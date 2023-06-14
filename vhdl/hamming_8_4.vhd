@@ -40,5 +40,13 @@ architecture Behavioral of hamming_8_4 is
 
 begin
 
+    DATA_OUT(0) <= '1' xor DATA_IN(0) xor DATA_IN(2) xor DATA_IN(3);
+    DATA_OUT(1) <= DATA_IN(0);
+    DATA_OUT(2) <= '1' xor DATA_IN(0) xor DATA_IN(1) xor DATA_IN(3);
+    DATA_OUT(3) <= DATA_IN(1);
+    DATA_OUT(4) <= '1' xor DATA_IN(0) xor DATA_IN(1) xor DATA_IN(2);
+    DATA_OUT(5) <= DATA_IN(2);
+    DATA_OUT(6) <= DATA_IN(1) xor DATA_IN(2) xor DATA_IN(3);
+    DATA_OUT(7) <= DATA_IN(3);
 
 end Behavioral;
