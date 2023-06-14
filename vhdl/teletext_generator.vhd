@@ -43,48 +43,43 @@ end teletext_generator;
 
 architecture Behavioral of teletext_generator is
 
-constant LINE_COUNT     : unsigned(9 downto 0) := TO_UNSIGNED(625, 10);
-constant COLUMN_COUNT   : unsigned(9 downto 0) := TO_UNSIGNED(444, 10);
+component sync_generator
+    port (CLK_IN            : in std_logic;
+          RESET_N           : in std_logic;
+          SYNC_OUT          : out std_logic;
+          PACKET_TRIGGER    : out STD_LOGIC);
+    end component;
+    
+component shift_register
+    Generic (
+        register_size : integer
+    );
+    port (CLK_IN : in STD_LOGIC;
+           RESET_N : in STD_LOGIC;
+           LOAD : in STD_LOGIC;
+           DATA_IN : in STD_LOGIC_VECTOR ((register_size - 1) downto 0);
+           DATA_OUT : out STD_LOGIC);
+    end component;
 
-signal current_line     : unsigned(9 downto 0);
-signal next_line        : unsigned(9 downto 0);
-
-signal current_column   : unsigned(9 downto 0);
-signal next_column      : unsigned(9 downto 0);
+signal packet_trigger   : std_logic;
+signal teletext_packet  : std_logic_vector (359 downto 0) := (others => '1');
 
 begin
-
-    reg_p: process (CLK_IN)
-    begin
-        if (rising_edge(CLK_IN)) then
-            if (RESET_N = '0') then
-                current_line <= (others => '0');
-                current_column <= (others => '0');
-            else
-                current_line <= next_line;
-                current_column <= next_column;
-            end if;
-        end if;
-    end process;
-    
-    next_p: process(current_line, current_column)
-    begin
-        if current_column >= COLUMN_COUNT - 1 then
-            next_column <= (others => '0');
-            if current_line >= LINE_COUNT - 1 then
-                next_line <= (others => '0');
-            else
-                next_line <= current_line + "1";
-            end if;   
-        else
-            next_column <= current_column + "1";
-        end if;
-    
-    end process;
-
-    sync_p: process(current_line, current_column)
-    begin
+    sync_gen : sync_generator
+    port map (CLK_IN   => CLK_IN,
+              RESET_N  => RESET_N,
+              SYNC_OUT => SYNC_OUT,
+              PACKET_TRIGGER => packet_trigger);
+              
+    data_out_shift : shift_register
+    generic map(
+        register_size => 360)
+    port map(
+        CLK_IN      => CLK_IN,
+        RESET_N     => RESET_N,
+        LOAD        => packet_trigger,
+        DATA_IN     => teletext_packet,
+        DATA_OUT    => DATA_OUT);
         
-    end process;
     
 end Behavioral;

@@ -35,8 +35,7 @@ entity sync_generator is
     Port ( CLK_IN : in STD_LOGIC; -- CLK_IN expects 7MHz
            RESET_N: in STD_LOGIC;
            SYNC_OUT : out STD_LOGIC;
-           COL_OUT : out unsigned (9 downto 0);
-           LINE_OUT : out unsigned (9 downto 0));
+           PACKET_TRIGGER : out STD_LOGIC);
 end sync_generator;
 
 architecture Behavioral of sync_generator is
@@ -50,11 +49,7 @@ signal current_column   : unsigned(9 downto 0) := TO_UNSIGNED(1, 10);
 signal next_column      : unsigned(9 downto 0);
 
 begin
-
-    COL_OUT     <= current_column;
-    LINE_OUT     <= current_line;
-
-    reg_p: process (CLK_IN)
+    reg_p: process (CLK_IN, RESET_N)
     begin
         if (rising_edge(CLK_IN)) then
             if (RESET_N = '0') then
@@ -125,8 +120,26 @@ begin
                     when others =>
                         SYNC_OUT <= '0';
                 end case;
+        end case; 
+    end process;
+    
+    packet: process(current_line, current_column)
+        variable line: integer range 1 to 625;
+        variable column: integer range 1 to 448;
+    begin
+        line := to_integer(current_line);
+        column := to_integer(current_column);
+        case line is
+            when 6 to 22 | 318 to 335 =>
+                case column is
+                    when 71 =>
+                        PACKET_TRIGGER <= '1';
+                    when others =>
+                        PACKET_TRIGGER <= '0';
+                end case;
+            when others =>
+                PACKET_TRIGGER <= '0';
         end case;
-                
     end process;
 
 end Behavioral;
