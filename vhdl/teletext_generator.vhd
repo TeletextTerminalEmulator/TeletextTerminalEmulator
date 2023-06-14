@@ -60,6 +60,14 @@ component shift_register
            DATA_IN : in STD_LOGIC_VECTOR ((register_size - 1) downto 0);
            DATA_OUT : out STD_LOGIC);
     end component;
+    
+component packet_generator
+    port(
+        MAGAZINE: in unsigned(2 downto 0);
+        PACKET: in unsigned(3 downto 0);
+        PACKET_DATA: out std_logic_vector(359 downto 0)
+    );
+end component;
 
 signal packet_trigger   : std_logic;
 signal teletext_packet  : std_logic_vector (359 downto 0) := (others => '1');
@@ -81,5 +89,12 @@ begin
         DATA_IN     => teletext_packet,
         DATA_OUT    => DATA_OUT);
         
+        
+    packet_gen : packet_generator
+    port map(
+        MAGAZINE => "101",
+        PACKET => "0110",
+        PACKET_DATA => teletext_packet
+    );
     
 end Behavioral;
