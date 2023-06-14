@@ -39,6 +39,6 @@ end odd_parity;
 architecture Behavioral of odd_parity is
 
 begin
-
-
+    DATA_OUT(6 downto 0) <= DATA_IN(6 downto 0);
+    DATA_OUT(7) <= '1' xor DATA_IN(0) xor DATA_IN(1) xor DATA_IN(2) xor DATA_IN(3) xor DATA_IN(4) xor DATA_IN(5) xor DATA_IN(6);
 end Behavioral;
