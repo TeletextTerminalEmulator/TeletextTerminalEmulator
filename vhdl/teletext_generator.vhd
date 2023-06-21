@@ -61,11 +61,11 @@ component shift_register
            DATA_OUT : out STD_LOGIC);
     end component;
     
-component packet_generator
+component packet_header_generator
     port(
         MAGAZINE: in unsigned(2 downto 0);
         PACKET: in unsigned(3 downto 0);
-        PACKET_DATA: out std_logic_vector(359 downto 0)
+        PACKET_HEADER_DATA: out std_logic_vector(39 downto 0)
     );
 end component;
 
@@ -90,11 +90,11 @@ begin
         DATA_OUT    => DATA_OUT);
         
         
-    packet_gen : packet_generator
+    packet_gen : packet_header_generator
     port map(
         MAGAZINE => "101",
         PACKET => "0110",
-        PACKET_DATA => teletext_packet
+        PACKET_HEADER_DATA => teletext_packet(39 downto 0)
     );
     
 end Behavioral;

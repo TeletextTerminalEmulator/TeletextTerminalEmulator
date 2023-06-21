@@ -31,15 +31,15 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity packet_generator is
+entity packet_header_generator is
     port(
         MAGAZINE: in unsigned(2 downto 0);
         PACKET: in unsigned(3 downto 0);
-        PACKET_DATA: out std_logic_vector(359 downto 0)
+        PACKET_HEADER_DATA: out std_logic_vector(39 downto 0)
     );
-end packet_generator;
+end packet_header_generator;
 
-architecture Behavioral of packet_generator is
+architecture Behavioral of packet_header_generator is
 
     constant CLOCK_RUNIN : std_logic_vector(15 downto 0) := "0101010101010101";
     
@@ -52,20 +52,20 @@ architecture Behavioral of packet_generator is
 
 
 begin
-    PACKET_DATA(15 downto 0) <= CLOCK_RUNIN;
-    PACKET_DATA(23 downto 16) <= FRAMING_CODE;
+    PACKET_HEADER_DATA(15 downto 0) <= CLOCK_RUNIN;
+    PACKET_HEADER_DATA(23 downto 16) <= FRAMING_CODE;
     
     magazine_ham : hamming_8_4 
     port map(
         DATA_IN(2 downto 0) => std_logic_vector(MAGAZINE),
         DATA_IN(3) => '0',
-        DATA_OUT => PACKET_DATA(31 downto 24)
+        DATA_OUT => PACKET_HEADER_DATA(31 downto 24)
     );
     
     packet_ham : hamming_8_4
     port map(
         DATA_IN => std_logic_vector(PACKET),
-        DATA_OUT => PACKET_DATA(39 downto 32)
+        DATA_OUT => PACKET_HEADER_DATA(39 downto 32)
     );
 
 end Behavioral;
