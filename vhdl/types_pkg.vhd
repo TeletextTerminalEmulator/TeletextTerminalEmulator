@@ -44,5 +44,6 @@ package types_pkg is
         NATIONAL_OPTION_CHARACTER_SUBSET: std_logic_vector(2 downto 0);
     end record CONTROL_BITS;
     
-    type TELETEXT_CHAR is array (6 downto 0) of std_logic;
+    subtype TELETEXT_CHAR is std_logic_vector(6 downto 0);
+    type TELETEXT_ARRAY is array (natural range <>) of TELETEXT_CHAR;
 end package types_pkg;
