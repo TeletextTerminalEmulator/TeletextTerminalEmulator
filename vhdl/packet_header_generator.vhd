@@ -34,7 +34,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity packet_header_generator is
     port(
         MAGAZINE: in unsigned(2 downto 0);
-        PACKET: in unsigned(3 downto 0);
+        PACKET: in unsigned(4 downto 0);
         PACKET_HEADER_DATA: out std_logic_vector(39 downto 0)
     );
 end packet_header_generator;
@@ -58,13 +58,13 @@ begin
     magazine_ham : hamming_8_4 
     port map(
         DATA_IN(2 downto 0) => std_logic_vector(MAGAZINE),
-        DATA_IN(3) => '0',
+        DATA_IN(3) => std_logic(PACKET(0)),
         DATA_OUT => PACKET_HEADER_DATA(31 downto 24)
     );
     
     packet_ham : hamming_8_4
     port map(
-        DATA_IN => std_logic_vector(PACKET),
+        DATA_IN => std_logic_vector(PACKET(4 downto 1)),
         DATA_OUT => PACKET_HEADER_DATA(39 downto 32)
     );
 
