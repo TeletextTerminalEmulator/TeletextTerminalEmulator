@@ -171,4 +171,9 @@ begin
         end if;
     end process;
     
+    current_data_line_p: process (current_line, TELETEXT_FRAME)
+    begin
+        current_teletext_data_line <= TELETEXT_FRAME(to_integer(current_line));
+    end process;
+    
 end Behavioral;
