@@ -62,7 +62,7 @@ begin
         end if;
     end process;
     
-    shift_p : process(LOAD, current_state)
+    shift_p : process(LOAD, current_state, data_in)
     begin
         if LOAD = '1' then
             next_state <= data_in;

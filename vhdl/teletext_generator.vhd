@@ -39,6 +39,7 @@ entity teletext_generator is
         TELETEXT_FRAME      : in    TELETEXT_FRAME;
         PAGE_CONTROL_BITS   : in    CONTROL_BITS;
         PAGE_NUMBER         : in    unsigned (7 downto 0);
+        MAGAZINE_NUMBER     : in    unsigned (2 downto 0);
         
         DATA_OUT            : out   std_logic;
         SYNC_OUT            : out   std_logic
@@ -118,7 +119,7 @@ begin
         
     packet_header_gen : packet_header_generator
     port map(
-        MAGAZINE => "101",
+        MAGAZINE => MAGAZINE_NUMBER,
         PACKET => current_line,
         PACKET_HEADER_DATA => teletext_packet(39 downto 0)
     );
