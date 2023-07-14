@@ -86,11 +86,12 @@ begin
     reset_n <= not RESET;
     CLK_OUT <= teletext_clock;
     
-    clk_div: clock_divider
-    port map(
-        CLK_IN => CLK_IN,
-        CLK_OUT => teletext_clock
-    );
+    -- clk_div: clock_divider
+    -- port map(
+    --     CLK_IN => CLK_IN,
+    --     CLK_OUT => teletext_clock
+    -- );
+    teletext_clock <= CLK_IN;
     
     teletext_gen: teletext_generator
     port map(

@@ -1,0 +1,199 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x50BCCC9AA6299E7E",
+      "device": "xc7a35tcpg236-1",
+      "name": "system",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2022.2",
+      "validated": "true"
+    },
+    "design_tree": {
+      "clk_wiz_0": "",
+      "teletext_controller_0": ""
+    },
+    "ports": {
+      "RESET": {
+        "direction": "I"
+      },
+      "DATA_OUT": {
+        "type": "data",
+        "direction": "O",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "SYNC_OUT": {
+        "type": "data",
+        "direction": "O",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "CLK_OUT": {
+        "type": "clk",
+        "direction": "O",
+        "parameters": {
+          "FREQ_HZ": {
+            "value": "100000000",
+            "value_src": "default"
+          },
+          "FREQ_TOLERANCE_HZ": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.0",
+            "value_src": "default"
+          }
+        }
+      },
+      "CLK_IN": {
+        "type": "clk",
+        "direction": "I",
+        "parameters": {
+          "CLK_DOMAIN": {
+            "value": "system_CLK_IN",
+            "value_src": "default"
+          },
+          "FREQ_HZ": {
+            "value": "100000000"
+          },
+          "FREQ_TOLERANCE_HZ": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.0",
+            "value_src": "default"
+          }
+        }
+      }
+    },
+    "components": {
+      "clk_wiz_0": {
+        "vlnv": "xilinx.com:ip:clk_wiz:6.0",
+        "xci_name": "system_clk_wiz_0_0",
+        "xci_path": "ip/system_clk_wiz_0_0/system_clk_wiz_0_0.xci",
+        "inst_hier_path": "clk_wiz_0",
+        "parameters": {
+          "CLKOUT1_JITTER": {
+            "value": "429.404"
+          },
+          "CLKOUT1_PHASE_ERROR": {
+            "value": "301.475"
+          },
+          "CLKOUT1_REQUESTED_OUT_FREQ": {
+            "value": "7"
+          },
+          "MMCM_CLKFBOUT_MULT_F": {
+            "value": "44.625"
+          },
+          "MMCM_CLKOUT0_DIVIDE_F": {
+            "value": "127.500"
+          },
+          "MMCM_DIVCLK_DIVIDE": {
+            "value": "5"
+          }
+        }
+      },
+      "teletext_controller_0": {
+        "vlnv": "xilinx.com:module_ref:teletext_controller:1.0",
+        "xci_name": "system_teletext_controller_0_0",
+        "xci_path": "ip/system_teletext_controller_0_0/system_teletext_controller_0_0.xci",
+        "inst_hier_path": "teletext_controller_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "teletext_controller",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "CLK_IN": {
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "7000000",
+                "value_src": "ip_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "/clk_wiz_0_clk_out1",
+                "value_src": "ip_prop"
+              }
+            }
+          },
+          "RESET": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "DATA_OUT": {
+            "direction": "O"
+          },
+          "SYNC_OUT": {
+            "direction": "O"
+          },
+          "CLK_OUT": {
+            "direction": "O"
+          }
+        }
+      }
+    },
+    "nets": {
+      "CLK_IN_1": {
+        "ports": [
+          "CLK_IN",
+          "clk_wiz_0/clk_in1"
+        ]
+      },
+      "RESET_1": {
+        "ports": [
+          "RESET",
+          "clk_wiz_0/reset",
+          "teletext_controller_0/RESET"
+        ]
+      },
+      "clk_wiz_0_clk_out1": {
+        "ports": [
+          "clk_wiz_0/clk_out1",
+          "teletext_controller_0/CLK_IN"
+        ]
+      },
+      "teletext_controller_0_CLK_OUT": {
+        "ports": [
+          "teletext_controller_0/CLK_OUT",
+          "CLK_OUT"
+        ]
+      },
+      "teletext_controller_0_DATA_OUT": {
+        "ports": [
+          "teletext_controller_0/DATA_OUT",
+          "DATA_OUT"
+        ]
+      },
+      "teletext_controller_0_SYNC_OUT": {
+        "ports": [
+          "teletext_controller_0/SYNC_OUT",
+          "SYNC_OUT"
+        ]
+      }
+    }
+  }
+}
