@@ -1,10 +1,10 @@
--- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
--- Date        : Fri Jul 14 11:47:15 2023
--- Host        : nippon running 64-bit Ubuntu 16.04.7 LTS
+-- Tool Version: Vivado v.2022.2.2 (win64) Build 3788238 Tue Feb 21 20:00:34 MST 2023
+-- Date        : Mon Jul 24 15:23:17 2023
+-- Host        : Memmert running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub
---               /homes/jwachsmuth/Dokumente/teletext/block_designs/system/ip/system_teletext_controller_0_0/system_teletext_controller_0_0_stub.vhdl
+--               c:/Users/jwachsmuth/Documents/teletext/block_designs/system/ip/system_teletext_controller_0_0/system_teletext_controller_0_0_stub.vhdl
 -- Design      : system_teletext_controller_0_0
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7a35tcpg236-1
@@ -29,6 +29,6 @@ attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
 attribute black_box_pad_pin of stub : architecture is "CLK_IN,RESET,DATA_OUT,SYNC_OUT,CLK_OUT";
 attribute X_CORE_INFO : string;
-attribute X_CORE_INFO of stub : architecture is "teletext_controller,Vivado 2022.2";
+attribute X_CORE_INFO of stub : architecture is "teletext_controller,Vivado 2022.2.2";
 begin
 end;

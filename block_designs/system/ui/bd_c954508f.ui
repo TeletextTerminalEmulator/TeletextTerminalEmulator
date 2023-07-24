@@ -1,9 +1,9 @@
 {
    "ActiveEmotionalView":"Default View",
    "Default View_ScaleFactor":"1.0",
-   "Default View_TopLeft":"-1102,-298",
+   "Default View_TopLeft":"-358,-215",
    "ExpandedHierarchyInLayout":"",
-   "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+   "guistr":"# # String gsaved with Nlview 7.0r6  2020-01-29 bk=1.5227 VDI=41 GEI=36 GUI=JA:10.0 non-TLS
 #  -string -flagsOSRD
 preplace port port-id_RESET -pg 1 -lvl 0 -x 0 -y 20 -defaultsOSRD
 preplace port port-id_DATA_OUT -pg 1 -lvl 3 -x 480 -y 60 -defaultsOSRD
@@ -12,14 +12,14 @@ preplace port port-id_CLK_OUT -pg 1 -lvl 3 -x 480 -y 100 -defaultsOSRD
 preplace port port-id_CLK_IN -pg 1 -lvl 0 -x 0 -y 160 -defaultsOSRD
 preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 120 -y 80 -defaultsOSRD
 preplace inst teletext_controller_0 -pg 1 -lvl 2 -x 340 -y 80 -defaultsOSRD
+preplace netloc CLK_IN_1 1 0 1 20 90n
+preplace netloc RESET_1 1 0 2 20 10 210
 preplace netloc clk_wiz_0_clk_out1 1 1 1 N 70
-preplace netloc RESET_1 1 0 2 20 10 220
+preplace netloc teletext_controller_0_CLK_OUT 1 2 1 NJ 100
 preplace netloc teletext_controller_0_DATA_OUT 1 2 1 NJ 60
 preplace netloc teletext_controller_0_SYNC_OUT 1 2 1 NJ 80
-preplace netloc teletext_controller_0_CLK_OUT 1 2 1 NJ 100
-preplace netloc CLK_IN_1 1 0 1 20 90n
 levelinfo -pg 1 0 120 340 480
 pagesize -pg 1 -db -bbox -sgen -100 0 610 180
 "
 }
-
+0

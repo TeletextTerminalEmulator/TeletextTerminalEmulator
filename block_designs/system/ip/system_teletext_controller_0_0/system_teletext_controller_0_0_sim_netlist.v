@@ -1,10 +1,10 @@
-// Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
-// Date        : Fri Jul 14 11:47:15 2023
-// Host        : nippon running 64-bit Ubuntu 16.04.7 LTS
+// Tool Version: Vivado v.2022.2.2 (win64) Build 3788238 Tue Feb 21 20:00:34 MST 2023
+// Date        : Mon Jul 24 15:23:17 2023
+// Host        : Memmert running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
-//               /homes/jwachsmuth/Dokumente/teletext/block_designs/system/ip/system_teletext_controller_0_0/system_teletext_controller_0_0_sim_netlist.v
+//               c:/Users/jwachsmuth/Documents/teletext/block_designs/system/ip/system_teletext_controller_0_0/system_teletext_controller_0_0_sim_netlist.v
 // Design      : system_teletext_controller_0_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -13,7 +13,7 @@
 `timescale 1 ps / 1 ps
 
 (* CHECK_LICENSE_TYPE = "system_teletext_controller_0_0,teletext_controller,{}" *) (* DowngradeIPIdentifiedWarnings = "yes" *) (* IP_DEFINITION_SOURCE = "module_ref" *) 
-(* X_CORE_INFO = "teletext_controller,Vivado 2022.2" *) 
+(* X_CORE_INFO = "teletext_controller,Vivado 2022.2.2" *) 
 (* NotValidForBitStream *)
 module system_teletext_controller_0_0
    (CLK_IN,

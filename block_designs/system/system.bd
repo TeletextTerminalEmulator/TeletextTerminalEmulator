@@ -6,7 +6,7 @@
       "name": "system",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "Hierarchical",
-      "tool_version": "2022.2",
+      "tool_version": "2022.2.2",
       "validated": "true"
     },
     "design_tree": {
@@ -89,7 +89,7 @@
       "clk_wiz_0": {
         "vlnv": "xilinx.com:ip:clk_wiz:6.0",
         "xci_name": "system_clk_wiz_0_0",
-        "xci_path": "ip/system_clk_wiz_0_0/system_clk_wiz_0_0.xci",
+        "xci_path": "ip\\system_clk_wiz_0_0\\system_clk_wiz_0_0.xci",
         "inst_hier_path": "clk_wiz_0",
         "parameters": {
           "CLKOUT1_JITTER": {
@@ -115,7 +115,7 @@
       "teletext_controller_0": {
         "vlnv": "xilinx.com:module_ref:teletext_controller:1.0",
         "xci_name": "system_teletext_controller_0_0",
-        "xci_path": "ip/system_teletext_controller_0_0/system_teletext_controller_0_0.xci",
+        "xci_path": "ip\\system_teletext_controller_0_0\\system_teletext_controller_0_0.xci",
         "inst_hier_path": "teletext_controller_0",
         "reference_info": {
           "ref_type": "hdl",
