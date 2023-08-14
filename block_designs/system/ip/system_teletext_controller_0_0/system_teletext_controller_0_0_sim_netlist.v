@@ -1,7 +1,7 @@
 // Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2022.2.2 (win64) Build 3788238 Tue Feb 21 20:00:34 MST 2023
-// Date        : Mon Jul 24 15:23:17 2023
+// Date        : Mon Aug 14 16:29:34 2023
 // Host        : Memmert running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
 //               c:/Users/jwachsmuth/Documents/teletext/block_designs/system/ip/system_teletext_controller_0_0/system_teletext_controller_0_0_sim_netlist.v
@@ -44,14 +44,20 @@ endmodule
 module system_teletext_controller_0_0_shift_register
    (Q,
     PACKET_DATA,
-    packet_trigger,
+    load_trigger,
+    \current_state_reg[137]_0 ,
+    \current_state_reg[248]_0 ,
+    \current_state_reg[358]_0 ,
     \current_state_reg[354]_0 ,
     D,
     RESET,
     CLK_IN);
   output [31:0]Q;
   output [0:0]PACKET_DATA;
-  input packet_trigger;
+  input load_trigger;
+  input \current_state_reg[137]_0 ;
+  input \current_state_reg[248]_0 ;
+  input \current_state_reg[358]_0 ;
   input [4:0]\current_state_reg[354]_0 ;
   input [31:0]D;
   input RESET;
@@ -121,22 +127,24 @@ module system_teletext_controller_0_0_shift_register
   wire \current_state[96]_i_2_n_0 ;
   wire \current_state[98]_i_2_n_0 ;
   wire \current_state[9]_i_1_n_0 ;
+  wire \current_state_reg[137]_0 ;
+  wire \current_state_reg[248]_0 ;
   wire [4:0]\current_state_reg[354]_0 ;
+  wire \current_state_reg[358]_0 ;
+  wire load_trigger;
   wire [357:0]next_state;
-  wire packet_trigger;
 
-  (* SOFT_HLUTNM = "soft_lutpair111" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[0]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[1]),
         .O(next_state[0]));
   (* SOFT_HLUTNM = "soft_lutpair101" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[100]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[101]),
         .O(next_state[100]));
   (* SOFT_HLUTNM = "soft_lutpair6" *) 
@@ -144,7 +152,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[101]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[102]),
         .O(next_state[101]));
   (* SOFT_HLUTNM = "soft_lutpair53" *) 
@@ -152,7 +160,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[102]_i_1 
        (.I0(current_state[103]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[102]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair2" *) 
   LUT4 #(
@@ -160,7 +168,7 @@ module system_teletext_controller_0_0_shift_register
     \current_state[103]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
         .I1(PACKET_DATA),
-        .I2(packet_trigger),
+        .I2(\current_state_reg[137]_0 ),
         .I3(current_state[104]),
         .O(next_state[103]));
   (* SOFT_HLUTNM = "soft_lutpair1" *) 
@@ -179,7 +187,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[105]),
         .O(next_state[104]));
   LUT5 #(
@@ -188,7 +196,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[106]),
         .O(next_state[105]));
   LUT5 #(
@@ -197,7 +205,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[107]),
         .O(next_state[106]));
   (* SOFT_HLUTNM = "soft_lutpair23" *) 
@@ -205,36 +213,36 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[107]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[108]),
         .O(next_state[107]));
-  (* SOFT_HLUTNM = "soft_lutpair101" *) 
+  (* SOFT_HLUTNM = "soft_lutpair100" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[108]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[109]),
         .O(next_state[108]));
   (* SOFT_HLUTNM = "soft_lutpair100" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[109]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[110]),
         .O(next_state[109]));
-  (* SOFT_HLUTNM = "soft_lutpair109" *) 
+  (* SOFT_HLUTNM = "soft_lutpair108" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[10]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[11]),
         .O(next_state[10]));
-  (* SOFT_HLUTNM = "soft_lutpair53" *) 
+  (* SOFT_HLUTNM = "soft_lutpair54" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[110]_i_1 
        (.I0(current_state[111]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[110]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -242,7 +250,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[113]),
         .O(next_state[112]));
   LUT5 #(
@@ -251,7 +259,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[114]),
         .O(next_state[113]));
   LUT5 #(
@@ -260,7 +268,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[115]),
         .O(next_state[114]));
   (* SOFT_HLUTNM = "soft_lutpair28" *) 
@@ -268,21 +276,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[115]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[116]),
         .O(next_state[115]));
-  (* SOFT_HLUTNM = "soft_lutpair100" *) 
+  (* SOFT_HLUTNM = "soft_lutpair99" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[116]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[117]),
         .O(next_state[116]));
   (* SOFT_HLUTNM = "soft_lutpair99" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[117]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[118]),
         .O(next_state[117]));
   (* SOFT_HLUTNM = "soft_lutpair54" *) 
@@ -290,14 +298,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[118]_i_1 
        (.I0(current_state[119]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[118]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair44" *) 
+  (* SOFT_HLUTNM = "soft_lutpair46" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[11]_i_1 
        (.I0(current_state[12]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[11]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -305,7 +313,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[121]),
         .O(next_state[120]));
   LUT5 #(
@@ -314,7 +322,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[122]),
         .O(next_state[121]));
   LUT5 #(
@@ -323,7 +331,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[123]),
         .O(next_state[122]));
   (* SOFT_HLUTNM = "soft_lutpair28" *) 
@@ -331,29 +339,29 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[123]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[124]),
         .O(next_state[123]));
-  (* SOFT_HLUTNM = "soft_lutpair99" *) 
+  (* SOFT_HLUTNM = "soft_lutpair98" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[124]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[125]),
         .O(next_state[124]));
   (* SOFT_HLUTNM = "soft_lutpair98" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[125]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[126]),
         .O(next_state[125]));
-  (* SOFT_HLUTNM = "soft_lutpair54" *) 
+  (* SOFT_HLUTNM = "soft_lutpair55" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[126]_i_1 
        (.I0(current_state[127]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[126]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -361,7 +369,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[129]),
         .O(next_state[128]));
   LUT5 #(
@@ -370,14 +378,14 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[130]),
         .O(next_state[129]));
   (* SOFT_HLUTNM = "soft_lutpair108" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[12]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[13]),
         .O(next_state[12]));
   LUT5 #(
@@ -386,7 +394,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[131]),
         .O(next_state[130]));
   (* SOFT_HLUTNM = "soft_lutpair29" *) 
@@ -394,21 +402,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[131]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[132]),
         .O(next_state[131]));
-  (* SOFT_HLUTNM = "soft_lutpair98" *) 
+  (* SOFT_HLUTNM = "soft_lutpair97" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[132]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[133]),
         .O(next_state[132]));
   (* SOFT_HLUTNM = "soft_lutpair97" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[133]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[134]),
         .O(next_state[133]));
   (* SOFT_HLUTNM = "soft_lutpair55" *) 
@@ -416,7 +424,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[134]_i_1 
        (.I0(current_state[135]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[134]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -424,7 +432,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[137]),
         .O(next_state[136]));
   LUT5 #(
@@ -433,7 +441,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[138]),
         .O(next_state[137]));
   LUT5 #(
@@ -442,7 +450,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[139]),
         .O(next_state[138]));
   (* SOFT_HLUTNM = "soft_lutpair29" *) 
@@ -450,36 +458,36 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[139]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[140]),
         .O(next_state[139]));
-  (* SOFT_HLUTNM = "soft_lutpair45" *) 
+  (* SOFT_HLUTNM = "soft_lutpair47" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[13]_i_1 
        (.I0(current_state[14]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[13]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair97" *) 
+  (* SOFT_HLUTNM = "soft_lutpair96" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[140]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[141]),
         .O(next_state[140]));
   (* SOFT_HLUTNM = "soft_lutpair96" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[141]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[142]),
         .O(next_state[141]));
-  (* SOFT_HLUTNM = "soft_lutpair55" *) 
+  (* SOFT_HLUTNM = "soft_lutpair56" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[142]_i_1 
        (.I0(current_state[143]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[142]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -487,7 +495,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[145]),
         .O(next_state[144]));
   LUT5 #(
@@ -496,7 +504,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[146]),
         .O(next_state[145]));
   LUT5 #(
@@ -505,7 +513,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[147]),
         .O(next_state[146]));
   (* SOFT_HLUTNM = "soft_lutpair30" *) 
@@ -513,28 +521,28 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[147]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[148]),
         .O(next_state[147]));
-  (* SOFT_HLUTNM = "soft_lutpair96" *) 
+  (* SOFT_HLUTNM = "soft_lutpair95" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[148]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[149]),
         .O(next_state[148]));
   (* SOFT_HLUTNM = "soft_lutpair95" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[149]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[150]),
         .O(next_state[149]));
-  (* SOFT_HLUTNM = "soft_lutpair108" *) 
+  (* SOFT_HLUTNM = "soft_lutpair107" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[14]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[15]),
         .O(next_state[14]));
   (* SOFT_HLUTNM = "soft_lutpair56" *) 
@@ -542,7 +550,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[150]_i_1 
        (.I0(current_state[151]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[150]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -550,7 +558,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[153]),
         .O(next_state[152]));
   LUT5 #(
@@ -559,7 +567,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[154]),
         .O(next_state[153]));
   LUT5 #(
@@ -568,7 +576,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[155]),
         .O(next_state[154]));
   (* SOFT_HLUTNM = "soft_lutpair30" *) 
@@ -576,36 +584,36 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[155]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[156]),
         .O(next_state[155]));
-  (* SOFT_HLUTNM = "soft_lutpair95" *) 
+  (* SOFT_HLUTNM = "soft_lutpair94" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[156]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[157]),
         .O(next_state[156]));
   (* SOFT_HLUTNM = "soft_lutpair94" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[157]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[158]),
         .O(next_state[157]));
-  (* SOFT_HLUTNM = "soft_lutpair56" *) 
+  (* SOFT_HLUTNM = "soft_lutpair57" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[158]_i_1 
        (.I0(current_state[159]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[158]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair45" *) 
+  (* SOFT_HLUTNM = "soft_lutpair47" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[15]_i_1 
        (.I0(current_state[16]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[15]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -613,7 +621,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[161]),
         .O(next_state[160]));
   LUT5 #(
@@ -622,7 +630,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[162]),
         .O(next_state[161]));
   LUT5 #(
@@ -631,7 +639,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[163]),
         .O(next_state[162]));
   (* SOFT_HLUTNM = "soft_lutpair31" *) 
@@ -639,21 +647,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[163]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[164]),
         .O(next_state[163]));
-  (* SOFT_HLUTNM = "soft_lutpair94" *) 
+  (* SOFT_HLUTNM = "soft_lutpair93" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[164]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[165]),
         .O(next_state[164]));
   (* SOFT_HLUTNM = "soft_lutpair93" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[165]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[166]),
         .O(next_state[165]));
   (* SOFT_HLUTNM = "soft_lutpair57" *) 
@@ -661,7 +669,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[166]_i_1 
        (.I0(current_state[167]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[166]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -669,7 +677,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[169]),
         .O(next_state[168]));
   LUT5 #(
@@ -678,14 +686,14 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[170]),
         .O(next_state[169]));
   (* SOFT_HLUTNM = "soft_lutpair107" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[16]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[17]),
         .O(next_state[16]));
   LUT5 #(
@@ -694,7 +702,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[171]),
         .O(next_state[170]));
   (* SOFT_HLUTNM = "soft_lutpair31" *) 
@@ -702,29 +710,29 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[171]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[172]),
         .O(next_state[171]));
-  (* SOFT_HLUTNM = "soft_lutpair93" *) 
+  (* SOFT_HLUTNM = "soft_lutpair92" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[172]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[173]),
         .O(next_state[172]));
   (* SOFT_HLUTNM = "soft_lutpair92" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[173]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[174]),
         .O(next_state[173]));
-  (* SOFT_HLUTNM = "soft_lutpair57" *) 
+  (* SOFT_HLUTNM = "soft_lutpair58" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[174]_i_1 
        (.I0(current_state[175]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[174]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -732,7 +740,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[177]),
         .O(next_state[176]));
   LUT5 #(
@@ -741,7 +749,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[178]),
         .O(next_state[177]));
   LUT5 #(
@@ -750,7 +758,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[179]),
         .O(next_state[178]));
   (* SOFT_HLUTNM = "soft_lutpair32" *) 
@@ -758,28 +766,28 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[179]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[180]),
         .O(next_state[179]));
-  (* SOFT_HLUTNM = "soft_lutpair107" *) 
+  (* SOFT_HLUTNM = "soft_lutpair106" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[17]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[18]),
         .O(next_state[17]));
-  (* SOFT_HLUTNM = "soft_lutpair92" *) 
+  (* SOFT_HLUTNM = "soft_lutpair91" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[180]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[181]),
         .O(next_state[180]));
   (* SOFT_HLUTNM = "soft_lutpair91" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[181]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[182]),
         .O(next_state[181]));
   (* SOFT_HLUTNM = "soft_lutpair58" *) 
@@ -787,7 +795,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[182]_i_1 
        (.I0(current_state[183]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[182]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -795,7 +803,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[185]),
         .O(next_state[184]));
   LUT5 #(
@@ -804,7 +812,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[186]),
         .O(next_state[185]));
   LUT5 #(
@@ -813,7 +821,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[187]),
         .O(next_state[186]));
   (* SOFT_HLUTNM = "soft_lutpair32" *) 
@@ -821,36 +829,36 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[187]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[188]),
         .O(next_state[187]));
-  (* SOFT_HLUTNM = "soft_lutpair91" *) 
+  (* SOFT_HLUTNM = "soft_lutpair90" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[188]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[189]),
         .O(next_state[188]));
   (* SOFT_HLUTNM = "soft_lutpair90" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[189]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[190]),
         .O(next_state[189]));
   (* SOFT_HLUTNM = "soft_lutpair106" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[18]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[19]),
         .O(next_state[18]));
-  (* SOFT_HLUTNM = "soft_lutpair58" *) 
+  (* SOFT_HLUTNM = "soft_lutpair59" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[190]_i_1 
        (.I0(current_state[191]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[190]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -858,7 +866,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[193]),
         .O(next_state[192]));
   LUT5 #(
@@ -867,7 +875,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[194]),
         .O(next_state[193]));
   LUT5 #(
@@ -876,7 +884,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[195]),
         .O(next_state[194]));
   (* SOFT_HLUTNM = "soft_lutpair33" *) 
@@ -884,21 +892,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[195]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[196]),
         .O(next_state[195]));
-  (* SOFT_HLUTNM = "soft_lutpair90" *) 
+  (* SOFT_HLUTNM = "soft_lutpair89" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[196]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[197]),
         .O(next_state[196]));
   (* SOFT_HLUTNM = "soft_lutpair89" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[197]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[198]),
         .O(next_state[197]));
   (* SOFT_HLUTNM = "soft_lutpair59" *) 
@@ -906,21 +914,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[198]_i_1 
        (.I0(current_state[199]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[198]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair46" *) 
+  (* SOFT_HLUTNM = "soft_lutpair48" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[19]_i_1 
        (.I0(current_state[20]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[19]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair22" *) 
+  (* SOFT_HLUTNM = "soft_lutpair44" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[1]_i_1 
        (.I0(current_state[2]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[1]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -928,7 +936,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[201]),
         .O(next_state[200]));
   LUT5 #(
@@ -937,7 +945,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[202]),
         .O(next_state[201]));
   LUT5 #(
@@ -946,7 +954,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[203]),
         .O(next_state[202]));
   (* SOFT_HLUTNM = "soft_lutpair33" *) 
@@ -954,29 +962,29 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[203]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[204]),
         .O(next_state[203]));
-  (* SOFT_HLUTNM = "soft_lutpair89" *) 
+  (* SOFT_HLUTNM = "soft_lutpair88" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[204]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[205]),
         .O(next_state[204]));
   (* SOFT_HLUTNM = "soft_lutpair88" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[205]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[206]),
         .O(next_state[205]));
-  (* SOFT_HLUTNM = "soft_lutpair59" *) 
+  (* SOFT_HLUTNM = "soft_lutpair60" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[206]_i_1 
        (.I0(current_state[207]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[206]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -984,7 +992,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[209]),
         .O(next_state[208]));
   LUT5 #(
@@ -993,15 +1001,15 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[210]),
         .O(next_state[209]));
-  (* SOFT_HLUTNM = "soft_lutpair46" *) 
+  (* SOFT_HLUTNM = "soft_lutpair48" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[20]_i_1 
        (.I0(current_state[21]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[20]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1009,7 +1017,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[211]),
         .O(next_state[210]));
   (* SOFT_HLUTNM = "soft_lutpair34" *) 
@@ -1017,21 +1025,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[211]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[212]),
         .O(next_state[211]));
-  (* SOFT_HLUTNM = "soft_lutpair88" *) 
+  (* SOFT_HLUTNM = "soft_lutpair87" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[212]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[213]),
         .O(next_state[212]));
   (* SOFT_HLUTNM = "soft_lutpair87" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[213]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[214]),
         .O(next_state[213]));
   (* SOFT_HLUTNM = "soft_lutpair60" *) 
@@ -1039,7 +1047,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[214]_i_1 
        (.I0(current_state[215]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[214]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1047,7 +1055,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[217]),
         .O(next_state[216]));
   LUT5 #(
@@ -1056,7 +1064,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[218]),
         .O(next_state[217]));
   LUT5 #(
@@ -1065,7 +1073,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[219]),
         .O(next_state[218]));
   (* SOFT_HLUTNM = "soft_lutpair34" *) 
@@ -1073,36 +1081,36 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[219]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[220]),
         .O(next_state[219]));
-  (* SOFT_HLUTNM = "soft_lutpair106" *) 
+  (* SOFT_HLUTNM = "soft_lutpair105" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[21]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[22]),
         .O(next_state[21]));
-  (* SOFT_HLUTNM = "soft_lutpair87" *) 
+  (* SOFT_HLUTNM = "soft_lutpair86" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[220]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[221]),
         .O(next_state[220]));
   (* SOFT_HLUTNM = "soft_lutpair86" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[221]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[222]),
         .O(next_state[221]));
-  (* SOFT_HLUTNM = "soft_lutpair60" *) 
+  (* SOFT_HLUTNM = "soft_lutpair61" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[222]_i_1 
        (.I0(current_state[223]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[222]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1110,7 +1118,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[225]),
         .O(next_state[224]));
   LUT5 #(
@@ -1119,7 +1127,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[226]),
         .O(next_state[225]));
   LUT5 #(
@@ -1128,7 +1136,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[227]),
         .O(next_state[226]));
   (* SOFT_HLUTNM = "soft_lutpair35" *) 
@@ -1136,36 +1144,36 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[227]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[228]),
         .O(next_state[227]));
-  (* SOFT_HLUTNM = "soft_lutpair86" *) 
+  (* SOFT_HLUTNM = "soft_lutpair85" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[228]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[229]),
         .O(next_state[228]));
   (* SOFT_HLUTNM = "soft_lutpair85" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[229]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[230]),
         .O(next_state[229]));
-  (* SOFT_HLUTNM = "soft_lutpair47" *) 
+  (* SOFT_HLUTNM = "soft_lutpair49" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[22]_i_1 
        (.I0(current_state[23]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[22]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair61" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[230]_i_1 
        (.I0(current_state[231]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[230]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1173,7 +1181,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[233]),
         .O(next_state[232]));
   LUT5 #(
@@ -1182,7 +1190,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[234]),
         .O(next_state[233]));
   LUT5 #(
@@ -1191,7 +1199,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[235]),
         .O(next_state[234]));
   (* SOFT_HLUTNM = "soft_lutpair35" *) 
@@ -1199,36 +1207,36 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[235]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[236]),
         .O(next_state[235]));
-  (* SOFT_HLUTNM = "soft_lutpair85" *) 
+  (* SOFT_HLUTNM = "soft_lutpair84" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[236]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[237]),
         .O(next_state[236]));
   (* SOFT_HLUTNM = "soft_lutpair84" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[237]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[238]),
         .O(next_state[237]));
-  (* SOFT_HLUTNM = "soft_lutpair61" *) 
+  (* SOFT_HLUTNM = "soft_lutpair62" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[238]_i_1 
        (.I0(current_state[239]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[238]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair47" *) 
+  (* SOFT_HLUTNM = "soft_lutpair49" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[23]_i_1 
        (.I0(current_state[24]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[23]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1236,7 +1244,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[241]),
         .O(next_state[240]));
   LUT5 #(
@@ -1245,7 +1253,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[242]),
         .O(next_state[241]));
   LUT5 #(
@@ -1254,7 +1262,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[243]),
         .O(next_state[242]));
   (* SOFT_HLUTNM = "soft_lutpair36" *) 
@@ -1262,21 +1270,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[243]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .I2(current_state[244]),
         .O(next_state[243]));
-  (* SOFT_HLUTNM = "soft_lutpair84" *) 
+  (* SOFT_HLUTNM = "soft_lutpair83" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[244]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[245]),
         .O(next_state[244]));
   (* SOFT_HLUTNM = "soft_lutpair83" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[245]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[248]_0 ),
         .I1(current_state[246]),
         .O(next_state[245]));
   (* SOFT_HLUTNM = "soft_lutpair62" *) 
@@ -1284,7 +1292,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[246]_i_1 
        (.I0(current_state[247]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[248]_0 ),
         .O(\current_state[246]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1292,7 +1300,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[248]_0 ),
         .I4(current_state[249]),
         .O(next_state[248]));
   LUT5 #(
@@ -1301,7 +1309,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[250]),
         .O(next_state[249]));
   (* SOFT_HLUTNM = "soft_lutpair27" *) 
@@ -1309,7 +1317,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[24]_i_1 
        (.I0(\current_state_reg[354]_0 [0]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .I2(current_state[25]),
         .O(next_state[24]));
   LUT5 #(
@@ -1318,7 +1326,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[251]),
         .O(next_state[250]));
   (* SOFT_HLUTNM = "soft_lutpair36" *) 
@@ -1326,29 +1334,28 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[251]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[252]),
         .O(next_state[251]));
-  (* SOFT_HLUTNM = "soft_lutpair83" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[252]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[253]),
         .O(next_state[252]));
   (* SOFT_HLUTNM = "soft_lutpair82" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[253]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[254]),
         .O(next_state[253]));
-  (* SOFT_HLUTNM = "soft_lutpair62" *) 
+  (* SOFT_HLUTNM = "soft_lutpair43" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[254]_i_1 
        (.I0(current_state[255]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[254]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1356,7 +1363,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[257]),
         .O(next_state[256]));
   LUT5 #(
@@ -1365,7 +1372,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[258]),
         .O(next_state[257]));
   LUT5 #(
@@ -1374,7 +1381,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[259]),
         .O(next_state[258]));
   (* SOFT_HLUTNM = "soft_lutpair37" *) 
@@ -1382,28 +1389,28 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[259]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[260]),
         .O(next_state[259]));
   (* SOFT_HLUTNM = "soft_lutpair105" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[25]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[26]),
         .O(next_state[25]));
   (* SOFT_HLUTNM = "soft_lutpair82" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[260]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[261]),
         .O(next_state[260]));
   (* SOFT_HLUTNM = "soft_lutpair81" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[261]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[262]),
         .O(next_state[261]));
   (* SOFT_HLUTNM = "soft_lutpair63" *) 
@@ -1411,7 +1418,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[262]_i_1 
        (.I0(current_state[263]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[262]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1419,7 +1426,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[265]),
         .O(next_state[264]));
   LUT5 #(
@@ -1428,7 +1435,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[266]),
         .O(next_state[265]));
   LUT5 #(
@@ -1437,7 +1444,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[267]),
         .O(next_state[266]));
   (* SOFT_HLUTNM = "soft_lutpair37" *) 
@@ -1445,21 +1452,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[267]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[268]),
         .O(next_state[267]));
   (* SOFT_HLUTNM = "soft_lutpair81" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[268]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[269]),
         .O(next_state[268]));
   (* SOFT_HLUTNM = "soft_lutpair80" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[269]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[270]),
         .O(next_state[269]));
   (* SOFT_HLUTNM = "soft_lutpair27" *) 
@@ -1467,7 +1474,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[26]_i_1 
        (.I0(\current_state_reg[354]_0 [0]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .I2(current_state[27]),
         .O(next_state[26]));
   (* SOFT_HLUTNM = "soft_lutpair63" *) 
@@ -1475,7 +1482,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[270]_i_1 
        (.I0(current_state[271]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[270]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1483,7 +1490,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[273]),
         .O(next_state[272]));
   LUT5 #(
@@ -1492,7 +1499,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[274]),
         .O(next_state[273]));
   LUT5 #(
@@ -1501,7 +1508,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[275]),
         .O(next_state[274]));
   (* SOFT_HLUTNM = "soft_lutpair38" *) 
@@ -1509,21 +1516,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[275]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[276]),
         .O(next_state[275]));
   (* SOFT_HLUTNM = "soft_lutpair80" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[276]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[277]),
         .O(next_state[276]));
   (* SOFT_HLUTNM = "soft_lutpair79" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[277]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[278]),
         .O(next_state[277]));
   (* SOFT_HLUTNM = "soft_lutpair64" *) 
@@ -1531,14 +1538,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[278]_i_1 
        (.I0(current_state[279]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[278]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair48" *) 
+  (* SOFT_HLUTNM = "soft_lutpair22" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[27]_i_1 
        (.I0(current_state[28]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[27]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1546,7 +1553,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[281]),
         .O(next_state[280]));
   LUT5 #(
@@ -1555,7 +1562,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[282]),
         .O(next_state[281]));
   LUT5 #(
@@ -1564,7 +1571,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[283]),
         .O(next_state[282]));
   (* SOFT_HLUTNM = "soft_lutpair38" *) 
@@ -1572,21 +1579,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[283]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[284]),
         .O(next_state[283]));
   (* SOFT_HLUTNM = "soft_lutpair79" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[284]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[285]),
         .O(next_state[284]));
   (* SOFT_HLUTNM = "soft_lutpair78" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[285]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[286]),
         .O(next_state[285]));
   (* SOFT_HLUTNM = "soft_lutpair64" *) 
@@ -1594,7 +1601,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[286]_i_1 
        (.I0(current_state[287]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[286]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1602,7 +1609,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[289]),
         .O(next_state[288]));
   LUT5 #(
@@ -1611,15 +1618,15 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[290]),
         .O(next_state[289]));
-  (* SOFT_HLUTNM = "soft_lutpair48" *) 
+  (* SOFT_HLUTNM = "soft_lutpair24" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[28]_i_1 
        (.I0(current_state[29]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[28]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1627,7 +1634,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[291]),
         .O(next_state[290]));
   (* SOFT_HLUTNM = "soft_lutpair39" *) 
@@ -1635,21 +1642,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[291]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[292]),
         .O(next_state[291]));
   (* SOFT_HLUTNM = "soft_lutpair78" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[292]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[293]),
         .O(next_state[292]));
   (* SOFT_HLUTNM = "soft_lutpair77" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[293]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[294]),
         .O(next_state[293]));
   (* SOFT_HLUTNM = "soft_lutpair65" *) 
@@ -1657,7 +1664,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[294]_i_1 
        (.I0(current_state[295]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[294]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1665,7 +1672,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[297]),
         .O(next_state[296]));
   LUT5 #(
@@ -1674,7 +1681,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[298]),
         .O(next_state[297]));
   LUT5 #(
@@ -1683,7 +1690,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[299]),
         .O(next_state[298]));
   (* SOFT_HLUTNM = "soft_lutpair39" *) 
@@ -1691,35 +1698,35 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[299]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[300]),
         .O(next_state[299]));
-  (* SOFT_HLUTNM = "soft_lutpair49" *) 
+  (* SOFT_HLUTNM = "soft_lutpair25" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[29]_i_1 
        (.I0(current_state[30]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[29]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair111" *) 
+  (* SOFT_HLUTNM = "soft_lutpair110" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[2]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[3]),
         .O(next_state[2]));
   (* SOFT_HLUTNM = "soft_lutpair77" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[300]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[301]),
         .O(next_state[300]));
   (* SOFT_HLUTNM = "soft_lutpair76" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[301]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[302]),
         .O(next_state[301]));
   (* SOFT_HLUTNM = "soft_lutpair65" *) 
@@ -1727,7 +1734,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[302]_i_1 
        (.I0(current_state[303]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[302]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1735,7 +1742,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[305]),
         .O(next_state[304]));
   LUT5 #(
@@ -1744,7 +1751,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[306]),
         .O(next_state[305]));
   LUT5 #(
@@ -1753,7 +1760,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[307]),
         .O(next_state[306]));
   (* SOFT_HLUTNM = "soft_lutpair40" *) 
@@ -1761,21 +1768,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[307]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[308]),
         .O(next_state[307]));
   (* SOFT_HLUTNM = "soft_lutpair76" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[308]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[309]),
         .O(next_state[308]));
   (* SOFT_HLUTNM = "soft_lutpair75" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[309]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[310]),
         .O(next_state[309]));
   (* SOFT_HLUTNM = "soft_lutpair26" *) 
@@ -1783,7 +1790,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[30]_i_1 
        (.I0(\current_state_reg[354]_0 [0]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[31]),
         .O(next_state[30]));
   (* SOFT_HLUTNM = "soft_lutpair66" *) 
@@ -1791,7 +1798,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[310]_i_1 
        (.I0(current_state[311]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[310]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1799,7 +1806,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[313]),
         .O(next_state[312]));
   LUT5 #(
@@ -1808,7 +1815,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[314]),
         .O(next_state[313]));
   LUT5 #(
@@ -1817,7 +1824,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[315]),
         .O(next_state[314]));
   (* SOFT_HLUTNM = "soft_lutpair40" *) 
@@ -1825,21 +1832,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[315]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[316]),
         .O(next_state[315]));
   (* SOFT_HLUTNM = "soft_lutpair75" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[316]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[317]),
         .O(next_state[316]));
   (* SOFT_HLUTNM = "soft_lutpair74" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[317]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[318]),
         .O(next_state[317]));
   (* SOFT_HLUTNM = "soft_lutpair66" *) 
@@ -1847,14 +1854,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[318]_i_1 
        (.I0(current_state[319]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[318]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair26" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[31]_i_1 
        (.I0(\current_state_reg[354]_0 [0]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[32]),
         .O(next_state[31]));
   LUT5 #(
@@ -1863,7 +1870,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[321]),
         .O(next_state[320]));
   LUT5 #(
@@ -1872,7 +1879,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[322]),
         .O(next_state[321]));
   LUT5 #(
@@ -1881,7 +1888,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[323]),
         .O(next_state[322]));
   (* SOFT_HLUTNM = "soft_lutpair41" *) 
@@ -1889,21 +1896,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[323]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[324]),
         .O(next_state[323]));
   (* SOFT_HLUTNM = "soft_lutpair74" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[324]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[325]),
         .O(next_state[324]));
   (* SOFT_HLUTNM = "soft_lutpair73" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[325]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[326]),
         .O(next_state[325]));
   (* SOFT_HLUTNM = "soft_lutpair67" *) 
@@ -1911,7 +1918,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[326]_i_1 
        (.I0(current_state[327]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[326]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1919,7 +1926,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[329]),
         .O(next_state[328]));
   LUT5 #(
@@ -1928,7 +1935,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[330]),
         .O(next_state[329]));
   LUT5 #(
@@ -1937,7 +1944,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [1]),
         .I1(\current_state_reg[354]_0 [4]),
         .I2(\current_state_reg[354]_0 [3]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[33]),
         .O(next_state[32]));
   LUT5 #(
@@ -1946,7 +1953,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[331]),
         .O(next_state[330]));
   (* SOFT_HLUTNM = "soft_lutpair41" *) 
@@ -1954,21 +1961,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[331]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[332]),
         .O(next_state[331]));
   (* SOFT_HLUTNM = "soft_lutpair73" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[332]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[333]),
         .O(next_state[332]));
   (* SOFT_HLUTNM = "soft_lutpair72" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[333]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[334]),
         .O(next_state[333]));
   (* SOFT_HLUTNM = "soft_lutpair67" *) 
@@ -1976,7 +1983,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[334]_i_1 
        (.I0(current_state[335]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[334]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -1984,7 +1991,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[337]),
         .O(next_state[336]));
   LUT5 #(
@@ -1993,7 +2000,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[338]),
         .O(next_state[337]));
   LUT5 #(
@@ -2002,7 +2009,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[339]),
         .O(next_state[338]));
   (* SOFT_HLUTNM = "soft_lutpair42" *) 
@@ -2010,7 +2017,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[339]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[340]),
         .O(next_state[339]));
   (* SOFT_HLUTNM = "soft_lutpair25" *) 
@@ -2018,21 +2025,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[33]_i_1 
        (.I0(\current_state_reg[354]_0 [1]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[34]),
         .O(next_state[33]));
   (* SOFT_HLUTNM = "soft_lutpair72" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[340]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[341]),
         .O(next_state[340]));
   (* SOFT_HLUTNM = "soft_lutpair71" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[341]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[342]),
         .O(next_state[341]));
   (* SOFT_HLUTNM = "soft_lutpair68" *) 
@@ -2040,7 +2047,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[342]_i_1 
        (.I0(current_state[343]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[342]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -2048,7 +2055,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[345]),
         .O(next_state[344]));
   LUT5 #(
@@ -2057,7 +2064,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[346]),
         .O(next_state[345]));
   LUT5 #(
@@ -2066,7 +2073,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[347]),
         .O(next_state[346]));
   (* SOFT_HLUTNM = "soft_lutpair42" *) 
@@ -2074,21 +2081,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[347]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[348]),
         .O(next_state[347]));
   (* SOFT_HLUTNM = "soft_lutpair71" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[348]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[349]),
         .O(next_state[348]));
   (* SOFT_HLUTNM = "soft_lutpair70" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[349]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[350]),
         .O(next_state[349]));
   LUT5 #(
@@ -2097,7 +2104,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [2]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[35]),
         .O(next_state[34]));
   (* SOFT_HLUTNM = "soft_lutpair68" *) 
@@ -2105,7 +2112,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[350]_i_1 
        (.I0(current_state[351]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[350]_i_1_n_0 ));
   LUT5 #(
     .INIT(32'h70FF7000)) 
@@ -2113,7 +2120,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [0]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[353]),
         .O(next_state[352]));
   LUT5 #(
@@ -2122,7 +2129,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[354]),
         .O(next_state[353]));
   LUT5 #(
@@ -2131,7 +2138,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [2]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[358]_0 ),
         .I4(current_state[355]),
         .O(next_state[354]));
   (* SOFT_HLUTNM = "soft_lutpair43" *) 
@@ -2139,21 +2146,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[355]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .I2(current_state[356]),
         .O(next_state[355]));
   (* SOFT_HLUTNM = "soft_lutpair70" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[356]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[357]),
         .O(next_state[356]));
   (* SOFT_HLUTNM = "soft_lutpair69" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[357]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[358]_0 ),
         .I1(current_state[358]),
         .O(next_state[357]));
   (* SOFT_HLUTNM = "soft_lutpair69" *) 
@@ -2161,7 +2168,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[358]_i_1 
        (.I0(current_state[359]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[358]_0 ),
         .O(\current_state[358]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair0" *) 
   LUT5 #(
@@ -2178,7 +2185,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[35]_i_1 
        (.I0(\current_state_reg[354]_0 [2]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[36]),
         .O(next_state[35]));
   LUT5 #(
@@ -2187,7 +2194,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [3]),
         .I1(\current_state_reg[354]_0 [2]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[37]),
         .O(next_state[36]));
   (* SOFT_HLUTNM = "soft_lutpair23" *) 
@@ -2195,7 +2202,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[37]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[38]),
         .O(next_state[37]));
   LUT5 #(
@@ -2204,7 +2211,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [2]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [4]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[39]),
         .O(next_state[38]));
   (* SOFT_HLUTNM = "soft_lutpair22" *) 
@@ -2212,22 +2219,22 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[39]_i_1 
        (.I0(\current_state_reg[354]_0 [4]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[40]),
         .O(next_state[39]));
-  (* SOFT_HLUTNM = "soft_lutpair24" *) 
+  (* SOFT_HLUTNM = "soft_lutpair44" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[3]_i_1 
        (.I0(current_state[4]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[3]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair21" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[40]_i_1 
        (.I0(\current_state[96]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[41]),
         .O(next_state[40]));
   LUT5 #(
@@ -2236,7 +2243,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[42]),
         .O(next_state[41]));
   (* SOFT_HLUTNM = "soft_lutpair20" *) 
@@ -2244,7 +2251,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[42]_i_1 
        (.I0(\current_state[98]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[43]),
         .O(next_state[42]));
   (* SOFT_HLUTNM = "soft_lutpair19" *) 
@@ -2252,14 +2259,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[43]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[44]),
         .O(next_state[43]));
-  (* SOFT_HLUTNM = "soft_lutpair105" *) 
+  (* SOFT_HLUTNM = "soft_lutpair104" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[44]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[45]),
         .O(next_state[44]));
   (* SOFT_HLUTNM = "soft_lutpair18" *) 
@@ -2267,15 +2274,15 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[45]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[46]),
         .O(next_state[45]));
-  (* SOFT_HLUTNM = "soft_lutpair49" *) 
+  (* SOFT_HLUTNM = "soft_lutpair50" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[46]_i_1 
        (.I0(current_state[47]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[46]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair5" *) 
   LUT4 #(
@@ -2283,7 +2290,7 @@ module system_teletext_controller_0_0_shift_register
     \current_state[47]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
         .I1(PACKET_DATA),
-        .I2(packet_trigger),
+        .I2(\current_state_reg[137]_0 ),
         .I3(current_state[48]),
         .O(next_state[47]));
   (* SOFT_HLUTNM = "soft_lutpair21" *) 
@@ -2291,7 +2298,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[48]_i_1 
        (.I0(\current_state[96]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[49]),
         .O(next_state[48]));
   LUT5 #(
@@ -2300,14 +2307,14 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[50]),
         .O(next_state[49]));
   (* SOFT_HLUTNM = "soft_lutpair110" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[4]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[5]),
         .O(next_state[4]));
   (* SOFT_HLUTNM = "soft_lutpair20" *) 
@@ -2315,7 +2322,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[50]_i_1 
        (.I0(\current_state[98]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[51]),
         .O(next_state[50]));
   (* SOFT_HLUTNM = "soft_lutpair19" *) 
@@ -2323,14 +2330,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[51]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[52]),
         .O(next_state[51]));
   (* SOFT_HLUTNM = "soft_lutpair104" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[52]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[53]),
         .O(next_state[52]));
   (* SOFT_HLUTNM = "soft_lutpair18" *) 
@@ -2338,7 +2345,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[53]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[54]),
         .O(next_state[53]));
   (* SOFT_HLUTNM = "soft_lutpair50" *) 
@@ -2346,7 +2353,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[54]_i_1 
        (.I0(current_state[55]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[54]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair5" *) 
   LUT4 #(
@@ -2354,7 +2361,7 @@ module system_teletext_controller_0_0_shift_register
     \current_state[55]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
         .I1(PACKET_DATA),
-        .I2(packet_trigger),
+        .I2(\current_state_reg[137]_0 ),
         .I3(current_state[56]),
         .O(next_state[55]));
   (* SOFT_HLUTNM = "soft_lutpair17" *) 
@@ -2362,7 +2369,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[56]_i_1 
        (.I0(\current_state[96]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[57]),
         .O(next_state[56]));
   LUT5 #(
@@ -2371,7 +2378,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[58]),
         .O(next_state[57]));
   (* SOFT_HLUTNM = "soft_lutpair16" *) 
@@ -2379,7 +2386,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[58]_i_1 
        (.I0(\current_state[98]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[59]),
         .O(next_state[58]));
   (* SOFT_HLUTNM = "soft_lutpair15" *) 
@@ -2387,21 +2394,21 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[59]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[60]),
         .O(next_state[59]));
-  (* SOFT_HLUTNM = "soft_lutpair25" *) 
+  (* SOFT_HLUTNM = "soft_lutpair45" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[5]_i_1 
        (.I0(current_state[6]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[5]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair104" *) 
+  (* SOFT_HLUTNM = "soft_lutpair103" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[60]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[61]),
         .O(next_state[60]));
   (* SOFT_HLUTNM = "soft_lutpair14" *) 
@@ -2409,15 +2416,15 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[61]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[62]),
         .O(next_state[61]));
-  (* SOFT_HLUTNM = "soft_lutpair50" *) 
+  (* SOFT_HLUTNM = "soft_lutpair51" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[62]_i_1 
        (.I0(current_state[63]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[62]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair4" *) 
   LUT4 #(
@@ -2425,7 +2432,7 @@ module system_teletext_controller_0_0_shift_register
     \current_state[63]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
         .I1(PACKET_DATA),
-        .I2(packet_trigger),
+        .I2(\current_state_reg[137]_0 ),
         .I3(current_state[64]),
         .O(next_state[63]));
   (* SOFT_HLUTNM = "soft_lutpair17" *) 
@@ -2433,7 +2440,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[64]_i_1 
        (.I0(\current_state[96]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[65]),
         .O(next_state[64]));
   LUT5 #(
@@ -2442,7 +2449,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[66]),
         .O(next_state[65]));
   (* SOFT_HLUTNM = "soft_lutpair16" *) 
@@ -2450,7 +2457,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[66]_i_1 
        (.I0(\current_state[98]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[67]),
         .O(next_state[66]));
   (* SOFT_HLUTNM = "soft_lutpair15" *) 
@@ -2458,14 +2465,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[67]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[68]),
         .O(next_state[67]));
   (* SOFT_HLUTNM = "soft_lutpair103" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[68]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[69]),
         .O(next_state[68]));
   (* SOFT_HLUTNM = "soft_lutpair14" *) 
@@ -2473,14 +2480,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[69]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[70]),
         .O(next_state[69]));
-  (* SOFT_HLUTNM = "soft_lutpair110" *) 
+  (* SOFT_HLUTNM = "soft_lutpair109" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[6]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[7]),
         .O(next_state[6]));
   (* SOFT_HLUTNM = "soft_lutpair51" *) 
@@ -2488,7 +2495,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[70]_i_1 
        (.I0(current_state[71]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[70]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair4" *) 
   LUT4 #(
@@ -2496,7 +2503,7 @@ module system_teletext_controller_0_0_shift_register
     \current_state[71]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
         .I1(PACKET_DATA),
-        .I2(packet_trigger),
+        .I2(\current_state_reg[137]_0 ),
         .I3(current_state[72]),
         .O(next_state[71]));
   (* SOFT_HLUTNM = "soft_lutpair13" *) 
@@ -2504,7 +2511,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[72]_i_1 
        (.I0(\current_state[96]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[73]),
         .O(next_state[72]));
   LUT5 #(
@@ -2513,7 +2520,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[74]),
         .O(next_state[73]));
   (* SOFT_HLUTNM = "soft_lutpair12" *) 
@@ -2521,7 +2528,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[74]_i_1 
        (.I0(\current_state[98]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[75]),
         .O(next_state[74]));
   (* SOFT_HLUTNM = "soft_lutpair11" *) 
@@ -2529,14 +2536,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[75]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[76]),
         .O(next_state[75]));
-  (* SOFT_HLUTNM = "soft_lutpair103" *) 
+  (* SOFT_HLUTNM = "soft_lutpair102" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[76]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[77]),
         .O(next_state[76]));
   (* SOFT_HLUTNM = "soft_lutpair10" *) 
@@ -2544,15 +2551,15 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[77]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[78]),
         .O(next_state[77]));
-  (* SOFT_HLUTNM = "soft_lutpair51" *) 
+  (* SOFT_HLUTNM = "soft_lutpair52" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[78]_i_1 
        (.I0(current_state[79]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[78]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair3" *) 
   LUT4 #(
@@ -2560,22 +2567,22 @@ module system_teletext_controller_0_0_shift_register
     \current_state[79]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
         .I1(PACKET_DATA),
-        .I2(packet_trigger),
+        .I2(\current_state_reg[137]_0 ),
         .I3(current_state[80]),
         .O(next_state[79]));
-  (* SOFT_HLUTNM = "soft_lutpair43" *) 
+  (* SOFT_HLUTNM = "soft_lutpair45" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[7]_i_1 
        (.I0(current_state[8]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[7]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair13" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[80]_i_1 
        (.I0(\current_state[96]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[81]),
         .O(next_state[80]));
   LUT5 #(
@@ -2584,7 +2591,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[82]),
         .O(next_state[81]));
   (* SOFT_HLUTNM = "soft_lutpair12" *) 
@@ -2592,7 +2599,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[82]_i_1 
        (.I0(\current_state[98]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[83]),
         .O(next_state[82]));
   (* SOFT_HLUTNM = "soft_lutpair11" *) 
@@ -2600,14 +2607,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[83]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[84]),
         .O(next_state[83]));
   (* SOFT_HLUTNM = "soft_lutpair102" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[84]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[85]),
         .O(next_state[84]));
   (* SOFT_HLUTNM = "soft_lutpair10" *) 
@@ -2615,7 +2622,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[85]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[86]),
         .O(next_state[85]));
   (* SOFT_HLUTNM = "soft_lutpair52" *) 
@@ -2623,7 +2630,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(4'h2)) 
     \current_state[86]_i_1 
        (.I0(current_state[87]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[86]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair3" *) 
   LUT4 #(
@@ -2631,7 +2638,7 @@ module system_teletext_controller_0_0_shift_register
     \current_state[87]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
         .I1(PACKET_DATA),
-        .I2(packet_trigger),
+        .I2(\current_state_reg[137]_0 ),
         .I3(current_state[88]),
         .O(next_state[87]));
   (* SOFT_HLUTNM = "soft_lutpair9" *) 
@@ -2639,7 +2646,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[88]_i_1 
        (.I0(\current_state[96]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[89]),
         .O(next_state[88]));
   LUT5 #(
@@ -2648,14 +2655,14 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[90]),
         .O(next_state[89]));
   (* SOFT_HLUTNM = "soft_lutpair109" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[8]_i_1 
-       (.I0(packet_trigger),
+       (.I0(load_trigger),
         .I1(current_state[9]),
         .O(next_state[8]));
   (* SOFT_HLUTNM = "soft_lutpair8" *) 
@@ -2663,7 +2670,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[90]_i_1 
        (.I0(\current_state[98]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[91]),
         .O(next_state[90]));
   (* SOFT_HLUTNM = "soft_lutpair7" *) 
@@ -2671,14 +2678,14 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[91]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[92]),
         .O(next_state[91]));
-  (* SOFT_HLUTNM = "soft_lutpair102" *) 
+  (* SOFT_HLUTNM = "soft_lutpair101" *) 
   LUT2 #(
     .INIT(4'hE)) 
     \current_state[92]_i_1 
-       (.I0(packet_trigger),
+       (.I0(\current_state_reg[137]_0 ),
         .I1(current_state[93]),
         .O(next_state[92]));
   (* SOFT_HLUTNM = "soft_lutpair6" *) 
@@ -2686,15 +2693,15 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[93]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[94]),
         .O(next_state[93]));
-  (* SOFT_HLUTNM = "soft_lutpair52" *) 
+  (* SOFT_HLUTNM = "soft_lutpair53" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[94]_i_1 
        (.I0(current_state[95]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .O(\current_state[94]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair2" *) 
   LUT4 #(
@@ -2702,7 +2709,7 @@ module system_teletext_controller_0_0_shift_register
     \current_state[95]_i_1 
        (.I0(\current_state[103]_i_2_n_0 ),
         .I1(PACKET_DATA),
-        .I2(packet_trigger),
+        .I2(\current_state_reg[137]_0 ),
         .I3(current_state[96]),
         .O(next_state[95]));
   (* SOFT_HLUTNM = "soft_lutpair9" *) 
@@ -2710,7 +2717,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[96]_i_1 
        (.I0(\current_state[96]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[97]),
         .O(next_state[96]));
   (* SOFT_HLUTNM = "soft_lutpair0" *) 
@@ -2729,7 +2736,7 @@ module system_teletext_controller_0_0_shift_register
        (.I0(\current_state_reg[354]_0 [4]),
         .I1(\current_state_reg[354]_0 [3]),
         .I2(\current_state_reg[354]_0 [1]),
-        .I3(packet_trigger),
+        .I3(\current_state_reg[137]_0 ),
         .I4(current_state[98]),
         .O(next_state[97]));
   (* SOFT_HLUTNM = "soft_lutpair8" *) 
@@ -2737,7 +2744,7 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[98]_i_1 
        (.I0(\current_state[98]_i_2_n_0 ),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[99]),
         .O(next_state[98]));
   (* SOFT_HLUTNM = "soft_lutpair1" *) 
@@ -2755,15 +2762,15 @@ module system_teletext_controller_0_0_shift_register
     .INIT(8'hB8)) 
     \current_state[99]_i_1 
        (.I0(\current_state_reg[354]_0 [3]),
-        .I1(packet_trigger),
+        .I1(\current_state_reg[137]_0 ),
         .I2(current_state[100]),
         .O(next_state[99]));
-  (* SOFT_HLUTNM = "soft_lutpair44" *) 
+  (* SOFT_HLUTNM = "soft_lutpair46" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \current_state[9]_i_1 
        (.I0(current_state[10]),
-        .I1(packet_trigger),
+        .I1(load_trigger),
         .O(\current_state[9]_i_1_n_0 ));
   FDRE \current_state_reg[0] 
        (.C(CLK_IN),
@@ -4932,26 +4939,35 @@ module system_teletext_controller_0_0_sync_generator
    (SR,
     packet_trigger,
     D,
+    \current_line_reg[1]_0 ,
+    \current_line_reg[1]_1 ,
+    \current_line_reg[1]_2 ,
+    load_trigger,
     SYNC_OUT,
-    Q,
     RESET,
     PACKET_DATA,
-    \current_state_reg[351] ,
+    Q,
+    \current_state_reg[1] ,
     CLK_IN);
   output [0:0]SR;
   output packet_trigger;
   output [31:0]D;
+  output \current_line_reg[1]_0 ;
+  output \current_line_reg[1]_1 ;
+  output \current_line_reg[1]_2 ;
+  output load_trigger;
   output SYNC_OUT;
-  input [1:0]Q;
   input RESET;
   input [0:0]PACKET_DATA;
-  input [30:0]\current_state_reg[351] ;
+  input [30:0]Q;
+  input [4:0]\current_state_reg[1] ;
   input CLK_IN;
 
   wire CLK_IN;
   wire [31:0]D;
+  wire FRAME_TRIGGER;
   wire [0:0]PACKET_DATA;
-  wire [1:0]Q;
+  wire [30:0]Q;
   wire RESET;
   wire [0:0]SR;
   wire SYNC_OUT;
@@ -4977,7 +4993,6 @@ module system_teletext_controller_0_0_sync_generator
   wire SYNC_OUT_INST_0_i_28_n_0;
   wire SYNC_OUT_INST_0_i_29_n_0;
   wire SYNC_OUT_INST_0_i_2_n_0;
-  wire SYNC_OUT_INST_0_i_30_n_0;
   wire SYNC_OUT_INST_0_i_3_n_0;
   wire SYNC_OUT_INST_0_i_4_n_0;
   wire SYNC_OUT_INST_0_i_5_n_0;
@@ -4986,404 +5001,400 @@ module system_teletext_controller_0_0_sync_generator
   wire SYNC_OUT_INST_0_i_8_n_0;
   wire SYNC_OUT_INST_0_i_9_n_0;
   wire \current_column[0]_i_1_n_0 ;
+  wire \current_column[3]_i_1_n_0 ;
   wire \current_column[5]_i_1_n_0 ;
-  wire \current_column[6]_i_1_n_0 ;
   wire \current_column[6]_i_2_n_0 ;
   wire \current_column[9]_i_1_n_0 ;
   wire \current_column[9]_i_3_n_0 ;
   wire [8:0]current_column_reg;
   wire [9:9]current_column_reg__0;
+  wire current_line0;
   wire \current_line[0]_i_1_n_0 ;
+  wire \current_line[2]_i_1__0_n_0 ;
   wire \current_line[3]_i_1__0_n_0 ;
+  wire \current_line[4]_i_1__0_n_0 ;
   wire \current_line[4]_i_4_n_0 ;
   wire \current_line[4]_i_5_n_0 ;
   wire \current_line[4]_i_6_n_0 ;
   wire \current_line[4]_i_7_n_0 ;
   wire \current_line[4]_i_8_n_0 ;
   wire \current_line[4]_i_9_n_0 ;
-  wire \current_line[8]_i_2_n_0 ;
+  wire \current_line[5]_i_1_n_0 ;
+  wire \current_line[7]_i_2_n_0 ;
   wire \current_line[9]_i_1_n_0 ;
-  wire \current_line[9]_i_2_n_0 ;
-  wire \current_line[9]_i_4_n_0 ;
   wire \current_line[9]_i_5_n_0 ;
   wire \current_line[9]_i_6_n_0 ;
   wire \current_line[9]_i_7_n_0 ;
   wire [9:0]current_line_reg;
-  wire [30:0]\current_state_reg[351] ;
+  wire \current_line_reg[1]_0 ;
+  wire \current_line_reg[1]_1 ;
+  wire \current_line_reg[1]_2 ;
+  wire [4:0]\current_state_reg[1] ;
+  wire load_trigger;
   wire [9:1]p_0_in;
   wire [9:1]p_0_in__0;
   wire packet_trigger;
 
-  LUT6 #(
-    .INIT(64'hABA8FFFFABA80000)) 
+  LUT5 #(
+    .INIT(32'h02FF0200)) 
     SYNC_OUT_INST_0
        (.I0(SYNC_OUT_INST_0_i_1_n_0),
         .I1(SYNC_OUT_INST_0_i_2_n_0),
         .I2(SYNC_OUT_INST_0_i_3_n_0),
         .I3(SYNC_OUT_INST_0_i_4_n_0),
         .I4(SYNC_OUT_INST_0_i_5_n_0),
-        .I5(SYNC_OUT_INST_0_i_6_n_0),
         .O(SYNC_OUT));
-  LUT4 #(
-    .INIT(16'hFBF8)) 
-    SYNC_OUT_INST_0_i_1
-       (.I0(SYNC_OUT_INST_0_i_7_n_0),
-        .I1(SYNC_OUT_INST_0_i_8_n_0),
-        .I2(SYNC_OUT_INST_0_i_9_n_0),
-        .I3(SYNC_OUT_INST_0_i_10_n_0),
-        .O(SYNC_OUT_INST_0_i_1_n_0));
   LUT6 #(
-    .INIT(64'h0000000000008000)) 
-    SYNC_OUT_INST_0_i_10
-       (.I0(SYNC_OUT_INST_0_i_14_n_0),
-        .I1(current_column_reg[6]),
-        .I2(current_column_reg[7]),
-        .I3(current_column_reg[5]),
-        .I4(SYNC_OUT_INST_0_i_15_n_0),
-        .I5(current_column_reg[8]),
-        .O(SYNC_OUT_INST_0_i_10_n_0));
-  LUT2 #(
-    .INIT(4'h2)) 
-    SYNC_OUT_INST_0_i_11
-       (.I0(current_line_reg[5]),
-        .I1(current_line_reg[8]),
-        .O(SYNC_OUT_INST_0_i_11_n_0));
+    .INIT(64'hFFFFFFFF10110000)) 
+    SYNC_OUT_INST_0_i_1
+       (.I0(SYNC_OUT_INST_0_i_6_n_0),
+        .I1(SYNC_OUT_INST_0_i_7_n_0),
+        .I2(SYNC_OUT_INST_0_i_8_n_0),
+        .I3(SYNC_OUT_INST_0_i_9_n_0),
+        .I4(SYNC_OUT_INST_0_i_10_n_0),
+        .I5(SYNC_OUT_INST_0_i_11_n_0),
+        .O(SYNC_OUT_INST_0_i_1_n_0));
   (* SOFT_HLUTNM = "soft_lutpair120" *) 
-  LUT3 #(
-    .INIT(8'h28)) 
-    SYNC_OUT_INST_0_i_12
-       (.I0(current_line_reg[2]),
-        .I1(current_line_reg[4]),
-        .I2(current_line_reg[3]),
-        .O(SYNC_OUT_INST_0_i_12_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair122" *) 
-  LUT4 #(
-    .INIT(16'hFFFE)) 
-    SYNC_OUT_INST_0_i_13
-       (.I0(current_column_reg[6]),
-        .I1(current_column_reg[5]),
-        .I2(current_column_reg[7]),
-        .I3(current_column_reg[8]),
-        .O(SYNC_OUT_INST_0_i_13_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair112" *) 
-  LUT5 #(
-    .INIT(32'h15555555)) 
-    SYNC_OUT_INST_0_i_14
-       (.I0(current_column_reg[4]),
-        .I1(current_column_reg[0]),
-        .I2(current_column_reg[1]),
-        .I3(current_column_reg[2]),
-        .I4(current_column_reg[3]),
-        .O(SYNC_OUT_INST_0_i_14_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair114" *) 
   LUT5 #(
     .INIT(32'h00000001)) 
-    SYNC_OUT_INST_0_i_15
+    SYNC_OUT_INST_0_i_10
        (.I0(current_column_reg[0]),
         .I1(current_column_reg[1]),
         .I2(current_column_reg[3]),
         .I3(current_column_reg[4]),
         .I4(current_column_reg[2]),
-        .O(SYNC_OUT_INST_0_i_15_n_0));
+        .O(SYNC_OUT_INST_0_i_10_n_0));
+  LUT5 #(
+    .INIT(32'hFFFFFFFE)) 
+    SYNC_OUT_INST_0_i_11
+       (.I0(SYNC_OUT_INST_0_i_21_n_0),
+        .I1(SYNC_OUT_INST_0_i_22_n_0),
+        .I2(SYNC_OUT_INST_0_i_23_n_0),
+        .I3(SYNC_OUT_INST_0_i_17_n_0),
+        .I4(SYNC_OUT_INST_0_i_18_n_0),
+        .O(SYNC_OUT_INST_0_i_11_n_0));
   LUT6 #(
-    .INIT(64'h0005030500050005)) 
-    SYNC_OUT_INST_0_i_16
-       (.I0(SYNC_OUT_INST_0_i_26_n_0),
+    .INIT(64'hFFFFFFFFFFFFFF9A)) 
+    SYNC_OUT_INST_0_i_12
+       (.I0(current_line_reg[9]),
+        .I1(current_line_reg[8]),
+        .I2(current_line_reg[5]),
+        .I3(current_line_reg[7]),
+        .I4(SYNC_OUT_INST_0_i_22_n_0),
+        .I5(SYNC_OUT_INST_0_i_21_n_0),
+        .O(SYNC_OUT_INST_0_i_12_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair114" *) 
+  LUT5 #(
+    .INIT(32'hAAAAAA80)) 
+    SYNC_OUT_INST_0_i_13
+       (.I0(current_column_reg[4]),
+        .I1(current_column_reg[1]),
+        .I2(current_column_reg[0]),
+        .I3(current_column_reg[2]),
+        .I4(current_column_reg[3]),
+        .O(SYNC_OUT_INST_0_i_13_n_0));
+  LUT6 #(
+    .INIT(64'h00FF50003FFF0000)) 
+    SYNC_OUT_INST_0_i_14
+       (.I0(SYNC_OUT_INST_0_i_10_n_0),
+        .I1(SYNC_OUT_INST_0_i_13_n_0),
+        .I2(current_column_reg[5]),
+        .I3(current_column_reg[7]),
+        .I4(current_column_reg[8]),
+        .I5(current_column_reg[6]),
+        .O(SYNC_OUT_INST_0_i_14_n_0));
+  LUT6 #(
+    .INIT(64'h0300050500000505)) 
+    SYNC_OUT_INST_0_i_15
+       (.I0(SYNC_OUT_INST_0_i_24_n_0),
         .I1(current_line_reg[8]),
         .I2(current_line_reg[7]),
-        .I3(current_line_reg[9]),
-        .I4(SYNC_OUT_INST_0_i_27_n_0),
-        .I5(\current_line[9]_i_6_n_0 ),
+        .I3(SYNC_OUT_INST_0_i_25_n_0),
+        .I4(current_line_reg[9]),
+        .I5(SYNC_OUT_INST_0_i_26_n_0),
+        .O(SYNC_OUT_INST_0_i_15_n_0));
+  LUT6 #(
+    .INIT(64'h000000000000AA02)) 
+    SYNC_OUT_INST_0_i_16
+       (.I0(SYNC_OUT_INST_0_i_27_n_0),
+        .I1(current_line_reg[2]),
+        .I2(current_line_reg[3]),
+        .I3(current_line_reg[5]),
+        .I4(SYNC_OUT_INST_0_i_28_n_0),
+        .I5(SYNC_OUT_INST_0_i_29_n_0),
         .O(SYNC_OUT_INST_0_i_16_n_0));
-  LUT6 #(
-    .INIT(64'h000000000000888A)) 
+  (* SOFT_HLUTNM = "soft_lutpair121" *) 
+  LUT4 #(
+    .INIT(16'hFFFE)) 
     SYNC_OUT_INST_0_i_17
-       (.I0(SYNC_OUT_INST_0_i_28_n_0),
-        .I1(current_line_reg[5]),
-        .I2(current_line_reg[2]),
-        .I3(current_line_reg[3]),
-        .I4(SYNC_OUT_INST_0_i_29_n_0),
-        .I5(SYNC_OUT_INST_0_i_30_n_0),
+       (.I0(current_column_reg[6]),
+        .I1(current_column_reg[5]),
+        .I2(current_column_reg[7]),
+        .I3(current_column_reg[8]),
         .O(SYNC_OUT_INST_0_i_17_n_0));
-  LUT6 #(
-    .INIT(64'hFFF8000000000000)) 
+  (* SOFT_HLUTNM = "soft_lutpair114" *) 
+  LUT5 #(
+    .INIT(32'hEAAAAAAA)) 
     SYNC_OUT_INST_0_i_18
-       (.I0(current_column_reg[1]),
-        .I1(current_column_reg[0]),
-        .I2(current_column_reg[2]),
-        .I3(current_column_reg[3]),
-        .I4(current_column_reg[5]),
-        .I5(current_column_reg[4]),
+       (.I0(current_column_reg[4]),
+        .I1(current_column_reg[2]),
+        .I2(current_column_reg[0]),
+        .I3(current_column_reg[1]),
+        .I4(current_column_reg[3]),
         .O(SYNC_OUT_INST_0_i_18_n_0));
-  LUT6 #(
-    .INIT(64'h7F7F7F7FFFFF7FFF)) 
+  (* SOFT_HLUTNM = "soft_lutpair113" *) 
+  LUT5 #(
+    .INIT(32'h00001000)) 
     SYNC_OUT_INST_0_i_19
-       (.I0(current_line_reg[0]),
-        .I1(current_line_reg[1]),
-        .I2(current_line_reg[2]),
-        .I3(current_line_reg[4]),
-        .I4(current_line_reg[6]),
-        .I5(current_line_reg[3]),
+       (.I0(current_line_reg[3]),
+        .I1(current_line_reg[2]),
+        .I2(current_line_reg[1]),
+        .I3(current_line_reg[0]),
+        .I4(current_line_reg[5]),
         .O(SYNC_OUT_INST_0_i_19_n_0));
   LUT6 #(
-    .INIT(64'hDFDFDFFFBFFEFF7F)) 
+    .INIT(64'h0000000002AAAAAA)) 
     SYNC_OUT_INST_0_i_2
+       (.I0(SYNC_OUT_INST_0_i_12_n_0),
+        .I1(SYNC_OUT_INST_0_i_13_n_0),
+        .I2(current_column_reg[5]),
+        .I3(current_column_reg[7]),
+        .I4(current_column_reg[6]),
+        .I5(current_column_reg[8]),
+        .O(SYNC_OUT_INST_0_i_2_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair140" *) 
+  LUT3 #(
+    .INIT(8'hBA)) 
+    SYNC_OUT_INST_0_i_20
+       (.I0(current_line_reg[1]),
+        .I1(current_line_reg[4]),
+        .I2(current_line_reg[5]),
+        .O(SYNC_OUT_INST_0_i_20_n_0));
+  LUT6 #(
+    .INIT(64'hDFDFDFFFBFFEFF7F)) 
+    SYNC_OUT_INST_0_i_21
        (.I0(current_line_reg[4]),
         .I1(current_line_reg[6]),
         .I2(current_line_reg[5]),
         .I3(current_line_reg[3]),
         .I4(current_line_reg[2]),
         .I5(current_line_reg[8]),
-        .O(SYNC_OUT_INST_0_i_2_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair119" *) 
-  LUT3 #(
-    .INIT(8'h4F)) 
-    SYNC_OUT_INST_0_i_20
-       (.I0(current_line_reg[4]),
-        .I1(current_line_reg[5]),
-        .I2(current_line_reg[3]),
-        .O(SYNC_OUT_INST_0_i_20_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair118" *) 
-  LUT5 #(
-    .INIT(32'h00000008)) 
-    SYNC_OUT_INST_0_i_21
-       (.I0(current_line_reg[0]),
-        .I1(current_line_reg[1]),
-        .I2(current_line_reg[2]),
-        .I3(current_line_reg[3]),
-        .I4(current_line_reg[5]),
         .O(SYNC_OUT_INST_0_i_21_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair120" *) 
+  (* SOFT_HLUTNM = "soft_lutpair111" *) 
   LUT5 #(
-    .INIT(32'hAAAA08AA)) 
+    .INIT(32'hD7FF3C00)) 
     SYNC_OUT_INST_0_i_22
-       (.I0(current_line_reg[3]),
-        .I1(current_line_reg[0]),
-        .I2(current_line_reg[2]),
-        .I3(current_line_reg[4]),
-        .I4(current_line_reg[6]),
-        .O(SYNC_OUT_INST_0_i_22_n_0));
-  LUT6 #(
-    .INIT(64'hFFFFFFFF0D0DFF01)) 
-    SYNC_OUT_INST_0_i_23
-       (.I0(current_line_reg[6]),
-        .I1(current_line_reg[2]),
+       (.I0(current_line_reg[0]),
+        .I1(current_line_reg[4]),
         .I2(current_line_reg[3]),
-        .I3(current_line_reg[5]),
-        .I4(current_line_reg[4]),
-        .I5(current_line_reg[1]),
-        .O(SYNC_OUT_INST_0_i_23_n_0));
-  LUT6 #(
-    .INIT(64'hFBFBFFFFFFFFBFFE)) 
-    SYNC_OUT_INST_0_i_24
+        .I3(current_line_reg[2]),
+        .I4(current_line_reg[1]),
+        .O(SYNC_OUT_INST_0_i_22_n_0));
+  LUT4 #(
+    .INIT(16'hFBAE)) 
+    SYNC_OUT_INST_0_i_23
        (.I0(current_line_reg[7]),
         .I1(current_line_reg[5]),
         .I2(current_line_reg[8]),
-        .I3(current_line_reg[4]),
-        .I4(current_line_reg[9]),
-        .I5(current_line_reg[6]),
-        .O(SYNC_OUT_INST_0_i_24_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair123" *) 
-  LUT4 #(
-    .INIT(16'hFEEE)) 
-    SYNC_OUT_INST_0_i_25
-       (.I0(current_column_reg[3]),
-        .I1(current_column_reg[2]),
-        .I2(current_column_reg[0]),
-        .I3(current_column_reg[1]),
-        .O(SYNC_OUT_INST_0_i_25_n_0));
+        .I3(current_line_reg[9]),
+        .O(SYNC_OUT_INST_0_i_23_n_0));
   (* SOFT_HLUTNM = "soft_lutpair119" *) 
   LUT5 #(
     .INIT(32'hDFFFFFFE)) 
-    SYNC_OUT_INST_0_i_26
+    SYNC_OUT_INST_0_i_24
        (.I0(current_line_reg[8]),
         .I1(current_line_reg[6]),
         .I2(current_line_reg[4]),
         .I3(current_line_reg[5]),
         .I4(current_line_reg[3]),
-        .O(SYNC_OUT_INST_0_i_26_n_0));
+        .O(SYNC_OUT_INST_0_i_24_n_0));
   LUT2 #(
-    .INIT(4'hE)) 
-    SYNC_OUT_INST_0_i_27
+    .INIT(4'h1)) 
+    SYNC_OUT_INST_0_i_25
        (.I0(current_line_reg[2]),
         .I1(current_line_reg[3]),
-        .O(SYNC_OUT_INST_0_i_27_n_0));
+        .O(SYNC_OUT_INST_0_i_25_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair117" *) 
+  LUT3 #(
+    .INIT(8'h80)) 
+    SYNC_OUT_INST_0_i_26
+       (.I0(current_line_reg[6]),
+        .I1(current_line_reg[5]),
+        .I2(current_line_reg[4]),
+        .O(SYNC_OUT_INST_0_i_26_n_0));
   LUT6 #(
     .INIT(64'hAAAABABBAAAAAABB)) 
-    SYNC_OUT_INST_0_i_28
+    SYNC_OUT_INST_0_i_27
        (.I0(current_line_reg[3]),
         .I1(current_line_reg[9]),
         .I2(current_line_reg[8]),
         .I3(current_line_reg[5]),
         .I4(current_line_reg[6]),
         .I5(current_line_reg[4]),
-        .O(SYNC_OUT_INST_0_i_28_n_0));
+        .O(SYNC_OUT_INST_0_i_27_n_0));
   LUT6 #(
     .INIT(64'hEEFFFFFF0E0E0E0E)) 
-    SYNC_OUT_INST_0_i_29
+    SYNC_OUT_INST_0_i_28
        (.I0(current_line_reg[4]),
         .I1(current_line_reg[8]),
         .I2(current_line_reg[5]),
         .I3(current_line_reg[6]),
         .I4(current_line_reg[9]),
         .I5(current_line_reg[3]),
-        .O(SYNC_OUT_INST_0_i_29_n_0));
-  LUT6 #(
-    .INIT(64'hDFFDFFFFFFFFCFFC)) 
-    SYNC_OUT_INST_0_i_3
-       (.I0(current_line_reg[0]),
-        .I1(current_line_reg[7]),
-        .I2(SYNC_OUT_INST_0_i_11_n_0),
-        .I3(current_line_reg[9]),
-        .I4(current_line_reg[1]),
-        .I5(SYNC_OUT_INST_0_i_12_n_0),
-        .O(SYNC_OUT_INST_0_i_3_n_0));
-  (* SOFT_HLUTNM = "soft_lutpair115" *) 
+        .O(SYNC_OUT_INST_0_i_28_n_0));
+  (* SOFT_HLUTNM = "soft_lutpair118" *) 
   LUT5 #(
-    .INIT(32'hDDFDFDFD)) 
-    SYNC_OUT_INST_0_i_30
-       (.I0(current_line_reg[0]),
-        .I1(current_line_reg[7]),
-        .I2(current_line_reg[5]),
-        .I3(current_line_reg[1]),
-        .I4(current_line_reg[2]),
-        .O(SYNC_OUT_INST_0_i_30_n_0));
-  LUT6 #(
-    .INIT(64'hB8FCB8B8B8FFB8B8)) 
-    SYNC_OUT_INST_0_i_4
-       (.I0(SYNC_OUT_INST_0_i_7_n_0),
-        .I1(SYNC_OUT_INST_0_i_8_n_0),
-        .I2(SYNC_OUT_INST_0_i_10_n_0),
-        .I3(SYNC_OUT_INST_0_i_13_n_0),
+    .INIT(32'hFFFF2AFF)) 
+    SYNC_OUT_INST_0_i_29
+       (.I0(current_line_reg[5]),
+        .I1(current_line_reg[1]),
+        .I2(current_line_reg[2]),
+        .I3(current_line_reg[0]),
+        .I4(current_line_reg[7]),
+        .O(SYNC_OUT_INST_0_i_29_n_0));
+  LUT5 #(
+    .INIT(32'hFFAE00A2)) 
+    SYNC_OUT_INST_0_i_3
+       (.I0(SYNC_OUT_INST_0_i_6_n_0),
+        .I1(SYNC_OUT_INST_0_i_9_n_0),
+        .I2(SYNC_OUT_INST_0_i_8_n_0),
+        .I3(SYNC_OUT_INST_0_i_7_n_0),
         .I4(SYNC_OUT_INST_0_i_14_n_0),
-        .I5(SYNC_OUT_INST_0_i_15_n_0),
+        .O(SYNC_OUT_INST_0_i_3_n_0));
+  LUT6 #(
+    .INIT(64'hFFFFFFFF4F5E0000)) 
+    SYNC_OUT_INST_0_i_4
+       (.I0(current_line_reg[2]),
+        .I1(current_line_reg[3]),
+        .I2(current_line_reg[1]),
+        .I3(current_line_reg[4]),
+        .I4(SYNC_OUT_INST_0_i_15_n_0),
+        .I5(SYNC_OUT_INST_0_i_16_n_0),
         .O(SYNC_OUT_INST_0_i_4_n_0));
   LUT6 #(
-    .INIT(64'hFFFFFFFF0DFE0000)) 
+    .INIT(64'hEAAAEAAAEAAAAAAB)) 
     SYNC_OUT_INST_0_i_5
-       (.I0(current_line_reg[4]),
-        .I1(current_line_reg[3]),
-        .I2(current_line_reg[2]),
-        .I3(current_line_reg[1]),
-        .I4(SYNC_OUT_INST_0_i_16_n_0),
-        .I5(SYNC_OUT_INST_0_i_17_n_0),
+       (.I0(SYNC_OUT_INST_0_i_17_n_0),
+        .I1(current_column_reg[2]),
+        .I2(current_column_reg[3]),
+        .I3(current_column_reg[4]),
+        .I4(current_column_reg[0]),
+        .I5(current_column_reg[1]),
         .O(SYNC_OUT_INST_0_i_5_n_0));
   LUT6 #(
-    .INIT(64'h0155555555555554)) 
+    .INIT(64'h0000000000004000)) 
     SYNC_OUT_INST_0_i_6
-       (.I0(SYNC_OUT_INST_0_i_13_n_0),
-        .I1(current_column_reg[0]),
-        .I2(current_column_reg[1]),
-        .I3(current_column_reg[4]),
-        .I4(current_column_reg[2]),
-        .I5(current_column_reg[3]),
-        .O(SYNC_OUT_INST_0_i_6_n_0));
-  LUT6 #(
-    .INIT(64'h000FFFFF20200000)) 
-    SYNC_OUT_INST_0_i_7
-       (.I0(current_column_reg[5]),
-        .I1(SYNC_OUT_INST_0_i_15_n_0),
-        .I2(current_column_reg[6]),
-        .I3(SYNC_OUT_INST_0_i_18_n_0),
-        .I4(current_column_reg[7]),
-        .I5(current_column_reg[8]),
-        .O(SYNC_OUT_INST_0_i_7_n_0));
-  LUT6 #(
-    .INIT(64'hFFFFFFFF0B0B0B00)) 
-    SYNC_OUT_INST_0_i_8
-       (.I0(SYNC_OUT_INST_0_i_19_n_0),
-        .I1(SYNC_OUT_INST_0_i_20_n_0),
-        .I2(SYNC_OUT_INST_0_i_21_n_0),
-        .I3(SYNC_OUT_INST_0_i_22_n_0),
-        .I4(SYNC_OUT_INST_0_i_23_n_0),
-        .I5(SYNC_OUT_INST_0_i_24_n_0),
-        .O(SYNC_OUT_INST_0_i_8_n_0));
-  LUT6 #(
-    .INIT(64'h1515155515551555)) 
-    SYNC_OUT_INST_0_i_9
        (.I0(current_column_reg[8]),
         .I1(current_column_reg[6]),
         .I2(current_column_reg[7]),
         .I3(current_column_reg[5]),
-        .I4(current_column_reg[4]),
-        .I5(SYNC_OUT_INST_0_i_25_n_0),
+        .I4(SYNC_OUT_INST_0_i_10_n_0),
+        .I5(SYNC_OUT_INST_0_i_18_n_0),
+        .O(SYNC_OUT_INST_0_i_6_n_0));
+  LUT6 #(
+    .INIT(64'hFBFBFFFFFFFFBFFE)) 
+    SYNC_OUT_INST_0_i_7
+       (.I0(current_line_reg[7]),
+        .I1(current_line_reg[5]),
+        .I2(current_line_reg[8]),
+        .I3(current_line_reg[4]),
+        .I4(current_line_reg[9]),
+        .I5(current_line_reg[6]),
+        .O(SYNC_OUT_INST_0_i_7_n_0));
+  LUT6 #(
+    .INIT(64'hFFFFFFFF11040004)) 
+    SYNC_OUT_INST_0_i_8
+       (.I0(\current_line[7]_i_2_n_0 ),
+        .I1(current_line_reg[4]),
+        .I2(current_line_reg[6]),
+        .I3(current_line_reg[3]),
+        .I4(current_line_reg[5]),
+        .I5(SYNC_OUT_INST_0_i_19_n_0),
+        .O(SYNC_OUT_INST_0_i_8_n_0));
+  LUT6 #(
+    .INIT(64'hFFFFAFEFFAAAFAFF)) 
+    SYNC_OUT_INST_0_i_9
+       (.I0(SYNC_OUT_INST_0_i_20_n_0),
+        .I1(current_line_reg[0]),
+        .I2(current_line_reg[4]),
+        .I3(current_line_reg[2]),
+        .I4(current_line_reg[6]),
+        .I5(current_line_reg[3]),
         .O(SYNC_OUT_INST_0_i_9_n_0));
   LUT1 #(
     .INIT(2'h1)) 
     \current_column[0]_i_1 
        (.I0(current_column_reg[0]),
         .O(\current_column[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair142" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \current_column[1]_i_1 
        (.I0(current_column_reg[1]),
         .I1(current_column_reg[0]),
         .O(p_0_in[1]));
-  (* SOFT_HLUTNM = "soft_lutpair140" *) 
+  (* SOFT_HLUTNM = "soft_lutpair139" *) 
   LUT3 #(
     .INIT(8'h6A)) 
     \current_column[2]_i_1 
        (.I0(current_column_reg[2]),
+        .I1(current_column_reg[0]),
+        .I2(current_column_reg[1]),
+        .O(p_0_in[2]));
+  (* SOFT_HLUTNM = "soft_lutpair120" *) 
+  LUT4 #(
+    .INIT(16'h6AAA)) 
+    \current_column[3]_i_1 
+       (.I0(current_column_reg[3]),
         .I1(current_column_reg[1]),
         .I2(current_column_reg[0]),
-        .O(p_0_in[2]));
-  (* SOFT_HLUTNM = "soft_lutpair123" *) 
-  LUT4 #(
-    .INIT(16'h7F80)) 
-    \current_column[3]_i_1 
-       (.I0(current_column_reg[0]),
-        .I1(current_column_reg[1]),
-        .I2(current_column_reg[2]),
-        .I3(current_column_reg[3]),
-        .O(p_0_in[3]));
-  (* SOFT_HLUTNM = "soft_lutpair114" *) 
+        .I3(current_column_reg[2]),
+        .O(\current_column[3]_i_1_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair115" *) 
   LUT5 #(
     .INIT(32'h6AAAAAAA)) 
     \current_column[4]_i_1 
        (.I0(current_column_reg[4]),
-        .I1(current_column_reg[0]),
-        .I2(current_column_reg[1]),
-        .I3(current_column_reg[2]),
+        .I1(current_column_reg[2]),
+        .I2(current_column_reg[0]),
+        .I3(current_column_reg[1]),
         .I4(current_column_reg[3]),
         .O(p_0_in[4]));
   LUT6 #(
     .INIT(64'h6AAAAAAAAAAAAAAA)) 
     \current_column[5]_i_1 
        (.I0(current_column_reg[5]),
-        .I1(current_column_reg[3]),
-        .I2(current_column_reg[2]),
+        .I1(current_column_reg[1]),
+        .I2(current_column_reg[0]),
         .I3(current_column_reg[4]),
-        .I4(current_column_reg[1]),
-        .I5(current_column_reg[0]),
+        .I4(current_column_reg[3]),
+        .I5(current_column_reg[2]),
         .O(\current_column[5]_i_1_n_0 ));
   LUT6 #(
-    .INIT(64'hA6AAAAAAAAAAAAAA)) 
+    .INIT(64'h6AAAAAAAAAAAAAAA)) 
     \current_column[6]_i_1 
        (.I0(current_column_reg[6]),
-        .I1(current_column_reg[5]),
-        .I2(\current_column[6]_i_2_n_0 ),
+        .I1(current_column_reg[2]),
+        .I2(current_column_reg[3]),
         .I3(current_column_reg[4]),
-        .I4(current_column_reg[2]),
-        .I5(current_column_reg[3]),
-        .O(\current_column[6]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair142" *) 
+        .I4(\current_column[6]_i_2_n_0 ),
+        .I5(current_column_reg[5]),
+        .O(p_0_in[6]));
+  (* SOFT_HLUTNM = "soft_lutpair139" *) 
   LUT2 #(
-    .INIT(4'h7)) 
+    .INIT(4'h8)) 
     \current_column[6]_i_2 
        (.I0(current_column_reg[1]),
         .I1(current_column_reg[0]),
         .O(\current_column[6]_i_2_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair122" *) 
   LUT4 #(
-    .INIT(16'h9AAA)) 
+    .INIT(16'hA6AA)) 
     \current_column[7]_i_1 
        (.I0(current_column_reg[7]),
-        .I1(\current_column[9]_i_3_n_0 ),
-        .I2(current_column_reg[5]),
+        .I1(current_column_reg[5]),
+        .I2(\current_column[9]_i_3_n_0 ),
         .I3(current_column_reg[6]),
         .O(p_0_in[7]));
-  (* SOFT_HLUTNM = "soft_lutpair113" *) 
+  (* SOFT_HLUTNM = "soft_lutpair112" *) 
   LUT5 #(
     .INIT(32'h9AAAAAAA)) 
     \current_column[8]_i_1 
@@ -5402,25 +5413,25 @@ module system_teletext_controller_0_0_sync_generator
         .I3(current_column_reg[6]),
         .I4(current_column_reg__0),
         .O(\current_column[9]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair113" *) 
-  LUT5 #(
-    .INIT(32'h00008000)) 
-    \current_column[9]_i_2 
-       (.I0(current_column_reg[8]),
-        .I1(current_column_reg[6]),
-        .I2(current_column_reg[7]),
-        .I3(current_column_reg[5]),
-        .I4(\current_column[9]_i_3_n_0 ),
-        .O(p_0_in[9]));
   (* SOFT_HLUTNM = "soft_lutpair112" *) 
+  LUT5 #(
+    .INIT(32'h00800000)) 
+    \current_column[9]_i_2 
+       (.I0(current_column_reg[6]),
+        .I1(current_column_reg[7]),
+        .I2(current_column_reg[5]),
+        .I3(\current_column[9]_i_3_n_0 ),
+        .I4(current_column_reg[8]),
+        .O(p_0_in[9]));
+  (* SOFT_HLUTNM = "soft_lutpair115" *) 
   LUT5 #(
     .INIT(32'h7FFFFFFF)) 
     \current_column[9]_i_3 
-       (.I0(current_column_reg[0]),
-        .I1(current_column_reg[1]),
+       (.I0(current_column_reg[2]),
+        .I1(current_column_reg[3]),
         .I2(current_column_reg[4]),
-        .I3(current_column_reg[2]),
-        .I4(current_column_reg[3]),
+        .I3(current_column_reg[0]),
+        .I4(current_column_reg[1]),
         .O(\current_column[9]_i_3_n_0 ));
   FDSE #(
     .INIT(1'b1)) 
@@ -5451,7 +5462,7 @@ module system_teletext_controller_0_0_sync_generator
     \current_column_reg[3] 
        (.C(CLK_IN),
         .CE(1'b1),
-        .D(p_0_in[3]),
+        .D(\current_column[3]_i_1_n_0 ),
         .Q(current_column_reg[3]),
         .R(\current_column[9]_i_1_n_0 ));
   FDRE #(
@@ -5475,7 +5486,7 @@ module system_teletext_controller_0_0_sync_generator
     \current_column_reg[6] 
        (.C(CLK_IN),
         .CE(1'b1),
-        .D(\current_column[6]_i_1_n_0 ),
+        .D(p_0_in[6]),
         .Q(current_column_reg[6]),
         .R(\current_column[9]_i_1_n_0 ));
   FDRE #(
@@ -5507,22 +5518,22 @@ module system_teletext_controller_0_0_sync_generator
     \current_line[0]_i_1 
        (.I0(current_line_reg[0]),
         .O(\current_line[0]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair141" *) 
+  (* SOFT_HLUTNM = "soft_lutpair140" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \current_line[1]_i_1 
        (.I0(current_line_reg[1]),
         .I1(current_line_reg[0]),
         .O(p_0_in__0[1]));
-  (* SOFT_HLUTNM = "soft_lutpair141" *) 
+  (* SOFT_HLUTNM = "soft_lutpair122" *) 
   LUT3 #(
     .INIT(8'h6A)) 
-    \current_line[2]_i_1 
+    \current_line[2]_i_1__0 
        (.I0(current_line_reg[2]),
         .I1(current_line_reg[0]),
         .I2(current_line_reg[1]),
-        .O(p_0_in__0[2]));
-  (* SOFT_HLUTNM = "soft_lutpair116" *) 
+        .O(\current_line[2]_i_1__0_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair113" *) 
   LUT4 #(
     .INIT(16'h6AAA)) 
     \current_line[3]_i_1__0 
@@ -5531,89 +5542,88 @@ module system_teletext_controller_0_0_sync_generator
         .I2(current_line_reg[1]),
         .I3(current_line_reg[2]),
         .O(\current_line[3]_i_1__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair116" *) 
+  LUT3 #(
+    .INIT(8'hF4)) 
+    \current_line[4]_i_1 
+       (.I0(packet_trigger),
+        .I1(FRAME_TRIGGER),
+        .I2(RESET),
+        .O(SR));
+  (* SOFT_HLUTNM = "soft_lutpair111" *) 
   LUT5 #(
     .INIT(32'h6AAAAAAA)) 
-    \current_line[4]_i_1 
-       (.I0(current_line_reg[4]),
-        .I1(current_line_reg[2]),
-        .I2(current_line_reg[1]),
-        .I3(current_line_reg[0]),
-        .I4(current_line_reg[3]),
-        .O(p_0_in__0[4]));
-  (* SOFT_HLUTNM = "soft_lutpair121" *) 
-  LUT4 #(
-    .INIT(16'hFF80)) 
     \current_line[4]_i_1__0 
-       (.I0(Q[0]),
-        .I1(Q[1]),
-        .I2(packet_trigger),
-        .I3(RESET),
-        .O(SR));
+       (.I0(current_line_reg[4]),
+        .I1(current_line_reg[3]),
+        .I2(current_line_reg[2]),
+        .I3(current_line_reg[1]),
+        .I4(current_line_reg[0]),
+        .O(\current_line[4]_i_1__0_n_0 ));
   LUT6 #(
-    .INIT(64'h0000000000105555)) 
+    .INIT(64'h0000000000000010)) 
     \current_line[4]_i_2 
        (.I0(\current_line[4]_i_4_n_0 ),
-        .I1(current_line_reg[5]),
-        .I2(current_line_reg[8]),
-        .I3(current_line_reg[4]),
-        .I4(current_line_reg[6]),
-        .I5(\current_line[4]_i_5_n_0 ),
-        .O(packet_trigger));
-  LUT6 #(
-    .INIT(64'hFFFFFFFF7FFF0000)) 
-    \current_line[4]_i_4 
-       (.I0(current_line_reg[2]),
-        .I1(current_line_reg[1]),
-        .I2(current_line_reg[4]),
-        .I3(current_line_reg[3]),
-        .I4(current_line_reg[5]),
-        .I5(\current_line[4]_i_6_n_0 ),
-        .O(\current_line[4]_i_4_n_0 ));
-  LUT6 #(
-    .INIT(64'hFFFFFFFFEEEEEFEE)) 
-    \current_line[4]_i_5 
-       (.I0(\current_line[4]_i_7_n_0 ),
-        .I1(\current_line[4]_i_8_n_0 ),
-        .I2(current_line_reg[5]),
-        .I3(current_line_reg[8]),
-        .I4(current_line_reg[6]),
+        .I1(\current_line[4]_i_5_n_0 ),
+        .I2(\current_line[4]_i_6_n_0 ),
+        .I3(\current_line[4]_i_7_n_0 ),
+        .I4(\current_line[4]_i_8_n_0 ),
         .I5(\current_line[4]_i_9_n_0 ),
-        .O(\current_line[4]_i_5_n_0 ));
+        .O(packet_trigger));
   LUT5 #(
     .INIT(32'hFFFEFFFF)) 
-    \current_line[4]_i_6 
+    \current_line[4]_i_4 
        (.I0(current_line_reg[9]),
         .I1(current_line_reg[7]),
         .I2(current_column_reg[3]),
         .I3(current_column_reg[4]),
         .I4(current_column_reg[6]),
+        .O(\current_line[4]_i_4_n_0 ));
+  LUT6 #(
+    .INIT(64'h7FFFFFFF7F7F7F7F)) 
+    \current_line[4]_i_5 
+       (.I0(current_column_reg[1]),
+        .I1(current_column_reg[0]),
+        .I2(current_column_reg[2]),
+        .I3(current_line_reg[3]),
+        .I4(current_line_reg[4]),
+        .I5(current_line_reg[5]),
+        .O(\current_line[4]_i_5_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair119" *) 
+  LUT4 #(
+    .INIT(16'h04FF)) 
+    \current_line[4]_i_6 
+       (.I0(current_line_reg[5]),
+        .I1(current_line_reg[8]),
+        .I2(current_line_reg[4]),
+        .I3(current_line_reg[6]),
         .O(\current_line[4]_i_6_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair118" *) 
+  LUT3 #(
+    .INIT(8'h70)) 
+    \current_line[4]_i_7 
+       (.I0(current_line_reg[2]),
+        .I1(current_line_reg[1]),
+        .I2(current_line_reg[5]),
+        .O(\current_line[4]_i_7_n_0 ));
+  LUT6 #(
+    .INIT(64'hFEFEFEFEFEFFFEFE)) 
+    \current_line[4]_i_8 
+       (.I0(current_column_reg[5]),
+        .I1(current_column_reg[7]),
+        .I2(current_column_reg[8]),
+        .I3(current_line_reg[5]),
+        .I4(current_line_reg[8]),
+        .I5(current_line_reg[6]),
+        .O(\current_line[4]_i_8_n_0 ));
   LUT6 #(
     .INIT(64'h00000000E0A5A5A5)) 
-    \current_line[4]_i_7 
+    \current_line[4]_i_9 
        (.I0(current_line_reg[3]),
         .I1(current_line_reg[0]),
         .I2(current_line_reg[4]),
         .I3(current_line_reg[2]),
         .I4(current_line_reg[1]),
         .I5(current_line_reg[8]),
-        .O(\current_line[4]_i_7_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair124" *) 
-  LUT3 #(
-    .INIT(8'hFE)) 
-    \current_line[4]_i_8 
-       (.I0(current_column_reg[8]),
-        .I1(current_column_reg[7]),
-        .I2(current_column_reg[5]),
-        .O(\current_line[4]_i_8_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair140" *) 
-  LUT3 #(
-    .INIT(8'h7F)) 
-    \current_line[4]_i_9 
-       (.I0(current_column_reg[0]),
-        .I1(current_column_reg[1]),
-        .I2(current_column_reg[2]),
         .O(\current_line[4]_i_9_n_0 ));
   LUT6 #(
     .INIT(64'h6AAAAAAAAAAAAAAA)) 
@@ -5624,16 +5634,16 @@ module system_teletext_controller_0_0_sync_generator
         .I3(current_line_reg[2]),
         .I4(current_line_reg[1]),
         .I5(current_line_reg[0]),
-        .O(p_0_in__0[5]));
+        .O(\current_line[5]_i_1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair117" *) 
   LUT5 #(
-    .INIT(32'hA6AAAAAA)) 
+    .INIT(32'h9AAAAAAA)) 
     \current_line[6]_i_1 
        (.I0(current_line_reg[6]),
-        .I1(current_line_reg[5]),
-        .I2(\current_line[9]_i_7_n_0 ),
-        .I3(current_line_reg[4]),
-        .I4(current_line_reg[3]),
+        .I1(\current_line[7]_i_2_n_0 ),
+        .I2(current_line_reg[4]),
+        .I3(current_line_reg[3]),
+        .I4(current_line_reg[5]),
         .O(p_0_in__0[6]));
   LUT6 #(
     .INIT(64'hAAAAAAAA6AAAAAAA)) 
@@ -5641,38 +5651,32 @@ module system_teletext_controller_0_0_sync_generator
        (.I0(current_line_reg[7]),
         .I1(current_line_reg[6]),
         .I2(current_line_reg[5]),
-        .I3(current_line_reg[4]),
-        .I4(current_line_reg[3]),
-        .I5(\current_line[9]_i_7_n_0 ),
+        .I3(current_line_reg[3]),
+        .I4(current_line_reg[4]),
+        .I5(\current_line[7]_i_2_n_0 ),
         .O(p_0_in__0[7]));
-  LUT6 #(
-    .INIT(64'h6AAAAAAAAAAAAAAA)) 
+  (* SOFT_HLUTNM = "soft_lutpair122" *) 
+  LUT3 #(
+    .INIT(8'h7F)) 
+    \current_line[7]_i_2 
+       (.I0(current_line_reg[2]),
+        .I1(current_line_reg[1]),
+        .I2(current_line_reg[0]),
+        .O(\current_line[7]_i_2_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair116" *) 
+  LUT4 #(
+    .INIT(16'h6AAA)) 
     \current_line[8]_i_1 
        (.I0(current_line_reg[8]),
-        .I1(\current_line[8]_i_2_n_0 ),
-        .I2(current_line_reg[4]),
-        .I3(current_line_reg[5]),
-        .I4(current_line_reg[6]),
-        .I5(current_line_reg[7]),
-        .O(p_0_in__0[8]));
-  (* SOFT_HLUTNM = "soft_lutpair118" *) 
-  LUT4 #(
-    .INIT(16'h8000)) 
-    \current_line[8]_i_2 
-       (.I0(current_line_reg[3]),
-        .I1(current_line_reg[0]),
-        .I2(current_line_reg[1]),
-        .I3(current_line_reg[2]),
-        .O(\current_line[8]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'hAAAAFFFEAAAAAAAA)) 
-    \current_line[9]_i_1 
-       (.I0(RESET),
-        .I1(\current_line[9]_i_4_n_0 ),
-        .I2(current_line_reg[8]),
+        .I1(\current_line[9]_i_5_n_0 ),
+        .I2(current_line_reg[6]),
         .I3(current_line_reg[7]),
-        .I4(\current_line[9]_i_5_n_0 ),
-        .I5(current_line_reg[9]),
+        .O(p_0_in__0[8]));
+  LUT2 #(
+    .INIT(4'hE)) 
+    \current_line[9]_i_1 
+       (.I0(FRAME_TRIGGER),
+        .I1(RESET),
         .O(\current_line[9]_i_1_n_0 ));
   LUT4 #(
     .INIT(16'hFF80)) 
@@ -5681,57 +5685,60 @@ module system_teletext_controller_0_0_sync_generator
         .I1(current_column_reg[7]),
         .I2(current_column_reg[6]),
         .I3(current_column_reg__0),
-        .O(\current_line[9]_i_2_n_0 ));
-  LUT6 #(
-    .INIT(64'hAAAA6AAAAAAAAAAA)) 
+        .O(current_line0));
+  (* SOFT_HLUTNM = "soft_lutpair116" *) 
+  LUT5 #(
+    .INIT(32'h6AAAAAAA)) 
     \current_line[9]_i_3 
        (.I0(current_line_reg[9]),
         .I1(current_line_reg[7]),
-        .I2(\current_line[9]_i_6_n_0 ),
-        .I3(current_line_reg[3]),
-        .I4(\current_line[9]_i_7_n_0 ),
-        .I5(current_line_reg[8]),
+        .I2(current_line_reg[6]),
+        .I3(\current_line[9]_i_5_n_0 ),
+        .I4(current_line_reg[8]),
         .O(p_0_in__0[9]));
-  LUT6 #(
-    .INIT(64'h8080808080808000)) 
+  LUT5 #(
+    .INIT(32'h0000FE00)) 
     \current_line[9]_i_4 
+       (.I0(current_line_reg[7]),
+        .I1(current_line_reg[8]),
+        .I2(\current_line[9]_i_6_n_0 ),
+        .I3(current_line_reg[9]),
+        .I4(\current_line[9]_i_7_n_0 ),
+        .O(FRAME_TRIGGER));
+  LUT6 #(
+    .INIT(64'h8000000000000000)) 
+    \current_line[9]_i_5 
+       (.I0(current_line_reg[5]),
+        .I1(current_line_reg[3]),
+        .I2(current_line_reg[4]),
+        .I3(current_line_reg[2]),
+        .I4(current_line_reg[1]),
+        .I5(current_line_reg[0]),
+        .O(\current_line[9]_i_5_n_0 ));
+  LUT6 #(
+    .INIT(64'h8080800080808080)) 
+    \current_line[9]_i_6 
        (.I0(current_line_reg[4]),
         .I1(current_line_reg[5]),
         .I2(current_line_reg[6]),
-        .I3(SYNC_OUT_INST_0_i_27_n_0),
-        .I4(current_line_reg[1]),
-        .I5(current_line_reg[0]),
-        .O(\current_line[9]_i_4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair124" *) 
+        .I3(current_line_reg[1]),
+        .I4(current_line_reg[0]),
+        .I5(SYNC_OUT_INST_0_i_25_n_0),
+        .O(\current_line[9]_i_6_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair121" *) 
   LUT4 #(
     .INIT(16'h1555)) 
-    \current_line[9]_i_5 
+    \current_line[9]_i_7 
        (.I0(current_column_reg__0),
         .I1(current_column_reg[6]),
         .I2(current_column_reg[7]),
         .I3(current_column_reg[8]),
-        .O(\current_line[9]_i_5_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair117" *) 
-  LUT3 #(
-    .INIT(8'h80)) 
-    \current_line[9]_i_6 
-       (.I0(current_line_reg[6]),
-        .I1(current_line_reg[5]),
-        .I2(current_line_reg[4]),
-        .O(\current_line[9]_i_6_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair115" *) 
-  LUT3 #(
-    .INIT(8'h7F)) 
-    \current_line[9]_i_7 
-       (.I0(current_line_reg[2]),
-        .I1(current_line_reg[1]),
-        .I2(current_line_reg[0]),
         .O(\current_line[9]_i_7_n_0 ));
   FDSE #(
     .INIT(1'b1)) 
     \current_line_reg[0] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
+        .CE(current_line0),
         .D(\current_line[0]_i_1_n_0 ),
         .Q(current_line_reg[0]),
         .S(\current_line[9]_i_1_n_0 ));
@@ -5739,7 +5746,7 @@ module system_teletext_controller_0_0_sync_generator
     .INIT(1'b0)) 
     \current_line_reg[1] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
+        .CE(current_line0),
         .D(p_0_in__0[1]),
         .Q(current_line_reg[1]),
         .R(\current_line[9]_i_1_n_0 ));
@@ -5747,15 +5754,15 @@ module system_teletext_controller_0_0_sync_generator
     .INIT(1'b0)) 
     \current_line_reg[2] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
-        .D(p_0_in__0[2]),
+        .CE(current_line0),
+        .D(\current_line[2]_i_1__0_n_0 ),
         .Q(current_line_reg[2]),
         .R(\current_line[9]_i_1_n_0 ));
   FDRE #(
     .INIT(1'b0)) 
     \current_line_reg[3] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
+        .CE(current_line0),
         .D(\current_line[3]_i_1__0_n_0 ),
         .Q(current_line_reg[3]),
         .R(\current_line[9]_i_1_n_0 ));
@@ -5763,23 +5770,23 @@ module system_teletext_controller_0_0_sync_generator
     .INIT(1'b0)) 
     \current_line_reg[4] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
-        .D(p_0_in__0[4]),
+        .CE(current_line0),
+        .D(\current_line[4]_i_1__0_n_0 ),
         .Q(current_line_reg[4]),
         .R(\current_line[9]_i_1_n_0 ));
   FDRE #(
     .INIT(1'b0)) 
     \current_line_reg[5] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
-        .D(p_0_in__0[5]),
+        .CE(current_line0),
+        .D(\current_line[5]_i_1_n_0 ),
         .Q(current_line_reg[5]),
         .R(\current_line[9]_i_1_n_0 ));
   FDRE #(
     .INIT(1'b0)) 
     \current_line_reg[6] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
+        .CE(current_line0),
         .D(p_0_in__0[6]),
         .Q(current_line_reg[6]),
         .R(\current_line[9]_i_1_n_0 ));
@@ -5787,7 +5794,7 @@ module system_teletext_controller_0_0_sync_generator
     .INIT(1'b0)) 
     \current_line_reg[7] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
+        .CE(current_line0),
         .D(p_0_in__0[7]),
         .Q(current_line_reg[7]),
         .R(\current_line[9]_i_1_n_0 ));
@@ -5795,7 +5802,7 @@ module system_teletext_controller_0_0_sync_generator
     .INIT(1'b0)) 
     \current_line_reg[8] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
+        .CE(current_line0),
         .D(p_0_in__0[8]),
         .Q(current_line_reg[8]),
         .R(\current_line[9]_i_1_n_0 ));
@@ -5803,264 +5810,305 @@ module system_teletext_controller_0_0_sync_generator
     .INIT(1'b0)) 
     \current_line_reg[9] 
        (.C(CLK_IN),
-        .CE(\current_line[9]_i_2_n_0 ),
+        .CE(current_line0),
         .D(p_0_in__0[9]),
         .Q(current_line_reg[9]),
         .R(\current_line[9]_i_1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair125" *) 
+  LUT6 #(
+    .INIT(64'h0100FF00FF00FF00)) 
+    \current_state[0]_i_2 
+       (.I0(\current_state_reg[1] [1]),
+        .I1(\current_state_reg[1] [2]),
+        .I2(\current_state_reg[1] [0]),
+        .I3(packet_trigger),
+        .I4(\current_state_reg[1] [3]),
+        .I5(\current_state_reg[1] [4]),
+        .O(load_trigger));
+  (* SOFT_HLUTNM = "soft_lutpair123" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[111]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [0]),
+        .I1(\current_line_reg[1]_0 ),
+        .I2(Q[0]),
         .O(D[0]));
-  (* SOFT_HLUTNM = "soft_lutpair125" *) 
+  (* SOFT_HLUTNM = "soft_lutpair123" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[119]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [1]),
+        .I1(\current_line_reg[1]_0 ),
+        .I2(Q[1]),
         .O(D[1]));
-  (* SOFT_HLUTNM = "soft_lutpair126" *) 
+  (* SOFT_HLUTNM = "soft_lutpair124" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[127]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [2]),
+        .I1(\current_line_reg[1]_0 ),
+        .I2(Q[2]),
         .O(D[2]));
-  (* SOFT_HLUTNM = "soft_lutpair126" *) 
+  (* SOFT_HLUTNM = "soft_lutpair124" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[135]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [3]),
+        .I1(\current_line_reg[1]_0 ),
+        .I2(Q[3]),
         .O(D[3]));
-  (* SOFT_HLUTNM = "soft_lutpair127" *) 
+  LUT6 #(
+    .INIT(64'h0100FF00FF00FF00)) 
+    \current_state[137]_i_2 
+       (.I0(\current_state_reg[1] [1]),
+        .I1(\current_state_reg[1] [2]),
+        .I2(\current_state_reg[1] [0]),
+        .I3(packet_trigger),
+        .I4(\current_state_reg[1] [3]),
+        .I5(\current_state_reg[1] [4]),
+        .O(\current_line_reg[1]_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair125" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[143]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [4]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[4]),
         .O(D[4]));
-  (* SOFT_HLUTNM = "soft_lutpair127" *) 
+  (* SOFT_HLUTNM = "soft_lutpair125" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[151]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [5]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[5]),
         .O(D[5]));
-  (* SOFT_HLUTNM = "soft_lutpair128" *) 
+  (* SOFT_HLUTNM = "soft_lutpair126" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[159]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [6]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[6]),
         .O(D[6]));
-  (* SOFT_HLUTNM = "soft_lutpair128" *) 
+  (* SOFT_HLUTNM = "soft_lutpair126" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[167]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [7]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[7]),
         .O(D[7]));
-  (* SOFT_HLUTNM = "soft_lutpair129" *) 
+  (* SOFT_HLUTNM = "soft_lutpair127" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[175]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [8]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[8]),
         .O(D[8]));
-  (* SOFT_HLUTNM = "soft_lutpair129" *) 
+  (* SOFT_HLUTNM = "soft_lutpair127" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[183]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [9]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[9]),
         .O(D[9]));
-  (* SOFT_HLUTNM = "soft_lutpair130" *) 
+  (* SOFT_HLUTNM = "soft_lutpair128" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[191]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [10]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[10]),
         .O(D[10]));
-  (* SOFT_HLUTNM = "soft_lutpair130" *) 
+  (* SOFT_HLUTNM = "soft_lutpair128" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[199]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [11]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[11]),
         .O(D[11]));
-  (* SOFT_HLUTNM = "soft_lutpair131" *) 
+  (* SOFT_HLUTNM = "soft_lutpair129" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[207]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [12]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[12]),
         .O(D[12]));
-  (* SOFT_HLUTNM = "soft_lutpair131" *) 
+  (* SOFT_HLUTNM = "soft_lutpair129" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[215]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [13]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[13]),
         .O(D[13]));
-  (* SOFT_HLUTNM = "soft_lutpair132" *) 
+  (* SOFT_HLUTNM = "soft_lutpair130" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[223]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [14]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[14]),
         .O(D[14]));
-  (* SOFT_HLUTNM = "soft_lutpair132" *) 
+  (* SOFT_HLUTNM = "soft_lutpair130" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[231]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [15]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[15]),
         .O(D[15]));
-  (* SOFT_HLUTNM = "soft_lutpair133" *) 
+  (* SOFT_HLUTNM = "soft_lutpair131" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[239]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [16]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[16]),
         .O(D[16]));
-  (* SOFT_HLUTNM = "soft_lutpair133" *) 
+  (* SOFT_HLUTNM = "soft_lutpair131" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[247]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [17]),
+        .I1(\current_line_reg[1]_1 ),
+        .I2(Q[17]),
         .O(D[17]));
-  (* SOFT_HLUTNM = "soft_lutpair134" *) 
+  LUT6 #(
+    .INIT(64'h0100FF00FF00FF00)) 
+    \current_state[248]_i_2 
+       (.I0(\current_state_reg[1] [1]),
+        .I1(\current_state_reg[1] [2]),
+        .I2(\current_state_reg[1] [0]),
+        .I3(packet_trigger),
+        .I4(\current_state_reg[1] [3]),
+        .I5(\current_state_reg[1] [4]),
+        .O(\current_line_reg[1]_1 ));
+  (* SOFT_HLUTNM = "soft_lutpair132" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[255]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [18]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[18]),
         .O(D[18]));
-  (* SOFT_HLUTNM = "soft_lutpair134" *) 
+  (* SOFT_HLUTNM = "soft_lutpair132" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[263]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [19]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[19]),
         .O(D[19]));
-  (* SOFT_HLUTNM = "soft_lutpair135" *) 
+  (* SOFT_HLUTNM = "soft_lutpair133" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[271]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [20]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[20]),
         .O(D[20]));
-  (* SOFT_HLUTNM = "soft_lutpair135" *) 
+  (* SOFT_HLUTNM = "soft_lutpair133" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[279]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [21]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[21]),
         .O(D[21]));
-  (* SOFT_HLUTNM = "soft_lutpair136" *) 
+  (* SOFT_HLUTNM = "soft_lutpair134" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[287]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [22]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[22]),
         .O(D[22]));
-  (* SOFT_HLUTNM = "soft_lutpair136" *) 
+  (* SOFT_HLUTNM = "soft_lutpair134" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[295]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [23]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[23]),
         .O(D[23]));
-  (* SOFT_HLUTNM = "soft_lutpair137" *) 
+  (* SOFT_HLUTNM = "soft_lutpair135" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[303]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [24]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[24]),
         .O(D[24]));
-  (* SOFT_HLUTNM = "soft_lutpair137" *) 
+  (* SOFT_HLUTNM = "soft_lutpair135" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[311]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [25]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[25]),
         .O(D[25]));
-  (* SOFT_HLUTNM = "soft_lutpair138" *) 
+  (* SOFT_HLUTNM = "soft_lutpair136" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[319]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [26]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[26]),
         .O(D[26]));
-  (* SOFT_HLUTNM = "soft_lutpair138" *) 
+  (* SOFT_HLUTNM = "soft_lutpair136" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[327]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [27]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[27]),
         .O(D[27]));
-  (* SOFT_HLUTNM = "soft_lutpair139" *) 
+  (* SOFT_HLUTNM = "soft_lutpair137" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[335]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [28]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[28]),
         .O(D[28]));
-  (* SOFT_HLUTNM = "soft_lutpair139" *) 
+  (* SOFT_HLUTNM = "soft_lutpair137" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[343]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [29]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[29]),
         .O(D[29]));
+  (* SOFT_HLUTNM = "soft_lutpair138" *) 
   LUT3 #(
     .INIT(8'hB8)) 
     \current_state[351]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
-        .I2(\current_state_reg[351] [30]),
+        .I1(\current_line_reg[1]_2 ),
+        .I2(Q[30]),
         .O(D[30]));
-  (* SOFT_HLUTNM = "soft_lutpair121" *) 
+  (* SOFT_HLUTNM = "soft_lutpair138" *) 
   LUT2 #(
     .INIT(4'h8)) 
     \current_state[359]_i_1 
        (.I0(PACKET_DATA),
-        .I1(packet_trigger),
+        .I1(\current_line_reg[1]_2 ),
         .O(D[31]));
+  LUT6 #(
+    .INIT(64'h0100FF00FF00FF00)) 
+    \current_state[359]_i_3 
+       (.I0(\current_state_reg[1] [1]),
+        .I1(\current_state_reg[1] [2]),
+        .I2(\current_state_reg[1] [0]),
+        .I3(packet_trigger),
+        .I4(\current_state_reg[1] [3]),
+        .I5(\current_state_reg[1] [4]),
+        .O(\current_line_reg[1]_2 ));
 endmodule
 
 (* ORIG_REF_NAME = "teletext_controller" *) 
@@ -6104,32 +6152,36 @@ module system_teletext_controller_0_0_teletext_generator
   wire SYNC_OUT;
   wire [4:0]current_line;
   wire [352:112]current_state;
+  wire load_trigger;
   wire [4:0]next_line;
   wire [359:111]next_state;
   wire packet_trigger;
   wire sync_gen_n_0;
+  wire sync_gen_n_34;
+  wire sync_gen_n_35;
+  wire sync_gen_n_36;
 
   LUT1 #(
     .INIT(2'h1)) 
     \current_line[0]_i_1__0 
        (.I0(current_line[0]),
         .O(next_line[0]));
-  (* SOFT_HLUTNM = "soft_lutpair144" *) 
+  (* SOFT_HLUTNM = "soft_lutpair142" *) 
   LUT2 #(
     .INIT(4'h6)) 
     \current_line[1]_i_1__0 
        (.I0(current_line[0]),
         .I1(current_line[1]),
         .O(next_line[1]));
-  (* SOFT_HLUTNM = "soft_lutpair144" *) 
+  (* SOFT_HLUTNM = "soft_lutpair142" *) 
   LUT3 #(
     .INIT(8'h78)) 
-    \current_line[2]_i_1__0 
+    \current_line[2]_i_1 
        (.I0(current_line[1]),
         .I1(current_line[0]),
         .I2(current_line[2]),
         .O(next_line[2]));
-  (* SOFT_HLUTNM = "soft_lutpair143" *) 
+  (* SOFT_HLUTNM = "soft_lutpair141" *) 
   LUT4 #(
     .INIT(16'h7F80)) 
     \current_line[3]_i_1 
@@ -6138,7 +6190,7 @@ module system_teletext_controller_0_0_teletext_generator
         .I2(current_line[1]),
         .I3(current_line[3]),
         .O(next_line[3]));
-  (* SOFT_HLUTNM = "soft_lutpair143" *) 
+  (* SOFT_HLUTNM = "soft_lutpair141" *) 
   LUT5 #(
     .INIT(32'h7FFF8000)) 
     \current_line[4]_i_3 
@@ -6194,17 +6246,24 @@ module system_teletext_controller_0_0_teletext_generator
         .PACKET_DATA(PACKET_DATA),
         .Q({current_state[352],current_state[344],current_state[336],current_state[328],current_state[320],current_state[312],current_state[304],current_state[296],current_state[288],current_state[280],current_state[272],current_state[264],current_state[256],current_state[248],current_state[240],current_state[232],current_state[224],current_state[216],current_state[208],current_state[200],current_state[192],current_state[184],current_state[176],current_state[168],current_state[160],current_state[152],current_state[144],current_state[136],current_state[128],current_state[120],current_state[112],DATA_OUT}),
         .RESET(RESET),
+        .\current_state_reg[137]_0 (sync_gen_n_34),
+        .\current_state_reg[248]_0 (sync_gen_n_35),
         .\current_state_reg[354]_0 (current_line),
-        .packet_trigger(packet_trigger));
+        .\current_state_reg[358]_0 (sync_gen_n_36),
+        .load_trigger(load_trigger));
   system_teletext_controller_0_0_sync_generator sync_gen
        (.CLK_IN(CLK_IN),
         .D({next_state[359],next_state[351],next_state[343],next_state[335],next_state[327],next_state[319],next_state[311],next_state[303],next_state[295],next_state[287],next_state[279],next_state[271],next_state[263],next_state[255],next_state[247],next_state[239],next_state[231],next_state[223],next_state[215],next_state[207],next_state[199],next_state[191],next_state[183],next_state[175],next_state[167],next_state[159],next_state[151],next_state[143],next_state[135],next_state[127],next_state[119],next_state[111]}),
         .PACKET_DATA(PACKET_DATA),
-        .Q(current_line[4:3]),
+        .Q({current_state[352],current_state[344],current_state[336],current_state[328],current_state[320],current_state[312],current_state[304],current_state[296],current_state[288],current_state[280],current_state[272],current_state[264],current_state[256],current_state[248],current_state[240],current_state[232],current_state[224],current_state[216],current_state[208],current_state[200],current_state[192],current_state[184],current_state[176],current_state[168],current_state[160],current_state[152],current_state[144],current_state[136],current_state[128],current_state[120],current_state[112]}),
         .RESET(RESET),
         .SR(sync_gen_n_0),
         .SYNC_OUT(SYNC_OUT),
-        .\current_state_reg[351] ({current_state[352],current_state[344],current_state[336],current_state[328],current_state[320],current_state[312],current_state[304],current_state[296],current_state[288],current_state[280],current_state[272],current_state[264],current_state[256],current_state[248],current_state[240],current_state[232],current_state[224],current_state[216],current_state[208],current_state[200],current_state[192],current_state[184],current_state[176],current_state[168],current_state[160],current_state[152],current_state[144],current_state[136],current_state[128],current_state[120],current_state[112]}),
+        .\current_line_reg[1]_0 (sync_gen_n_34),
+        .\current_line_reg[1]_1 (sync_gen_n_35),
+        .\current_line_reg[1]_2 (sync_gen_n_36),
+        .\current_state_reg[1] (current_line),
+        .load_trigger(load_trigger),
         .packet_trigger(packet_trigger));
 endmodule
 `ifndef GLBL

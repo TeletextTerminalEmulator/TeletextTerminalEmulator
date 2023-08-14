@@ -52,6 +52,7 @@ component sync_generator
     port (CLK_IN            : in std_logic;
           RESET_N           : in std_logic;
           SYNC_OUT          : out std_logic;
+          FRAME_TRIGGER     : out std_logic;
           PACKET_TRIGGER    : out STD_LOGIC);
     end component;
     
@@ -92,6 +93,8 @@ component packet_page_header_generator
 end component;
 
 signal packet_trigger               : std_logic;
+signal load_trigger                 : std_logic;
+signal frame_trigger                : std_logic;
 signal teletext_packet              : std_logic_vector (359 downto 0) := (others => '1');
 signal teletext_normal_data         : std_logic_vector (319 downto 0);
 signal teletext_page_header_data    : std_logic_vector (319 downto 0); 
@@ -104,6 +107,7 @@ begin
     port map (CLK_IN   => CLK_IN,
               RESET_N  => RESET_N,
               SYNC_OUT => SYNC_OUT,
+              FRAME_TRIGGER => frame_trigger,
               PACKET_TRIGGER => packet_trigger);
               
     data_out_shift : shift_register
@@ -112,7 +116,7 @@ begin
     port map(
         CLK_IN      => CLK_IN,
         RESET_N     => RESET_N,
-        LOAD        => packet_trigger,
+        LOAD        => load_trigger,
         DATA_IN     => teletext_packet,
         DATA_OUT    => DATA_OUT);
         
@@ -150,25 +154,33 @@ begin
         end if;
     end process;
     
-    advance_line: process (packet_trigger, current_line)
+    advance_line: process (packet_trigger, frame_trigger, current_line)
     begin
         if packet_trigger = '1' then
-            if current_line >= 24 then
-                next_line <= (others => '0');
-            else
+--            if current_line >= 24 then
+--                next_line <= (others => '0');
+--            else
                 next_line <= current_line + 1;
-            end if;
+--            end if;
+        elsif frame_trigger = '1' then
+            next_line <= (others => '0');
         else
             next_line <= current_line;
         end if;
     end process;
     
-    switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data)
+    switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, packet_trigger)
     begin
         if current_line = 0 then
             teletext_packet(359 downto 40) <= teletext_page_header_data;
         else
             teletext_packet(359 downto 40) <= teletext_normal_data;
+        end if;
+        
+        if current_line <= 24 then
+            load_trigger <= packet_trigger;
+        else
+            load_trigger <= '0';
         end if;
     end process;
     
@@ -176,5 +188,7 @@ begin
     begin
         current_teletext_data_line <= TELETEXT_FRAME(to_integer(current_line));
     end process;
+    
+    
     
 end Behavioral;

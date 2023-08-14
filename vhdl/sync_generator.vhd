@@ -35,6 +35,7 @@ entity sync_generator is
     Port ( CLK_IN : in STD_LOGIC; -- CLK_IN expects 7MHz
            RESET_N: in STD_LOGIC;
            SYNC_OUT : out STD_LOGIC;
+           FRAME_TRIGGER : out STD_LOGIC;
            PACKET_TRIGGER : out STD_LOGIC);
 end sync_generator;
 
@@ -68,12 +69,15 @@ begin
             next_column <= TO_UNSIGNED(1, 10);
             if current_line >= LINE_COUNT then
                 next_line <= TO_UNSIGNED(1, 10);
+                FRAME_TRIGGER <= '1';
             else
                 next_line <= current_line + "1";
+                FRAME_TRIGGER <= '0';
             end if;   
         else
             next_column <= current_column + "1";
             next_line <= current_line;
+            FRAME_TRIGGER <= '0';
         end if;
     
     end process;
@@ -88,37 +92,37 @@ begin
             when 1 | 2 | 314 | 315 => -- two long syncs
                 case column is
                     when 1 to 210 | 225 to 434 =>
-                        SYNC_OUT <= '1';
-                    when others =>
                         SYNC_OUT <= '0';
+                    when others =>
+                        SYNC_OUT <= '1';
                 end case;
             when 3 => -- one long sync, one short sync
                 case column is
                     when 1 to 210 | 225 to 238 =>
-                        SYNC_OUT <= '1';
-                    when others =>
                         SYNC_OUT <= '0';
+                    when others =>
+                        SYNC_OUT <= '1';
                 end case;
             when 313 => -- one short sync, one long sync
                 case column is
                     when 1 to 14 | 225 to 434 =>
-                        SYNC_OUT <= '1';
-                    when others =>
                         SYNC_OUT <= '0';
+                    when others =>
+                        SYNC_OUT <= '1';
                 end case;
            when 4 | 5 | 311 | 312 | 316 | 317 | 623 to 625 => -- two short syncs
                 case column is
                     when 1 to 14 | 225 to 238 =>
-                        SYNC_OUT <= '1';
-                    when others =>
                         SYNC_OUT <= '0';
+                    when others =>
+                        SYNC_OUT <= '1';
                 end case;
            when others => -- one normal sync
                 case column is
                     when 1 to 28 =>
-                        SYNC_OUT <= '1';
-                    when others =>
                         SYNC_OUT <= '0';
+                    when others =>
+                        SYNC_OUT <= '1';
                 end case;
         end case; 
     end process;

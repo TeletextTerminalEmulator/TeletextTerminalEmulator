@@ -1,7 +1,7 @@
 -- Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2022.2.2 (win64) Build 3788238 Tue Feb 21 20:00:34 MST 2023
--- Date        : Mon Jul 24 15:23:17 2023
+-- Date        : Mon Aug 14 16:29:34 2023
 -- Host        : Memmert running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
 --               c:/Users/jwachsmuth/Documents/teletext/block_designs/system/ip/system_teletext_controller_0_0/system_teletext_controller_0_0_sim_netlist.vhdl
@@ -18,7 +18,10 @@ entity system_teletext_controller_0_0_shift_register is
   port (
     Q : out STD_LOGIC_VECTOR ( 31 downto 0 );
     PACKET_DATA : out STD_LOGIC_VECTOR ( 0 to 0 );
-    packet_trigger : in STD_LOGIC;
+    load_trigger : in STD_LOGIC;
+    \current_state_reg[137]_0\ : in STD_LOGIC;
+    \current_state_reg[248]_0\ : in STD_LOGIC;
+    \current_state_reg[358]_0\ : in STD_LOGIC;
     \current_state_reg[354]_0\ : in STD_LOGIC_VECTOR ( 4 downto 0 );
     D : in STD_LOGIC_VECTOR ( 31 downto 0 );
     RESET : in STD_LOGIC;
@@ -91,104 +94,102 @@ architecture STRUCTURE of system_teletext_controller_0_0_shift_register is
   signal \current_state[9]_i_1_n_0\ : STD_LOGIC;
   signal next_state : STD_LOGIC_VECTOR ( 357 downto 0 );
   attribute SOFT_HLUTNM : string;
-  attribute SOFT_HLUTNM of \current_state[0]_i_1\ : label is "soft_lutpair111";
   attribute SOFT_HLUTNM of \current_state[100]_i_1\ : label is "soft_lutpair101";
   attribute SOFT_HLUTNM of \current_state[101]_i_1\ : label is "soft_lutpair6";
   attribute SOFT_HLUTNM of \current_state[102]_i_1\ : label is "soft_lutpair53";
   attribute SOFT_HLUTNM of \current_state[103]_i_1\ : label is "soft_lutpair2";
   attribute SOFT_HLUTNM of \current_state[103]_i_2\ : label is "soft_lutpair1";
   attribute SOFT_HLUTNM of \current_state[107]_i_1\ : label is "soft_lutpair23";
-  attribute SOFT_HLUTNM of \current_state[108]_i_1\ : label is "soft_lutpair101";
+  attribute SOFT_HLUTNM of \current_state[108]_i_1\ : label is "soft_lutpair100";
   attribute SOFT_HLUTNM of \current_state[109]_i_1\ : label is "soft_lutpair100";
-  attribute SOFT_HLUTNM of \current_state[10]_i_1\ : label is "soft_lutpair109";
-  attribute SOFT_HLUTNM of \current_state[110]_i_1\ : label is "soft_lutpair53";
+  attribute SOFT_HLUTNM of \current_state[10]_i_1\ : label is "soft_lutpair108";
+  attribute SOFT_HLUTNM of \current_state[110]_i_1\ : label is "soft_lutpair54";
   attribute SOFT_HLUTNM of \current_state[115]_i_1\ : label is "soft_lutpair28";
-  attribute SOFT_HLUTNM of \current_state[116]_i_1\ : label is "soft_lutpair100";
+  attribute SOFT_HLUTNM of \current_state[116]_i_1\ : label is "soft_lutpair99";
   attribute SOFT_HLUTNM of \current_state[117]_i_1\ : label is "soft_lutpair99";
   attribute SOFT_HLUTNM of \current_state[118]_i_1\ : label is "soft_lutpair54";
-  attribute SOFT_HLUTNM of \current_state[11]_i_1\ : label is "soft_lutpair44";
+  attribute SOFT_HLUTNM of \current_state[11]_i_1\ : label is "soft_lutpair46";
   attribute SOFT_HLUTNM of \current_state[123]_i_1\ : label is "soft_lutpair28";
-  attribute SOFT_HLUTNM of \current_state[124]_i_1\ : label is "soft_lutpair99";
+  attribute SOFT_HLUTNM of \current_state[124]_i_1\ : label is "soft_lutpair98";
   attribute SOFT_HLUTNM of \current_state[125]_i_1\ : label is "soft_lutpair98";
-  attribute SOFT_HLUTNM of \current_state[126]_i_1\ : label is "soft_lutpair54";
+  attribute SOFT_HLUTNM of \current_state[126]_i_1\ : label is "soft_lutpair55";
   attribute SOFT_HLUTNM of \current_state[12]_i_1\ : label is "soft_lutpair108";
   attribute SOFT_HLUTNM of \current_state[131]_i_1\ : label is "soft_lutpair29";
-  attribute SOFT_HLUTNM of \current_state[132]_i_1\ : label is "soft_lutpair98";
+  attribute SOFT_HLUTNM of \current_state[132]_i_1\ : label is "soft_lutpair97";
   attribute SOFT_HLUTNM of \current_state[133]_i_1\ : label is "soft_lutpair97";
   attribute SOFT_HLUTNM of \current_state[134]_i_1\ : label is "soft_lutpair55";
   attribute SOFT_HLUTNM of \current_state[139]_i_1\ : label is "soft_lutpair29";
-  attribute SOFT_HLUTNM of \current_state[13]_i_1\ : label is "soft_lutpair45";
-  attribute SOFT_HLUTNM of \current_state[140]_i_1\ : label is "soft_lutpair97";
+  attribute SOFT_HLUTNM of \current_state[13]_i_1\ : label is "soft_lutpair47";
+  attribute SOFT_HLUTNM of \current_state[140]_i_1\ : label is "soft_lutpair96";
   attribute SOFT_HLUTNM of \current_state[141]_i_1\ : label is "soft_lutpair96";
-  attribute SOFT_HLUTNM of \current_state[142]_i_1\ : label is "soft_lutpair55";
+  attribute SOFT_HLUTNM of \current_state[142]_i_1\ : label is "soft_lutpair56";
   attribute SOFT_HLUTNM of \current_state[147]_i_1\ : label is "soft_lutpair30";
-  attribute SOFT_HLUTNM of \current_state[148]_i_1\ : label is "soft_lutpair96";
+  attribute SOFT_HLUTNM of \current_state[148]_i_1\ : label is "soft_lutpair95";
   attribute SOFT_HLUTNM of \current_state[149]_i_1\ : label is "soft_lutpair95";
-  attribute SOFT_HLUTNM of \current_state[14]_i_1\ : label is "soft_lutpair108";
+  attribute SOFT_HLUTNM of \current_state[14]_i_1\ : label is "soft_lutpair107";
   attribute SOFT_HLUTNM of \current_state[150]_i_1\ : label is "soft_lutpair56";
   attribute SOFT_HLUTNM of \current_state[155]_i_1\ : label is "soft_lutpair30";
-  attribute SOFT_HLUTNM of \current_state[156]_i_1\ : label is "soft_lutpair95";
+  attribute SOFT_HLUTNM of \current_state[156]_i_1\ : label is "soft_lutpair94";
   attribute SOFT_HLUTNM of \current_state[157]_i_1\ : label is "soft_lutpair94";
-  attribute SOFT_HLUTNM of \current_state[158]_i_1\ : label is "soft_lutpair56";
-  attribute SOFT_HLUTNM of \current_state[15]_i_1\ : label is "soft_lutpair45";
+  attribute SOFT_HLUTNM of \current_state[158]_i_1\ : label is "soft_lutpair57";
+  attribute SOFT_HLUTNM of \current_state[15]_i_1\ : label is "soft_lutpair47";
   attribute SOFT_HLUTNM of \current_state[163]_i_1\ : label is "soft_lutpair31";
-  attribute SOFT_HLUTNM of \current_state[164]_i_1\ : label is "soft_lutpair94";
+  attribute SOFT_HLUTNM of \current_state[164]_i_1\ : label is "soft_lutpair93";
   attribute SOFT_HLUTNM of \current_state[165]_i_1\ : label is "soft_lutpair93";
   attribute SOFT_HLUTNM of \current_state[166]_i_1\ : label is "soft_lutpair57";
   attribute SOFT_HLUTNM of \current_state[16]_i_1\ : label is "soft_lutpair107";
   attribute SOFT_HLUTNM of \current_state[171]_i_1\ : label is "soft_lutpair31";
-  attribute SOFT_HLUTNM of \current_state[172]_i_1\ : label is "soft_lutpair93";
+  attribute SOFT_HLUTNM of \current_state[172]_i_1\ : label is "soft_lutpair92";
   attribute SOFT_HLUTNM of \current_state[173]_i_1\ : label is "soft_lutpair92";
-  attribute SOFT_HLUTNM of \current_state[174]_i_1\ : label is "soft_lutpair57";
+  attribute SOFT_HLUTNM of \current_state[174]_i_1\ : label is "soft_lutpair58";
   attribute SOFT_HLUTNM of \current_state[179]_i_1\ : label is "soft_lutpair32";
-  attribute SOFT_HLUTNM of \current_state[17]_i_1\ : label is "soft_lutpair107";
-  attribute SOFT_HLUTNM of \current_state[180]_i_1\ : label is "soft_lutpair92";
+  attribute SOFT_HLUTNM of \current_state[17]_i_1\ : label is "soft_lutpair106";
+  attribute SOFT_HLUTNM of \current_state[180]_i_1\ : label is "soft_lutpair91";
   attribute SOFT_HLUTNM of \current_state[181]_i_1\ : label is "soft_lutpair91";
   attribute SOFT_HLUTNM of \current_state[182]_i_1\ : label is "soft_lutpair58";
   attribute SOFT_HLUTNM of \current_state[187]_i_1\ : label is "soft_lutpair32";
-  attribute SOFT_HLUTNM of \current_state[188]_i_1\ : label is "soft_lutpair91";
+  attribute SOFT_HLUTNM of \current_state[188]_i_1\ : label is "soft_lutpair90";
   attribute SOFT_HLUTNM of \current_state[189]_i_1\ : label is "soft_lutpair90";
   attribute SOFT_HLUTNM of \current_state[18]_i_1\ : label is "soft_lutpair106";
-  attribute SOFT_HLUTNM of \current_state[190]_i_1\ : label is "soft_lutpair58";
+  attribute SOFT_HLUTNM of \current_state[190]_i_1\ : label is "soft_lutpair59";
   attribute SOFT_HLUTNM of \current_state[195]_i_1\ : label is "soft_lutpair33";
-  attribute SOFT_HLUTNM of \current_state[196]_i_1\ : label is "soft_lutpair90";
+  attribute SOFT_HLUTNM of \current_state[196]_i_1\ : label is "soft_lutpair89";
   attribute SOFT_HLUTNM of \current_state[197]_i_1\ : label is "soft_lutpair89";
   attribute SOFT_HLUTNM of \current_state[198]_i_1\ : label is "soft_lutpair59";
-  attribute SOFT_HLUTNM of \current_state[19]_i_1\ : label is "soft_lutpair46";
-  attribute SOFT_HLUTNM of \current_state[1]_i_1\ : label is "soft_lutpair22";
+  attribute SOFT_HLUTNM of \current_state[19]_i_1\ : label is "soft_lutpair48";
+  attribute SOFT_HLUTNM of \current_state[1]_i_1\ : label is "soft_lutpair44";
   attribute SOFT_HLUTNM of \current_state[203]_i_1\ : label is "soft_lutpair33";
-  attribute SOFT_HLUTNM of \current_state[204]_i_1\ : label is "soft_lutpair89";
+  attribute SOFT_HLUTNM of \current_state[204]_i_1\ : label is "soft_lutpair88";
   attribute SOFT_HLUTNM of \current_state[205]_i_1\ : label is "soft_lutpair88";
-  attribute SOFT_HLUTNM of \current_state[206]_i_1\ : label is "soft_lutpair59";
-  attribute SOFT_HLUTNM of \current_state[20]_i_1\ : label is "soft_lutpair46";
+  attribute SOFT_HLUTNM of \current_state[206]_i_1\ : label is "soft_lutpair60";
+  attribute SOFT_HLUTNM of \current_state[20]_i_1\ : label is "soft_lutpair48";
   attribute SOFT_HLUTNM of \current_state[211]_i_1\ : label is "soft_lutpair34";
-  attribute SOFT_HLUTNM of \current_state[212]_i_1\ : label is "soft_lutpair88";
+  attribute SOFT_HLUTNM of \current_state[212]_i_1\ : label is "soft_lutpair87";
   attribute SOFT_HLUTNM of \current_state[213]_i_1\ : label is "soft_lutpair87";
   attribute SOFT_HLUTNM of \current_state[214]_i_1\ : label is "soft_lutpair60";
   attribute SOFT_HLUTNM of \current_state[219]_i_1\ : label is "soft_lutpair34";
-  attribute SOFT_HLUTNM of \current_state[21]_i_1\ : label is "soft_lutpair106";
-  attribute SOFT_HLUTNM of \current_state[220]_i_1\ : label is "soft_lutpair87";
+  attribute SOFT_HLUTNM of \current_state[21]_i_1\ : label is "soft_lutpair105";
+  attribute SOFT_HLUTNM of \current_state[220]_i_1\ : label is "soft_lutpair86";
   attribute SOFT_HLUTNM of \current_state[221]_i_1\ : label is "soft_lutpair86";
-  attribute SOFT_HLUTNM of \current_state[222]_i_1\ : label is "soft_lutpair60";
+  attribute SOFT_HLUTNM of \current_state[222]_i_1\ : label is "soft_lutpair61";
   attribute SOFT_HLUTNM of \current_state[227]_i_1\ : label is "soft_lutpair35";
-  attribute SOFT_HLUTNM of \current_state[228]_i_1\ : label is "soft_lutpair86";
+  attribute SOFT_HLUTNM of \current_state[228]_i_1\ : label is "soft_lutpair85";
   attribute SOFT_HLUTNM of \current_state[229]_i_1\ : label is "soft_lutpair85";
-  attribute SOFT_HLUTNM of \current_state[22]_i_1\ : label is "soft_lutpair47";
+  attribute SOFT_HLUTNM of \current_state[22]_i_1\ : label is "soft_lutpair49";
   attribute SOFT_HLUTNM of \current_state[230]_i_1\ : label is "soft_lutpair61";
   attribute SOFT_HLUTNM of \current_state[235]_i_1\ : label is "soft_lutpair35";
-  attribute SOFT_HLUTNM of \current_state[236]_i_1\ : label is "soft_lutpair85";
+  attribute SOFT_HLUTNM of \current_state[236]_i_1\ : label is "soft_lutpair84";
   attribute SOFT_HLUTNM of \current_state[237]_i_1\ : label is "soft_lutpair84";
-  attribute SOFT_HLUTNM of \current_state[238]_i_1\ : label is "soft_lutpair61";
-  attribute SOFT_HLUTNM of \current_state[23]_i_1\ : label is "soft_lutpair47";
+  attribute SOFT_HLUTNM of \current_state[238]_i_1\ : label is "soft_lutpair62";
+  attribute SOFT_HLUTNM of \current_state[23]_i_1\ : label is "soft_lutpair49";
   attribute SOFT_HLUTNM of \current_state[243]_i_1\ : label is "soft_lutpair36";
-  attribute SOFT_HLUTNM of \current_state[244]_i_1\ : label is "soft_lutpair84";
+  attribute SOFT_HLUTNM of \current_state[244]_i_1\ : label is "soft_lutpair83";
   attribute SOFT_HLUTNM of \current_state[245]_i_1\ : label is "soft_lutpair83";
   attribute SOFT_HLUTNM of \current_state[246]_i_1\ : label is "soft_lutpair62";
   attribute SOFT_HLUTNM of \current_state[24]_i_1\ : label is "soft_lutpair27";
   attribute SOFT_HLUTNM of \current_state[251]_i_1\ : label is "soft_lutpair36";
-  attribute SOFT_HLUTNM of \current_state[252]_i_1\ : label is "soft_lutpair83";
   attribute SOFT_HLUTNM of \current_state[253]_i_1\ : label is "soft_lutpair82";
-  attribute SOFT_HLUTNM of \current_state[254]_i_1\ : label is "soft_lutpair62";
+  attribute SOFT_HLUTNM of \current_state[254]_i_1\ : label is "soft_lutpair43";
   attribute SOFT_HLUTNM of \current_state[259]_i_1\ : label is "soft_lutpair37";
   attribute SOFT_HLUTNM of \current_state[25]_i_1\ : label is "soft_lutpair105";
   attribute SOFT_HLUTNM of \current_state[260]_i_1\ : label is "soft_lutpair82";
@@ -203,19 +204,19 @@ architecture STRUCTURE of system_teletext_controller_0_0_shift_register is
   attribute SOFT_HLUTNM of \current_state[276]_i_1\ : label is "soft_lutpair80";
   attribute SOFT_HLUTNM of \current_state[277]_i_1\ : label is "soft_lutpair79";
   attribute SOFT_HLUTNM of \current_state[278]_i_1\ : label is "soft_lutpair64";
-  attribute SOFT_HLUTNM of \current_state[27]_i_1\ : label is "soft_lutpair48";
+  attribute SOFT_HLUTNM of \current_state[27]_i_1\ : label is "soft_lutpair22";
   attribute SOFT_HLUTNM of \current_state[283]_i_1\ : label is "soft_lutpair38";
   attribute SOFT_HLUTNM of \current_state[284]_i_1\ : label is "soft_lutpair79";
   attribute SOFT_HLUTNM of \current_state[285]_i_1\ : label is "soft_lutpair78";
   attribute SOFT_HLUTNM of \current_state[286]_i_1\ : label is "soft_lutpair64";
-  attribute SOFT_HLUTNM of \current_state[28]_i_1\ : label is "soft_lutpair48";
+  attribute SOFT_HLUTNM of \current_state[28]_i_1\ : label is "soft_lutpair24";
   attribute SOFT_HLUTNM of \current_state[291]_i_1\ : label is "soft_lutpair39";
   attribute SOFT_HLUTNM of \current_state[292]_i_1\ : label is "soft_lutpair78";
   attribute SOFT_HLUTNM of \current_state[293]_i_1\ : label is "soft_lutpair77";
   attribute SOFT_HLUTNM of \current_state[294]_i_1\ : label is "soft_lutpair65";
   attribute SOFT_HLUTNM of \current_state[299]_i_1\ : label is "soft_lutpair39";
-  attribute SOFT_HLUTNM of \current_state[29]_i_1\ : label is "soft_lutpair49";
-  attribute SOFT_HLUTNM of \current_state[2]_i_1\ : label is "soft_lutpair111";
+  attribute SOFT_HLUTNM of \current_state[29]_i_1\ : label is "soft_lutpair25";
+  attribute SOFT_HLUTNM of \current_state[2]_i_1\ : label is "soft_lutpair110";
   attribute SOFT_HLUTNM of \current_state[300]_i_1\ : label is "soft_lutpair77";
   attribute SOFT_HLUTNM of \current_state[301]_i_1\ : label is "soft_lutpair76";
   attribute SOFT_HLUTNM of \current_state[302]_i_1\ : label is "soft_lutpair65";
@@ -254,13 +255,13 @@ architecture STRUCTURE of system_teletext_controller_0_0_shift_register is
   attribute SOFT_HLUTNM of \current_state[35]_i_1\ : label is "soft_lutpair24";
   attribute SOFT_HLUTNM of \current_state[37]_i_1\ : label is "soft_lutpair23";
   attribute SOFT_HLUTNM of \current_state[39]_i_1\ : label is "soft_lutpair22";
-  attribute SOFT_HLUTNM of \current_state[3]_i_1\ : label is "soft_lutpair24";
+  attribute SOFT_HLUTNM of \current_state[3]_i_1\ : label is "soft_lutpair44";
   attribute SOFT_HLUTNM of \current_state[40]_i_1\ : label is "soft_lutpair21";
   attribute SOFT_HLUTNM of \current_state[42]_i_1\ : label is "soft_lutpair20";
   attribute SOFT_HLUTNM of \current_state[43]_i_1\ : label is "soft_lutpair19";
-  attribute SOFT_HLUTNM of \current_state[44]_i_1\ : label is "soft_lutpair105";
+  attribute SOFT_HLUTNM of \current_state[44]_i_1\ : label is "soft_lutpair104";
   attribute SOFT_HLUTNM of \current_state[45]_i_1\ : label is "soft_lutpair18";
-  attribute SOFT_HLUTNM of \current_state[46]_i_1\ : label is "soft_lutpair49";
+  attribute SOFT_HLUTNM of \current_state[46]_i_1\ : label is "soft_lutpair50";
   attribute SOFT_HLUTNM of \current_state[47]_i_1\ : label is "soft_lutpair5";
   attribute SOFT_HLUTNM of \current_state[48]_i_1\ : label is "soft_lutpair21";
   attribute SOFT_HLUTNM of \current_state[4]_i_1\ : label is "soft_lutpair110";
@@ -273,27 +274,27 @@ architecture STRUCTURE of system_teletext_controller_0_0_shift_register is
   attribute SOFT_HLUTNM of \current_state[56]_i_1\ : label is "soft_lutpair17";
   attribute SOFT_HLUTNM of \current_state[58]_i_1\ : label is "soft_lutpair16";
   attribute SOFT_HLUTNM of \current_state[59]_i_1\ : label is "soft_lutpair15";
-  attribute SOFT_HLUTNM of \current_state[5]_i_1\ : label is "soft_lutpair25";
-  attribute SOFT_HLUTNM of \current_state[60]_i_1\ : label is "soft_lutpair104";
+  attribute SOFT_HLUTNM of \current_state[5]_i_1\ : label is "soft_lutpair45";
+  attribute SOFT_HLUTNM of \current_state[60]_i_1\ : label is "soft_lutpair103";
   attribute SOFT_HLUTNM of \current_state[61]_i_1\ : label is "soft_lutpair14";
-  attribute SOFT_HLUTNM of \current_state[62]_i_1\ : label is "soft_lutpair50";
+  attribute SOFT_HLUTNM of \current_state[62]_i_1\ : label is "soft_lutpair51";
   attribute SOFT_HLUTNM of \current_state[63]_i_1\ : label is "soft_lutpair4";
   attribute SOFT_HLUTNM of \current_state[64]_i_1\ : label is "soft_lutpair17";
   attribute SOFT_HLUTNM of \current_state[66]_i_1\ : label is "soft_lutpair16";
   attribute SOFT_HLUTNM of \current_state[67]_i_1\ : label is "soft_lutpair15";
   attribute SOFT_HLUTNM of \current_state[68]_i_1\ : label is "soft_lutpair103";
   attribute SOFT_HLUTNM of \current_state[69]_i_1\ : label is "soft_lutpair14";
-  attribute SOFT_HLUTNM of \current_state[6]_i_1\ : label is "soft_lutpair110";
+  attribute SOFT_HLUTNM of \current_state[6]_i_1\ : label is "soft_lutpair109";
   attribute SOFT_HLUTNM of \current_state[70]_i_1\ : label is "soft_lutpair51";
   attribute SOFT_HLUTNM of \current_state[71]_i_1\ : label is "soft_lutpair4";
   attribute SOFT_HLUTNM of \current_state[72]_i_1\ : label is "soft_lutpair13";
   attribute SOFT_HLUTNM of \current_state[74]_i_1\ : label is "soft_lutpair12";
   attribute SOFT_HLUTNM of \current_state[75]_i_1\ : label is "soft_lutpair11";
-  attribute SOFT_HLUTNM of \current_state[76]_i_1\ : label is "soft_lutpair103";
+  attribute SOFT_HLUTNM of \current_state[76]_i_1\ : label is "soft_lutpair102";
   attribute SOFT_HLUTNM of \current_state[77]_i_1\ : label is "soft_lutpair10";
-  attribute SOFT_HLUTNM of \current_state[78]_i_1\ : label is "soft_lutpair51";
+  attribute SOFT_HLUTNM of \current_state[78]_i_1\ : label is "soft_lutpair52";
   attribute SOFT_HLUTNM of \current_state[79]_i_1\ : label is "soft_lutpair3";
-  attribute SOFT_HLUTNM of \current_state[7]_i_1\ : label is "soft_lutpair43";
+  attribute SOFT_HLUTNM of \current_state[7]_i_1\ : label is "soft_lutpair45";
   attribute SOFT_HLUTNM of \current_state[80]_i_1\ : label is "soft_lutpair13";
   attribute SOFT_HLUTNM of \current_state[82]_i_1\ : label is "soft_lutpair12";
   attribute SOFT_HLUTNM of \current_state[83]_i_1\ : label is "soft_lutpair11";
@@ -305,16 +306,16 @@ architecture STRUCTURE of system_teletext_controller_0_0_shift_register is
   attribute SOFT_HLUTNM of \current_state[8]_i_1\ : label is "soft_lutpair109";
   attribute SOFT_HLUTNM of \current_state[90]_i_1\ : label is "soft_lutpair8";
   attribute SOFT_HLUTNM of \current_state[91]_i_1\ : label is "soft_lutpair7";
-  attribute SOFT_HLUTNM of \current_state[92]_i_1\ : label is "soft_lutpair102";
+  attribute SOFT_HLUTNM of \current_state[92]_i_1\ : label is "soft_lutpair101";
   attribute SOFT_HLUTNM of \current_state[93]_i_1\ : label is "soft_lutpair6";
-  attribute SOFT_HLUTNM of \current_state[94]_i_1\ : label is "soft_lutpair52";
+  attribute SOFT_HLUTNM of \current_state[94]_i_1\ : label is "soft_lutpair53";
   attribute SOFT_HLUTNM of \current_state[95]_i_1\ : label is "soft_lutpair2";
   attribute SOFT_HLUTNM of \current_state[96]_i_1\ : label is "soft_lutpair9";
   attribute SOFT_HLUTNM of \current_state[96]_i_2\ : label is "soft_lutpair0";
   attribute SOFT_HLUTNM of \current_state[98]_i_1\ : label is "soft_lutpair8";
   attribute SOFT_HLUTNM of \current_state[98]_i_2\ : label is "soft_lutpair1";
   attribute SOFT_HLUTNM of \current_state[99]_i_1\ : label is "soft_lutpair7";
-  attribute SOFT_HLUTNM of \current_state[9]_i_1\ : label is "soft_lutpair44";
+  attribute SOFT_HLUTNM of \current_state[9]_i_1\ : label is "soft_lutpair46";
 begin
   PACKET_DATA(0) <= \^packet_data\(0);
 \current_state[0]_i_1\: unisim.vcomponents.LUT2
@@ -322,7 +323,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(1),
       O => next_state(0)
     );
@@ -331,7 +332,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(101),
       O => next_state(100)
     );
@@ -341,7 +342,7 @@ begin
     )
         port map (
       I0 => \current_state[103]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(102),
       O => next_state(101)
     );
@@ -351,7 +352,7 @@ begin
     )
         port map (
       I0 => current_state(103),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[102]_i_1_n_0\
     );
 \current_state[103]_i_1\: unisim.vcomponents.LUT4
@@ -361,7 +362,7 @@ begin
         port map (
       I0 => \current_state[103]_i_2_n_0\,
       I1 => \^packet_data\(0),
-      I2 => packet_trigger,
+      I2 => \current_state_reg[137]_0\,
       I3 => current_state(104),
       O => next_state(103)
     );
@@ -385,7 +386,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(105),
       O => next_state(104)
     );
@@ -397,7 +398,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(106),
       O => next_state(105)
     );
@@ -409,7 +410,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(107),
       O => next_state(106)
     );
@@ -419,7 +420,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(108),
       O => next_state(107)
     );
@@ -428,7 +429,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(109),
       O => next_state(108)
     );
@@ -437,7 +438,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(110),
       O => next_state(109)
     );
@@ -446,7 +447,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(11),
       O => next_state(10)
     );
@@ -456,7 +457,7 @@ begin
     )
         port map (
       I0 => current_state(111),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[110]_i_1_n_0\
     );
 \current_state[112]_i_1\: unisim.vcomponents.LUT5
@@ -467,7 +468,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(113),
       O => next_state(112)
     );
@@ -479,7 +480,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(114),
       O => next_state(113)
     );
@@ -491,7 +492,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(115),
       O => next_state(114)
     );
@@ -501,7 +502,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(116),
       O => next_state(115)
     );
@@ -510,7 +511,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(117),
       O => next_state(116)
     );
@@ -519,7 +520,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(118),
       O => next_state(117)
     );
@@ -529,7 +530,7 @@ begin
     )
         port map (
       I0 => current_state(119),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[118]_i_1_n_0\
     );
 \current_state[11]_i_1\: unisim.vcomponents.LUT2
@@ -538,7 +539,7 @@ begin
     )
         port map (
       I0 => current_state(12),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[11]_i_1_n_0\
     );
 \current_state[120]_i_1\: unisim.vcomponents.LUT5
@@ -549,7 +550,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(121),
       O => next_state(120)
     );
@@ -561,7 +562,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(122),
       O => next_state(121)
     );
@@ -573,7 +574,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(123),
       O => next_state(122)
     );
@@ -583,7 +584,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(124),
       O => next_state(123)
     );
@@ -592,7 +593,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(125),
       O => next_state(124)
     );
@@ -601,7 +602,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(126),
       O => next_state(125)
     );
@@ -611,7 +612,7 @@ begin
     )
         port map (
       I0 => current_state(127),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[126]_i_1_n_0\
     );
 \current_state[128]_i_1\: unisim.vcomponents.LUT5
@@ -622,7 +623,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(129),
       O => next_state(128)
     );
@@ -634,7 +635,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(130),
       O => next_state(129)
     );
@@ -643,7 +644,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(13),
       O => next_state(12)
     );
@@ -655,7 +656,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(131),
       O => next_state(130)
     );
@@ -665,7 +666,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(132),
       O => next_state(131)
     );
@@ -674,7 +675,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(133),
       O => next_state(132)
     );
@@ -683,7 +684,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(134),
       O => next_state(133)
     );
@@ -693,7 +694,7 @@ begin
     )
         port map (
       I0 => current_state(135),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[134]_i_1_n_0\
     );
 \current_state[136]_i_1\: unisim.vcomponents.LUT5
@@ -704,7 +705,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(137),
       O => next_state(136)
     );
@@ -716,7 +717,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(138),
       O => next_state(137)
     );
@@ -728,7 +729,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(139),
       O => next_state(138)
     );
@@ -738,7 +739,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(140),
       O => next_state(139)
     );
@@ -748,7 +749,7 @@ begin
     )
         port map (
       I0 => current_state(14),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[13]_i_1_n_0\
     );
 \current_state[140]_i_1\: unisim.vcomponents.LUT2
@@ -756,7 +757,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(141),
       O => next_state(140)
     );
@@ -765,7 +766,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(142),
       O => next_state(141)
     );
@@ -775,7 +776,7 @@ begin
     )
         port map (
       I0 => current_state(143),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[142]_i_1_n_0\
     );
 \current_state[144]_i_1\: unisim.vcomponents.LUT5
@@ -786,7 +787,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(145),
       O => next_state(144)
     );
@@ -798,7 +799,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(146),
       O => next_state(145)
     );
@@ -810,7 +811,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(147),
       O => next_state(146)
     );
@@ -820,7 +821,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(148),
       O => next_state(147)
     );
@@ -829,7 +830,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(149),
       O => next_state(148)
     );
@@ -838,7 +839,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(150),
       O => next_state(149)
     );
@@ -847,7 +848,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(15),
       O => next_state(14)
     );
@@ -857,7 +858,7 @@ begin
     )
         port map (
       I0 => current_state(151),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[150]_i_1_n_0\
     );
 \current_state[152]_i_1\: unisim.vcomponents.LUT5
@@ -868,7 +869,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(153),
       O => next_state(152)
     );
@@ -880,7 +881,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(154),
       O => next_state(153)
     );
@@ -892,7 +893,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(155),
       O => next_state(154)
     );
@@ -902,7 +903,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(156),
       O => next_state(155)
     );
@@ -911,7 +912,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(157),
       O => next_state(156)
     );
@@ -920,7 +921,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(158),
       O => next_state(157)
     );
@@ -930,7 +931,7 @@ begin
     )
         port map (
       I0 => current_state(159),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[158]_i_1_n_0\
     );
 \current_state[15]_i_1\: unisim.vcomponents.LUT2
@@ -939,7 +940,7 @@ begin
     )
         port map (
       I0 => current_state(16),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[15]_i_1_n_0\
     );
 \current_state[160]_i_1\: unisim.vcomponents.LUT5
@@ -950,7 +951,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(161),
       O => next_state(160)
     );
@@ -962,7 +963,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(162),
       O => next_state(161)
     );
@@ -974,7 +975,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(163),
       O => next_state(162)
     );
@@ -984,7 +985,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(164),
       O => next_state(163)
     );
@@ -993,7 +994,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(165),
       O => next_state(164)
     );
@@ -1002,7 +1003,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(166),
       O => next_state(165)
     );
@@ -1012,7 +1013,7 @@ begin
     )
         port map (
       I0 => current_state(167),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[166]_i_1_n_0\
     );
 \current_state[168]_i_1\: unisim.vcomponents.LUT5
@@ -1023,7 +1024,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(169),
       O => next_state(168)
     );
@@ -1035,7 +1036,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(170),
       O => next_state(169)
     );
@@ -1044,7 +1045,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(17),
       O => next_state(16)
     );
@@ -1056,7 +1057,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(171),
       O => next_state(170)
     );
@@ -1066,7 +1067,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(172),
       O => next_state(171)
     );
@@ -1075,7 +1076,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(173),
       O => next_state(172)
     );
@@ -1084,7 +1085,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(174),
       O => next_state(173)
     );
@@ -1094,7 +1095,7 @@ begin
     )
         port map (
       I0 => current_state(175),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[174]_i_1_n_0\
     );
 \current_state[176]_i_1\: unisim.vcomponents.LUT5
@@ -1105,7 +1106,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(177),
       O => next_state(176)
     );
@@ -1117,7 +1118,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(178),
       O => next_state(177)
     );
@@ -1129,7 +1130,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(179),
       O => next_state(178)
     );
@@ -1139,7 +1140,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(180),
       O => next_state(179)
     );
@@ -1148,7 +1149,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(18),
       O => next_state(17)
     );
@@ -1157,7 +1158,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(181),
       O => next_state(180)
     );
@@ -1166,7 +1167,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(182),
       O => next_state(181)
     );
@@ -1176,7 +1177,7 @@ begin
     )
         port map (
       I0 => current_state(183),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[182]_i_1_n_0\
     );
 \current_state[184]_i_1\: unisim.vcomponents.LUT5
@@ -1187,7 +1188,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(185),
       O => next_state(184)
     );
@@ -1199,7 +1200,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(186),
       O => next_state(185)
     );
@@ -1211,7 +1212,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(187),
       O => next_state(186)
     );
@@ -1221,7 +1222,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(188),
       O => next_state(187)
     );
@@ -1230,7 +1231,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(189),
       O => next_state(188)
     );
@@ -1239,7 +1240,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(190),
       O => next_state(189)
     );
@@ -1248,7 +1249,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(19),
       O => next_state(18)
     );
@@ -1258,7 +1259,7 @@ begin
     )
         port map (
       I0 => current_state(191),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[190]_i_1_n_0\
     );
 \current_state[192]_i_1\: unisim.vcomponents.LUT5
@@ -1269,7 +1270,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(193),
       O => next_state(192)
     );
@@ -1281,7 +1282,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(194),
       O => next_state(193)
     );
@@ -1293,7 +1294,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(195),
       O => next_state(194)
     );
@@ -1303,7 +1304,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(196),
       O => next_state(195)
     );
@@ -1312,7 +1313,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(197),
       O => next_state(196)
     );
@@ -1321,7 +1322,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(198),
       O => next_state(197)
     );
@@ -1331,7 +1332,7 @@ begin
     )
         port map (
       I0 => current_state(199),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[198]_i_1_n_0\
     );
 \current_state[19]_i_1\: unisim.vcomponents.LUT2
@@ -1340,7 +1341,7 @@ begin
     )
         port map (
       I0 => current_state(20),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[19]_i_1_n_0\
     );
 \current_state[1]_i_1\: unisim.vcomponents.LUT2
@@ -1349,7 +1350,7 @@ begin
     )
         port map (
       I0 => current_state(2),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[1]_i_1_n_0\
     );
 \current_state[200]_i_1\: unisim.vcomponents.LUT5
@@ -1360,7 +1361,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(201),
       O => next_state(200)
     );
@@ -1372,7 +1373,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(202),
       O => next_state(201)
     );
@@ -1384,7 +1385,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(203),
       O => next_state(202)
     );
@@ -1394,7 +1395,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(204),
       O => next_state(203)
     );
@@ -1403,7 +1404,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(205),
       O => next_state(204)
     );
@@ -1412,7 +1413,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(206),
       O => next_state(205)
     );
@@ -1422,7 +1423,7 @@ begin
     )
         port map (
       I0 => current_state(207),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[206]_i_1_n_0\
     );
 \current_state[208]_i_1\: unisim.vcomponents.LUT5
@@ -1433,7 +1434,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(209),
       O => next_state(208)
     );
@@ -1445,7 +1446,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(210),
       O => next_state(209)
     );
@@ -1455,7 +1456,7 @@ begin
     )
         port map (
       I0 => current_state(21),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[20]_i_1_n_0\
     );
 \current_state[210]_i_1\: unisim.vcomponents.LUT5
@@ -1466,7 +1467,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(211),
       O => next_state(210)
     );
@@ -1476,7 +1477,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(212),
       O => next_state(211)
     );
@@ -1485,7 +1486,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(213),
       O => next_state(212)
     );
@@ -1494,7 +1495,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(214),
       O => next_state(213)
     );
@@ -1504,7 +1505,7 @@ begin
     )
         port map (
       I0 => current_state(215),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[214]_i_1_n_0\
     );
 \current_state[216]_i_1\: unisim.vcomponents.LUT5
@@ -1515,7 +1516,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(217),
       O => next_state(216)
     );
@@ -1527,7 +1528,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(218),
       O => next_state(217)
     );
@@ -1539,7 +1540,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(219),
       O => next_state(218)
     );
@@ -1549,7 +1550,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(220),
       O => next_state(219)
     );
@@ -1558,7 +1559,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(22),
       O => next_state(21)
     );
@@ -1567,7 +1568,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(221),
       O => next_state(220)
     );
@@ -1576,7 +1577,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(222),
       O => next_state(221)
     );
@@ -1586,7 +1587,7 @@ begin
     )
         port map (
       I0 => current_state(223),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[222]_i_1_n_0\
     );
 \current_state[224]_i_1\: unisim.vcomponents.LUT5
@@ -1597,7 +1598,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(225),
       O => next_state(224)
     );
@@ -1609,7 +1610,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(226),
       O => next_state(225)
     );
@@ -1621,7 +1622,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(227),
       O => next_state(226)
     );
@@ -1631,7 +1632,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(228),
       O => next_state(227)
     );
@@ -1640,7 +1641,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(229),
       O => next_state(228)
     );
@@ -1649,7 +1650,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(230),
       O => next_state(229)
     );
@@ -1659,7 +1660,7 @@ begin
     )
         port map (
       I0 => current_state(23),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[22]_i_1_n_0\
     );
 \current_state[230]_i_1\: unisim.vcomponents.LUT2
@@ -1668,7 +1669,7 @@ begin
     )
         port map (
       I0 => current_state(231),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[230]_i_1_n_0\
     );
 \current_state[232]_i_1\: unisim.vcomponents.LUT5
@@ -1679,7 +1680,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(233),
       O => next_state(232)
     );
@@ -1691,7 +1692,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(234),
       O => next_state(233)
     );
@@ -1703,7 +1704,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(235),
       O => next_state(234)
     );
@@ -1713,7 +1714,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(236),
       O => next_state(235)
     );
@@ -1722,7 +1723,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(237),
       O => next_state(236)
     );
@@ -1731,7 +1732,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(238),
       O => next_state(237)
     );
@@ -1741,7 +1742,7 @@ begin
     )
         port map (
       I0 => current_state(239),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[238]_i_1_n_0\
     );
 \current_state[23]_i_1\: unisim.vcomponents.LUT2
@@ -1750,7 +1751,7 @@ begin
     )
         port map (
       I0 => current_state(24),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[23]_i_1_n_0\
     );
 \current_state[240]_i_1\: unisim.vcomponents.LUT5
@@ -1761,7 +1762,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(241),
       O => next_state(240)
     );
@@ -1773,7 +1774,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(242),
       O => next_state(241)
     );
@@ -1785,7 +1786,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(243),
       O => next_state(242)
     );
@@ -1795,7 +1796,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       I2 => current_state(244),
       O => next_state(243)
     );
@@ -1804,7 +1805,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(245),
       O => next_state(244)
     );
@@ -1813,7 +1814,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[248]_0\,
       I1 => current_state(246),
       O => next_state(245)
     );
@@ -1823,7 +1824,7 @@ begin
     )
         port map (
       I0 => current_state(247),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[248]_0\,
       O => \current_state[246]_i_1_n_0\
     );
 \current_state[248]_i_1\: unisim.vcomponents.LUT5
@@ -1834,7 +1835,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[248]_0\,
       I4 => current_state(249),
       O => next_state(248)
     );
@@ -1846,7 +1847,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(250),
       O => next_state(249)
     );
@@ -1856,7 +1857,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(0),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       I2 => current_state(25),
       O => next_state(24)
     );
@@ -1868,7 +1869,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(251),
       O => next_state(250)
     );
@@ -1878,7 +1879,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(252),
       O => next_state(251)
     );
@@ -1887,7 +1888,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(253),
       O => next_state(252)
     );
@@ -1896,7 +1897,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(254),
       O => next_state(253)
     );
@@ -1906,7 +1907,7 @@ begin
     )
         port map (
       I0 => current_state(255),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[254]_i_1_n_0\
     );
 \current_state[256]_i_1\: unisim.vcomponents.LUT5
@@ -1917,7 +1918,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(257),
       O => next_state(256)
     );
@@ -1929,7 +1930,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(258),
       O => next_state(257)
     );
@@ -1941,7 +1942,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(259),
       O => next_state(258)
     );
@@ -1951,7 +1952,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(260),
       O => next_state(259)
     );
@@ -1960,7 +1961,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(26),
       O => next_state(25)
     );
@@ -1969,7 +1970,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(261),
       O => next_state(260)
     );
@@ -1978,7 +1979,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(262),
       O => next_state(261)
     );
@@ -1988,7 +1989,7 @@ begin
     )
         port map (
       I0 => current_state(263),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[262]_i_1_n_0\
     );
 \current_state[264]_i_1\: unisim.vcomponents.LUT5
@@ -1999,7 +2000,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(265),
       O => next_state(264)
     );
@@ -2011,7 +2012,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(266),
       O => next_state(265)
     );
@@ -2023,7 +2024,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(267),
       O => next_state(266)
     );
@@ -2033,7 +2034,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(268),
       O => next_state(267)
     );
@@ -2042,7 +2043,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(269),
       O => next_state(268)
     );
@@ -2051,7 +2052,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(270),
       O => next_state(269)
     );
@@ -2061,7 +2062,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(0),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       I2 => current_state(27),
       O => next_state(26)
     );
@@ -2071,7 +2072,7 @@ begin
     )
         port map (
       I0 => current_state(271),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[270]_i_1_n_0\
     );
 \current_state[272]_i_1\: unisim.vcomponents.LUT5
@@ -2082,7 +2083,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(273),
       O => next_state(272)
     );
@@ -2094,7 +2095,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(274),
       O => next_state(273)
     );
@@ -2106,7 +2107,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(275),
       O => next_state(274)
     );
@@ -2116,7 +2117,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(276),
       O => next_state(275)
     );
@@ -2125,7 +2126,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(277),
       O => next_state(276)
     );
@@ -2134,7 +2135,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(278),
       O => next_state(277)
     );
@@ -2144,7 +2145,7 @@ begin
     )
         port map (
       I0 => current_state(279),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[278]_i_1_n_0\
     );
 \current_state[27]_i_1\: unisim.vcomponents.LUT2
@@ -2153,7 +2154,7 @@ begin
     )
         port map (
       I0 => current_state(28),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[27]_i_1_n_0\
     );
 \current_state[280]_i_1\: unisim.vcomponents.LUT5
@@ -2164,7 +2165,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(281),
       O => next_state(280)
     );
@@ -2176,7 +2177,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(282),
       O => next_state(281)
     );
@@ -2188,7 +2189,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(283),
       O => next_state(282)
     );
@@ -2198,7 +2199,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(284),
       O => next_state(283)
     );
@@ -2207,7 +2208,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(285),
       O => next_state(284)
     );
@@ -2216,7 +2217,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(286),
       O => next_state(285)
     );
@@ -2226,7 +2227,7 @@ begin
     )
         port map (
       I0 => current_state(287),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[286]_i_1_n_0\
     );
 \current_state[288]_i_1\: unisim.vcomponents.LUT5
@@ -2237,7 +2238,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(289),
       O => next_state(288)
     );
@@ -2249,7 +2250,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(290),
       O => next_state(289)
     );
@@ -2259,7 +2260,7 @@ begin
     )
         port map (
       I0 => current_state(29),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[28]_i_1_n_0\
     );
 \current_state[290]_i_1\: unisim.vcomponents.LUT5
@@ -2270,7 +2271,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(291),
       O => next_state(290)
     );
@@ -2280,7 +2281,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(292),
       O => next_state(291)
     );
@@ -2289,7 +2290,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(293),
       O => next_state(292)
     );
@@ -2298,7 +2299,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(294),
       O => next_state(293)
     );
@@ -2308,7 +2309,7 @@ begin
     )
         port map (
       I0 => current_state(295),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[294]_i_1_n_0\
     );
 \current_state[296]_i_1\: unisim.vcomponents.LUT5
@@ -2319,7 +2320,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(297),
       O => next_state(296)
     );
@@ -2331,7 +2332,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(298),
       O => next_state(297)
     );
@@ -2343,7 +2344,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(299),
       O => next_state(298)
     );
@@ -2353,7 +2354,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(300),
       O => next_state(299)
     );
@@ -2363,7 +2364,7 @@ begin
     )
         port map (
       I0 => current_state(30),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[29]_i_1_n_0\
     );
 \current_state[2]_i_1\: unisim.vcomponents.LUT2
@@ -2371,7 +2372,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(3),
       O => next_state(2)
     );
@@ -2380,7 +2381,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(301),
       O => next_state(300)
     );
@@ -2389,7 +2390,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(302),
       O => next_state(301)
     );
@@ -2399,7 +2400,7 @@ begin
     )
         port map (
       I0 => current_state(303),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[302]_i_1_n_0\
     );
 \current_state[304]_i_1\: unisim.vcomponents.LUT5
@@ -2410,7 +2411,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(305),
       O => next_state(304)
     );
@@ -2422,7 +2423,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(306),
       O => next_state(305)
     );
@@ -2434,7 +2435,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(307),
       O => next_state(306)
     );
@@ -2444,7 +2445,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(308),
       O => next_state(307)
     );
@@ -2453,7 +2454,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(309),
       O => next_state(308)
     );
@@ -2462,7 +2463,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(310),
       O => next_state(309)
     );
@@ -2472,7 +2473,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(0),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(31),
       O => next_state(30)
     );
@@ -2482,7 +2483,7 @@ begin
     )
         port map (
       I0 => current_state(311),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[310]_i_1_n_0\
     );
 \current_state[312]_i_1\: unisim.vcomponents.LUT5
@@ -2493,7 +2494,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(313),
       O => next_state(312)
     );
@@ -2505,7 +2506,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(314),
       O => next_state(313)
     );
@@ -2517,7 +2518,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(315),
       O => next_state(314)
     );
@@ -2527,7 +2528,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(316),
       O => next_state(315)
     );
@@ -2536,7 +2537,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(317),
       O => next_state(316)
     );
@@ -2545,7 +2546,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(318),
       O => next_state(317)
     );
@@ -2555,7 +2556,7 @@ begin
     )
         port map (
       I0 => current_state(319),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[318]_i_1_n_0\
     );
 \current_state[31]_i_1\: unisim.vcomponents.LUT3
@@ -2564,7 +2565,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(0),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(32),
       O => next_state(31)
     );
@@ -2576,7 +2577,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(321),
       O => next_state(320)
     );
@@ -2588,7 +2589,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(322),
       O => next_state(321)
     );
@@ -2600,7 +2601,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(323),
       O => next_state(322)
     );
@@ -2610,7 +2611,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(324),
       O => next_state(323)
     );
@@ -2619,7 +2620,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(325),
       O => next_state(324)
     );
@@ -2628,7 +2629,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(326),
       O => next_state(325)
     );
@@ -2638,7 +2639,7 @@ begin
     )
         port map (
       I0 => current_state(327),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[326]_i_1_n_0\
     );
 \current_state[328]_i_1\: unisim.vcomponents.LUT5
@@ -2649,7 +2650,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(329),
       O => next_state(328)
     );
@@ -2661,7 +2662,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(330),
       O => next_state(329)
     );
@@ -2673,7 +2674,7 @@ begin
       I0 => \current_state_reg[354]_0\(1),
       I1 => \current_state_reg[354]_0\(4),
       I2 => \current_state_reg[354]_0\(3),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(33),
       O => next_state(32)
     );
@@ -2685,7 +2686,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(331),
       O => next_state(330)
     );
@@ -2695,7 +2696,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(332),
       O => next_state(331)
     );
@@ -2704,7 +2705,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(333),
       O => next_state(332)
     );
@@ -2713,7 +2714,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(334),
       O => next_state(333)
     );
@@ -2723,7 +2724,7 @@ begin
     )
         port map (
       I0 => current_state(335),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[334]_i_1_n_0\
     );
 \current_state[336]_i_1\: unisim.vcomponents.LUT5
@@ -2734,7 +2735,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(337),
       O => next_state(336)
     );
@@ -2746,7 +2747,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(338),
       O => next_state(337)
     );
@@ -2758,7 +2759,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(339),
       O => next_state(338)
     );
@@ -2768,7 +2769,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(340),
       O => next_state(339)
     );
@@ -2778,7 +2779,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(1),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(34),
       O => next_state(33)
     );
@@ -2787,7 +2788,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(341),
       O => next_state(340)
     );
@@ -2796,7 +2797,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(342),
       O => next_state(341)
     );
@@ -2806,7 +2807,7 @@ begin
     )
         port map (
       I0 => current_state(343),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[342]_i_1_n_0\
     );
 \current_state[344]_i_1\: unisim.vcomponents.LUT5
@@ -2817,7 +2818,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(345),
       O => next_state(344)
     );
@@ -2829,7 +2830,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(346),
       O => next_state(345)
     );
@@ -2841,7 +2842,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(347),
       O => next_state(346)
     );
@@ -2851,7 +2852,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(348),
       O => next_state(347)
     );
@@ -2860,7 +2861,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(349),
       O => next_state(348)
     );
@@ -2869,7 +2870,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(350),
       O => next_state(349)
     );
@@ -2881,7 +2882,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(2),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(35),
       O => next_state(34)
     );
@@ -2891,7 +2892,7 @@ begin
     )
         port map (
       I0 => current_state(351),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[350]_i_1_n_0\
     );
 \current_state[352]_i_1\: unisim.vcomponents.LUT5
@@ -2902,7 +2903,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(0),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(353),
       O => next_state(352)
     );
@@ -2914,7 +2915,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(354),
       O => next_state(353)
     );
@@ -2926,7 +2927,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(2),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[358]_0\,
       I4 => current_state(355),
       O => next_state(354)
     );
@@ -2936,7 +2937,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       I2 => current_state(356),
       O => next_state(355)
     );
@@ -2945,7 +2946,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(357),
       O => next_state(356)
     );
@@ -2954,7 +2955,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[358]_0\,
       I1 => current_state(358),
       O => next_state(357)
     );
@@ -2964,7 +2965,7 @@ begin
     )
         port map (
       I0 => current_state(359),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[358]_0\,
       O => \current_state[358]_i_1_n_0\
     );
 \current_state[359]_i_2\: unisim.vcomponents.LUT5
@@ -2985,7 +2986,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(2),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(36),
       O => next_state(35)
     );
@@ -2997,7 +2998,7 @@ begin
       I0 => \current_state_reg[354]_0\(3),
       I1 => \current_state_reg[354]_0\(2),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(37),
       O => next_state(36)
     );
@@ -3007,7 +3008,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(38),
       O => next_state(37)
     );
@@ -3019,7 +3020,7 @@ begin
       I0 => \current_state_reg[354]_0\(2),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(4),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(39),
       O => next_state(38)
     );
@@ -3029,7 +3030,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(4),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(40),
       O => next_state(39)
     );
@@ -3039,7 +3040,7 @@ begin
     )
         port map (
       I0 => current_state(4),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[3]_i_1_n_0\
     );
 \current_state[40]_i_1\: unisim.vcomponents.LUT3
@@ -3048,7 +3049,7 @@ begin
     )
         port map (
       I0 => \current_state[96]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(41),
       O => next_state(40)
     );
@@ -3060,7 +3061,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(42),
       O => next_state(41)
     );
@@ -3070,7 +3071,7 @@ begin
     )
         port map (
       I0 => \current_state[98]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(43),
       O => next_state(42)
     );
@@ -3080,7 +3081,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(44),
       O => next_state(43)
     );
@@ -3089,7 +3090,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(45),
       O => next_state(44)
     );
@@ -3099,7 +3100,7 @@ begin
     )
         port map (
       I0 => \current_state[103]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(46),
       O => next_state(45)
     );
@@ -3109,7 +3110,7 @@ begin
     )
         port map (
       I0 => current_state(47),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[46]_i_1_n_0\
     );
 \current_state[47]_i_1\: unisim.vcomponents.LUT4
@@ -3119,7 +3120,7 @@ begin
         port map (
       I0 => \current_state[103]_i_2_n_0\,
       I1 => \^packet_data\(0),
-      I2 => packet_trigger,
+      I2 => \current_state_reg[137]_0\,
       I3 => current_state(48),
       O => next_state(47)
     );
@@ -3129,7 +3130,7 @@ begin
     )
         port map (
       I0 => \current_state[96]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(49),
       O => next_state(48)
     );
@@ -3141,7 +3142,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(50),
       O => next_state(49)
     );
@@ -3150,7 +3151,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(5),
       O => next_state(4)
     );
@@ -3160,7 +3161,7 @@ begin
     )
         port map (
       I0 => \current_state[98]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(51),
       O => next_state(50)
     );
@@ -3170,7 +3171,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(52),
       O => next_state(51)
     );
@@ -3179,7 +3180,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(53),
       O => next_state(52)
     );
@@ -3189,7 +3190,7 @@ begin
     )
         port map (
       I0 => \current_state[103]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(54),
       O => next_state(53)
     );
@@ -3199,7 +3200,7 @@ begin
     )
         port map (
       I0 => current_state(55),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[54]_i_1_n_0\
     );
 \current_state[55]_i_1\: unisim.vcomponents.LUT4
@@ -3209,7 +3210,7 @@ begin
         port map (
       I0 => \current_state[103]_i_2_n_0\,
       I1 => \^packet_data\(0),
-      I2 => packet_trigger,
+      I2 => \current_state_reg[137]_0\,
       I3 => current_state(56),
       O => next_state(55)
     );
@@ -3219,7 +3220,7 @@ begin
     )
         port map (
       I0 => \current_state[96]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(57),
       O => next_state(56)
     );
@@ -3231,7 +3232,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(58),
       O => next_state(57)
     );
@@ -3241,7 +3242,7 @@ begin
     )
         port map (
       I0 => \current_state[98]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(59),
       O => next_state(58)
     );
@@ -3251,7 +3252,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(60),
       O => next_state(59)
     );
@@ -3261,7 +3262,7 @@ begin
     )
         port map (
       I0 => current_state(6),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[5]_i_1_n_0\
     );
 \current_state[60]_i_1\: unisim.vcomponents.LUT2
@@ -3269,7 +3270,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(61),
       O => next_state(60)
     );
@@ -3279,7 +3280,7 @@ begin
     )
         port map (
       I0 => \current_state[103]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(62),
       O => next_state(61)
     );
@@ -3289,7 +3290,7 @@ begin
     )
         port map (
       I0 => current_state(63),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[62]_i_1_n_0\
     );
 \current_state[63]_i_1\: unisim.vcomponents.LUT4
@@ -3299,7 +3300,7 @@ begin
         port map (
       I0 => \current_state[103]_i_2_n_0\,
       I1 => \^packet_data\(0),
-      I2 => packet_trigger,
+      I2 => \current_state_reg[137]_0\,
       I3 => current_state(64),
       O => next_state(63)
     );
@@ -3309,7 +3310,7 @@ begin
     )
         port map (
       I0 => \current_state[96]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(65),
       O => next_state(64)
     );
@@ -3321,7 +3322,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(66),
       O => next_state(65)
     );
@@ -3331,7 +3332,7 @@ begin
     )
         port map (
       I0 => \current_state[98]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(67),
       O => next_state(66)
     );
@@ -3341,7 +3342,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(68),
       O => next_state(67)
     );
@@ -3350,7 +3351,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(69),
       O => next_state(68)
     );
@@ -3360,7 +3361,7 @@ begin
     )
         port map (
       I0 => \current_state[103]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(70),
       O => next_state(69)
     );
@@ -3369,7 +3370,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(7),
       O => next_state(6)
     );
@@ -3379,7 +3380,7 @@ begin
     )
         port map (
       I0 => current_state(71),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[70]_i_1_n_0\
     );
 \current_state[71]_i_1\: unisim.vcomponents.LUT4
@@ -3389,7 +3390,7 @@ begin
         port map (
       I0 => \current_state[103]_i_2_n_0\,
       I1 => \^packet_data\(0),
-      I2 => packet_trigger,
+      I2 => \current_state_reg[137]_0\,
       I3 => current_state(72),
       O => next_state(71)
     );
@@ -3399,7 +3400,7 @@ begin
     )
         port map (
       I0 => \current_state[96]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(73),
       O => next_state(72)
     );
@@ -3411,7 +3412,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(74),
       O => next_state(73)
     );
@@ -3421,7 +3422,7 @@ begin
     )
         port map (
       I0 => \current_state[98]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(75),
       O => next_state(74)
     );
@@ -3431,7 +3432,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(76),
       O => next_state(75)
     );
@@ -3440,7 +3441,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(77),
       O => next_state(76)
     );
@@ -3450,7 +3451,7 @@ begin
     )
         port map (
       I0 => \current_state[103]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(78),
       O => next_state(77)
     );
@@ -3460,7 +3461,7 @@ begin
     )
         port map (
       I0 => current_state(79),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[78]_i_1_n_0\
     );
 \current_state[79]_i_1\: unisim.vcomponents.LUT4
@@ -3470,7 +3471,7 @@ begin
         port map (
       I0 => \current_state[103]_i_2_n_0\,
       I1 => \^packet_data\(0),
-      I2 => packet_trigger,
+      I2 => \current_state_reg[137]_0\,
       I3 => current_state(80),
       O => next_state(79)
     );
@@ -3480,7 +3481,7 @@ begin
     )
         port map (
       I0 => current_state(8),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[7]_i_1_n_0\
     );
 \current_state[80]_i_1\: unisim.vcomponents.LUT3
@@ -3489,7 +3490,7 @@ begin
     )
         port map (
       I0 => \current_state[96]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(81),
       O => next_state(80)
     );
@@ -3501,7 +3502,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(82),
       O => next_state(81)
     );
@@ -3511,7 +3512,7 @@ begin
     )
         port map (
       I0 => \current_state[98]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(83),
       O => next_state(82)
     );
@@ -3521,7 +3522,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(84),
       O => next_state(83)
     );
@@ -3530,7 +3531,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(85),
       O => next_state(84)
     );
@@ -3540,7 +3541,7 @@ begin
     )
         port map (
       I0 => \current_state[103]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(86),
       O => next_state(85)
     );
@@ -3550,7 +3551,7 @@ begin
     )
         port map (
       I0 => current_state(87),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[86]_i_1_n_0\
     );
 \current_state[87]_i_1\: unisim.vcomponents.LUT4
@@ -3560,7 +3561,7 @@ begin
         port map (
       I0 => \current_state[103]_i_2_n_0\,
       I1 => \^packet_data\(0),
-      I2 => packet_trigger,
+      I2 => \current_state_reg[137]_0\,
       I3 => current_state(88),
       O => next_state(87)
     );
@@ -3570,7 +3571,7 @@ begin
     )
         port map (
       I0 => \current_state[96]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(89),
       O => next_state(88)
     );
@@ -3582,7 +3583,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(90),
       O => next_state(89)
     );
@@ -3591,7 +3592,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => load_trigger,
       I1 => current_state(9),
       O => next_state(8)
     );
@@ -3601,7 +3602,7 @@ begin
     )
         port map (
       I0 => \current_state[98]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(91),
       O => next_state(90)
     );
@@ -3611,7 +3612,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(92),
       O => next_state(91)
     );
@@ -3620,7 +3621,7 @@ begin
       INIT => X"E"
     )
         port map (
-      I0 => packet_trigger,
+      I0 => \current_state_reg[137]_0\,
       I1 => current_state(93),
       O => next_state(92)
     );
@@ -3630,7 +3631,7 @@ begin
     )
         port map (
       I0 => \current_state[103]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(94),
       O => next_state(93)
     );
@@ -3640,7 +3641,7 @@ begin
     )
         port map (
       I0 => current_state(95),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       O => \current_state[94]_i_1_n_0\
     );
 \current_state[95]_i_1\: unisim.vcomponents.LUT4
@@ -3650,7 +3651,7 @@ begin
         port map (
       I0 => \current_state[103]_i_2_n_0\,
       I1 => \^packet_data\(0),
-      I2 => packet_trigger,
+      I2 => \current_state_reg[137]_0\,
       I3 => current_state(96),
       O => next_state(95)
     );
@@ -3660,7 +3661,7 @@ begin
     )
         port map (
       I0 => \current_state[96]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(97),
       O => next_state(96)
     );
@@ -3684,7 +3685,7 @@ begin
       I0 => \current_state_reg[354]_0\(4),
       I1 => \current_state_reg[354]_0\(3),
       I2 => \current_state_reg[354]_0\(1),
-      I3 => packet_trigger,
+      I3 => \current_state_reg[137]_0\,
       I4 => current_state(98),
       O => next_state(97)
     );
@@ -3694,7 +3695,7 @@ begin
     )
         port map (
       I0 => \current_state[98]_i_2_n_0\,
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(99),
       O => next_state(98)
     );
@@ -3716,7 +3717,7 @@ begin
     )
         port map (
       I0 => \current_state_reg[354]_0\(3),
-      I1 => packet_trigger,
+      I1 => \current_state_reg[137]_0\,
       I2 => current_state(100),
       O => next_state(99)
     );
@@ -3726,7 +3727,7 @@ begin
     )
         port map (
       I0 => current_state(10),
-      I1 => packet_trigger,
+      I1 => load_trigger,
       O => \current_state[9]_i_1_n_0\
     );
 \current_state_reg[0]\: unisim.vcomponents.FDRE
@@ -6619,11 +6620,15 @@ entity system_teletext_controller_0_0_sync_generator is
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     packet_trigger : out STD_LOGIC;
     D : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    \current_line_reg[1]_0\ : out STD_LOGIC;
+    \current_line_reg[1]_1\ : out STD_LOGIC;
+    \current_line_reg[1]_2\ : out STD_LOGIC;
+    load_trigger : out STD_LOGIC;
     SYNC_OUT : out STD_LOGIC;
-    Q : in STD_LOGIC_VECTOR ( 1 downto 0 );
     RESET : in STD_LOGIC;
     PACKET_DATA : in STD_LOGIC_VECTOR ( 0 to 0 );
-    \current_state_reg[351]\ : in STD_LOGIC_VECTOR ( 30 downto 0 );
+    Q : in STD_LOGIC_VECTOR ( 30 downto 0 );
+    \current_state_reg[1]\ : in STD_LOGIC_VECTOR ( 4 downto 0 );
     CLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
@@ -6631,6 +6636,7 @@ entity system_teletext_controller_0_0_sync_generator is
 end system_teletext_controller_0_0_sync_generator;
 
 architecture STRUCTURE of system_teletext_controller_0_0_sync_generator is
+  signal FRAME_TRIGGER : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_10_n_0 : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_11_n_0 : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_12_n_0 : STD_LOGIC;
@@ -6653,7 +6659,6 @@ architecture STRUCTURE of system_teletext_controller_0_0_sync_generator is
   signal SYNC_OUT_INST_0_i_28_n_0 : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_29_n_0 : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_2_n_0 : STD_LOGIC;
-  signal SYNC_OUT_INST_0_i_30_n_0 : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_3_n_0 : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_4_n_0 : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_5_n_0 : STD_LOGIC;
@@ -6662,100 +6667,106 @@ architecture STRUCTURE of system_teletext_controller_0_0_sync_generator is
   signal SYNC_OUT_INST_0_i_8_n_0 : STD_LOGIC;
   signal SYNC_OUT_INST_0_i_9_n_0 : STD_LOGIC;
   signal \current_column[0]_i_1_n_0\ : STD_LOGIC;
+  signal \current_column[3]_i_1_n_0\ : STD_LOGIC;
   signal \current_column[5]_i_1_n_0\ : STD_LOGIC;
-  signal \current_column[6]_i_1_n_0\ : STD_LOGIC;
   signal \current_column[6]_i_2_n_0\ : STD_LOGIC;
   signal \current_column[9]_i_1_n_0\ : STD_LOGIC;
   signal \current_column[9]_i_3_n_0\ : STD_LOGIC;
   signal current_column_reg : STD_LOGIC_VECTOR ( 8 downto 0 );
   signal \current_column_reg__0\ : STD_LOGIC_VECTOR ( 9 to 9 );
+  signal current_line0 : STD_LOGIC;
   signal \current_line[0]_i_1_n_0\ : STD_LOGIC;
+  signal \current_line[2]_i_1__0_n_0\ : STD_LOGIC;
   signal \current_line[3]_i_1__0_n_0\ : STD_LOGIC;
+  signal \current_line[4]_i_1__0_n_0\ : STD_LOGIC;
   signal \current_line[4]_i_4_n_0\ : STD_LOGIC;
   signal \current_line[4]_i_5_n_0\ : STD_LOGIC;
   signal \current_line[4]_i_6_n_0\ : STD_LOGIC;
   signal \current_line[4]_i_7_n_0\ : STD_LOGIC;
   signal \current_line[4]_i_8_n_0\ : STD_LOGIC;
   signal \current_line[4]_i_9_n_0\ : STD_LOGIC;
-  signal \current_line[8]_i_2_n_0\ : STD_LOGIC;
+  signal \current_line[5]_i_1_n_0\ : STD_LOGIC;
+  signal \current_line[7]_i_2_n_0\ : STD_LOGIC;
   signal \current_line[9]_i_1_n_0\ : STD_LOGIC;
-  signal \current_line[9]_i_2_n_0\ : STD_LOGIC;
-  signal \current_line[9]_i_4_n_0\ : STD_LOGIC;
   signal \current_line[9]_i_5_n_0\ : STD_LOGIC;
   signal \current_line[9]_i_6_n_0\ : STD_LOGIC;
   signal \current_line[9]_i_7_n_0\ : STD_LOGIC;
   signal current_line_reg : STD_LOGIC_VECTOR ( 9 downto 0 );
+  signal \^current_line_reg[1]_0\ : STD_LOGIC;
+  signal \^current_line_reg[1]_1\ : STD_LOGIC;
+  signal \^current_line_reg[1]_2\ : STD_LOGIC;
   signal p_0_in : STD_LOGIC_VECTOR ( 9 downto 1 );
   signal \p_0_in__0\ : STD_LOGIC_VECTOR ( 9 downto 1 );
   signal \^packet_trigger\ : STD_LOGIC;
   attribute SOFT_HLUTNM : string;
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_12 : label is "soft_lutpair120";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_13 : label is "soft_lutpair122";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_14 : label is "soft_lutpair112";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_15 : label is "soft_lutpair114";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_20 : label is "soft_lutpair119";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_21 : label is "soft_lutpair118";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_22 : label is "soft_lutpair120";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_25 : label is "soft_lutpair123";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_26 : label is "soft_lutpair119";
-  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_30 : label is "soft_lutpair115";
-  attribute SOFT_HLUTNM of \current_column[1]_i_1\ : label is "soft_lutpair142";
-  attribute SOFT_HLUTNM of \current_column[2]_i_1\ : label is "soft_lutpair140";
-  attribute SOFT_HLUTNM of \current_column[3]_i_1\ : label is "soft_lutpair123";
-  attribute SOFT_HLUTNM of \current_column[4]_i_1\ : label is "soft_lutpair114";
-  attribute SOFT_HLUTNM of \current_column[6]_i_2\ : label is "soft_lutpair142";
-  attribute SOFT_HLUTNM of \current_column[7]_i_1\ : label is "soft_lutpair122";
-  attribute SOFT_HLUTNM of \current_column[8]_i_1\ : label is "soft_lutpair113";
-  attribute SOFT_HLUTNM of \current_column[9]_i_2\ : label is "soft_lutpair113";
-  attribute SOFT_HLUTNM of \current_column[9]_i_3\ : label is "soft_lutpair112";
-  attribute SOFT_HLUTNM of \current_line[1]_i_1\ : label is "soft_lutpair141";
-  attribute SOFT_HLUTNM of \current_line[2]_i_1\ : label is "soft_lutpair141";
-  attribute SOFT_HLUTNM of \current_line[3]_i_1__0\ : label is "soft_lutpair116";
-  attribute SOFT_HLUTNM of \current_line[4]_i_1\ : label is "soft_lutpair116";
-  attribute SOFT_HLUTNM of \current_line[4]_i_1__0\ : label is "soft_lutpair121";
-  attribute SOFT_HLUTNM of \current_line[4]_i_8\ : label is "soft_lutpair124";
-  attribute SOFT_HLUTNM of \current_line[4]_i_9\ : label is "soft_lutpair140";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_10 : label is "soft_lutpair120";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_13 : label is "soft_lutpair114";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_17 : label is "soft_lutpair121";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_18 : label is "soft_lutpair114";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_19 : label is "soft_lutpair113";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_20 : label is "soft_lutpair140";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_22 : label is "soft_lutpair111";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_24 : label is "soft_lutpair119";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_26 : label is "soft_lutpair117";
+  attribute SOFT_HLUTNM of SYNC_OUT_INST_0_i_29 : label is "soft_lutpair118";
+  attribute SOFT_HLUTNM of \current_column[2]_i_1\ : label is "soft_lutpair139";
+  attribute SOFT_HLUTNM of \current_column[3]_i_1\ : label is "soft_lutpair120";
+  attribute SOFT_HLUTNM of \current_column[4]_i_1\ : label is "soft_lutpair115";
+  attribute SOFT_HLUTNM of \current_column[6]_i_2\ : label is "soft_lutpair139";
+  attribute SOFT_HLUTNM of \current_column[8]_i_1\ : label is "soft_lutpair112";
+  attribute SOFT_HLUTNM of \current_column[9]_i_2\ : label is "soft_lutpair112";
+  attribute SOFT_HLUTNM of \current_column[9]_i_3\ : label is "soft_lutpair115";
+  attribute SOFT_HLUTNM of \current_line[1]_i_1\ : label is "soft_lutpair140";
+  attribute SOFT_HLUTNM of \current_line[2]_i_1__0\ : label is "soft_lutpair122";
+  attribute SOFT_HLUTNM of \current_line[3]_i_1__0\ : label is "soft_lutpair113";
+  attribute SOFT_HLUTNM of \current_line[4]_i_1__0\ : label is "soft_lutpair111";
+  attribute SOFT_HLUTNM of \current_line[4]_i_6\ : label is "soft_lutpair119";
+  attribute SOFT_HLUTNM of \current_line[4]_i_7\ : label is "soft_lutpair118";
   attribute SOFT_HLUTNM of \current_line[6]_i_1\ : label is "soft_lutpair117";
-  attribute SOFT_HLUTNM of \current_line[8]_i_2\ : label is "soft_lutpair118";
-  attribute SOFT_HLUTNM of \current_line[9]_i_5\ : label is "soft_lutpair124";
-  attribute SOFT_HLUTNM of \current_line[9]_i_6\ : label is "soft_lutpair117";
-  attribute SOFT_HLUTNM of \current_line[9]_i_7\ : label is "soft_lutpair115";
-  attribute SOFT_HLUTNM of \current_state[111]_i_1\ : label is "soft_lutpair125";
-  attribute SOFT_HLUTNM of \current_state[119]_i_1\ : label is "soft_lutpair125";
-  attribute SOFT_HLUTNM of \current_state[127]_i_1\ : label is "soft_lutpair126";
-  attribute SOFT_HLUTNM of \current_state[135]_i_1\ : label is "soft_lutpair126";
-  attribute SOFT_HLUTNM of \current_state[143]_i_1\ : label is "soft_lutpair127";
-  attribute SOFT_HLUTNM of \current_state[151]_i_1\ : label is "soft_lutpair127";
-  attribute SOFT_HLUTNM of \current_state[159]_i_1\ : label is "soft_lutpair128";
-  attribute SOFT_HLUTNM of \current_state[167]_i_1\ : label is "soft_lutpair128";
-  attribute SOFT_HLUTNM of \current_state[175]_i_1\ : label is "soft_lutpair129";
-  attribute SOFT_HLUTNM of \current_state[183]_i_1\ : label is "soft_lutpair129";
-  attribute SOFT_HLUTNM of \current_state[191]_i_1\ : label is "soft_lutpair130";
-  attribute SOFT_HLUTNM of \current_state[199]_i_1\ : label is "soft_lutpair130";
-  attribute SOFT_HLUTNM of \current_state[207]_i_1\ : label is "soft_lutpair131";
-  attribute SOFT_HLUTNM of \current_state[215]_i_1\ : label is "soft_lutpair131";
-  attribute SOFT_HLUTNM of \current_state[223]_i_1\ : label is "soft_lutpair132";
-  attribute SOFT_HLUTNM of \current_state[231]_i_1\ : label is "soft_lutpair132";
-  attribute SOFT_HLUTNM of \current_state[239]_i_1\ : label is "soft_lutpair133";
-  attribute SOFT_HLUTNM of \current_state[247]_i_1\ : label is "soft_lutpair133";
-  attribute SOFT_HLUTNM of \current_state[255]_i_1\ : label is "soft_lutpair134";
-  attribute SOFT_HLUTNM of \current_state[263]_i_1\ : label is "soft_lutpair134";
-  attribute SOFT_HLUTNM of \current_state[271]_i_1\ : label is "soft_lutpair135";
-  attribute SOFT_HLUTNM of \current_state[279]_i_1\ : label is "soft_lutpair135";
-  attribute SOFT_HLUTNM of \current_state[287]_i_1\ : label is "soft_lutpair136";
-  attribute SOFT_HLUTNM of \current_state[295]_i_1\ : label is "soft_lutpair136";
-  attribute SOFT_HLUTNM of \current_state[303]_i_1\ : label is "soft_lutpair137";
-  attribute SOFT_HLUTNM of \current_state[311]_i_1\ : label is "soft_lutpair137";
-  attribute SOFT_HLUTNM of \current_state[319]_i_1\ : label is "soft_lutpair138";
-  attribute SOFT_HLUTNM of \current_state[327]_i_1\ : label is "soft_lutpair138";
-  attribute SOFT_HLUTNM of \current_state[335]_i_1\ : label is "soft_lutpair139";
-  attribute SOFT_HLUTNM of \current_state[343]_i_1\ : label is "soft_lutpair139";
-  attribute SOFT_HLUTNM of \current_state[359]_i_1\ : label is "soft_lutpair121";
+  attribute SOFT_HLUTNM of \current_line[7]_i_2\ : label is "soft_lutpair122";
+  attribute SOFT_HLUTNM of \current_line[8]_i_1\ : label is "soft_lutpair116";
+  attribute SOFT_HLUTNM of \current_line[9]_i_3\ : label is "soft_lutpair116";
+  attribute SOFT_HLUTNM of \current_line[9]_i_7\ : label is "soft_lutpair121";
+  attribute SOFT_HLUTNM of \current_state[111]_i_1\ : label is "soft_lutpair123";
+  attribute SOFT_HLUTNM of \current_state[119]_i_1\ : label is "soft_lutpair123";
+  attribute SOFT_HLUTNM of \current_state[127]_i_1\ : label is "soft_lutpair124";
+  attribute SOFT_HLUTNM of \current_state[135]_i_1\ : label is "soft_lutpair124";
+  attribute SOFT_HLUTNM of \current_state[143]_i_1\ : label is "soft_lutpair125";
+  attribute SOFT_HLUTNM of \current_state[151]_i_1\ : label is "soft_lutpair125";
+  attribute SOFT_HLUTNM of \current_state[159]_i_1\ : label is "soft_lutpair126";
+  attribute SOFT_HLUTNM of \current_state[167]_i_1\ : label is "soft_lutpair126";
+  attribute SOFT_HLUTNM of \current_state[175]_i_1\ : label is "soft_lutpair127";
+  attribute SOFT_HLUTNM of \current_state[183]_i_1\ : label is "soft_lutpair127";
+  attribute SOFT_HLUTNM of \current_state[191]_i_1\ : label is "soft_lutpair128";
+  attribute SOFT_HLUTNM of \current_state[199]_i_1\ : label is "soft_lutpair128";
+  attribute SOFT_HLUTNM of \current_state[207]_i_1\ : label is "soft_lutpair129";
+  attribute SOFT_HLUTNM of \current_state[215]_i_1\ : label is "soft_lutpair129";
+  attribute SOFT_HLUTNM of \current_state[223]_i_1\ : label is "soft_lutpair130";
+  attribute SOFT_HLUTNM of \current_state[231]_i_1\ : label is "soft_lutpair130";
+  attribute SOFT_HLUTNM of \current_state[239]_i_1\ : label is "soft_lutpair131";
+  attribute SOFT_HLUTNM of \current_state[247]_i_1\ : label is "soft_lutpair131";
+  attribute SOFT_HLUTNM of \current_state[255]_i_1\ : label is "soft_lutpair132";
+  attribute SOFT_HLUTNM of \current_state[263]_i_1\ : label is "soft_lutpair132";
+  attribute SOFT_HLUTNM of \current_state[271]_i_1\ : label is "soft_lutpair133";
+  attribute SOFT_HLUTNM of \current_state[279]_i_1\ : label is "soft_lutpair133";
+  attribute SOFT_HLUTNM of \current_state[287]_i_1\ : label is "soft_lutpair134";
+  attribute SOFT_HLUTNM of \current_state[295]_i_1\ : label is "soft_lutpair134";
+  attribute SOFT_HLUTNM of \current_state[303]_i_1\ : label is "soft_lutpair135";
+  attribute SOFT_HLUTNM of \current_state[311]_i_1\ : label is "soft_lutpair135";
+  attribute SOFT_HLUTNM of \current_state[319]_i_1\ : label is "soft_lutpair136";
+  attribute SOFT_HLUTNM of \current_state[327]_i_1\ : label is "soft_lutpair136";
+  attribute SOFT_HLUTNM of \current_state[335]_i_1\ : label is "soft_lutpair137";
+  attribute SOFT_HLUTNM of \current_state[343]_i_1\ : label is "soft_lutpair137";
+  attribute SOFT_HLUTNM of \current_state[351]_i_1\ : label is "soft_lutpair138";
+  attribute SOFT_HLUTNM of \current_state[359]_i_1\ : label is "soft_lutpair138";
 begin
+  \current_line_reg[1]_0\ <= \^current_line_reg[1]_0\;
+  \current_line_reg[1]_1\ <= \^current_line_reg[1]_1\;
+  \current_line_reg[1]_2\ <= \^current_line_reg[1]_2\;
   packet_trigger <= \^packet_trigger\;
-SYNC_OUT_INST_0: unisim.vcomponents.LUT6
+SYNC_OUT_INST_0: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"ABA8FFFFABA80000"
+      INIT => X"02FF0200"
     )
         port map (
       I0 => SYNC_OUT_INST_0_i_1_n_0,
@@ -6763,76 +6774,22 @@ SYNC_OUT_INST_0: unisim.vcomponents.LUT6
       I2 => SYNC_OUT_INST_0_i_3_n_0,
       I3 => SYNC_OUT_INST_0_i_4_n_0,
       I4 => SYNC_OUT_INST_0_i_5_n_0,
-      I5 => SYNC_OUT_INST_0_i_6_n_0,
       O => SYNC_OUT
     );
-SYNC_OUT_INST_0_i_1: unisim.vcomponents.LUT4
+SYNC_OUT_INST_0_i_1: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"FBF8"
+      INIT => X"FFFFFFFF10110000"
     )
         port map (
-      I0 => SYNC_OUT_INST_0_i_7_n_0,
-      I1 => SYNC_OUT_INST_0_i_8_n_0,
-      I2 => SYNC_OUT_INST_0_i_9_n_0,
-      I3 => SYNC_OUT_INST_0_i_10_n_0,
+      I0 => SYNC_OUT_INST_0_i_6_n_0,
+      I1 => SYNC_OUT_INST_0_i_7_n_0,
+      I2 => SYNC_OUT_INST_0_i_8_n_0,
+      I3 => SYNC_OUT_INST_0_i_9_n_0,
+      I4 => SYNC_OUT_INST_0_i_10_n_0,
+      I5 => SYNC_OUT_INST_0_i_11_n_0,
       O => SYNC_OUT_INST_0_i_1_n_0
     );
-SYNC_OUT_INST_0_i_10: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"0000000000008000"
-    )
-        port map (
-      I0 => SYNC_OUT_INST_0_i_14_n_0,
-      I1 => current_column_reg(6),
-      I2 => current_column_reg(7),
-      I3 => current_column_reg(5),
-      I4 => SYNC_OUT_INST_0_i_15_n_0,
-      I5 => current_column_reg(8),
-      O => SYNC_OUT_INST_0_i_10_n_0
-    );
-SYNC_OUT_INST_0_i_11: unisim.vcomponents.LUT2
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => current_line_reg(5),
-      I1 => current_line_reg(8),
-      O => SYNC_OUT_INST_0_i_11_n_0
-    );
-SYNC_OUT_INST_0_i_12: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"28"
-    )
-        port map (
-      I0 => current_line_reg(2),
-      I1 => current_line_reg(4),
-      I2 => current_line_reg(3),
-      O => SYNC_OUT_INST_0_i_12_n_0
-    );
-SYNC_OUT_INST_0_i_13: unisim.vcomponents.LUT4
-    generic map(
-      INIT => X"FFFE"
-    )
-        port map (
-      I0 => current_column_reg(6),
-      I1 => current_column_reg(5),
-      I2 => current_column_reg(7),
-      I3 => current_column_reg(8),
-      O => SYNC_OUT_INST_0_i_13_n_0
-    );
-SYNC_OUT_INST_0_i_14: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"15555555"
-    )
-        port map (
-      I0 => current_column_reg(4),
-      I1 => current_column_reg(0),
-      I2 => current_column_reg(1),
-      I3 => current_column_reg(2),
-      I4 => current_column_reg(3),
-      O => SYNC_OUT_INST_0_i_14_n_0
-    );
-SYNC_OUT_INST_0_i_15: unisim.vcomponents.LUT5
+SYNC_OUT_INST_0_i_10: unisim.vcomponents.LUT5
     generic map(
       INIT => X"00000001"
     )
@@ -6842,61 +6799,143 @@ SYNC_OUT_INST_0_i_15: unisim.vcomponents.LUT5
       I2 => current_column_reg(3),
       I3 => current_column_reg(4),
       I4 => current_column_reg(2),
+      O => SYNC_OUT_INST_0_i_10_n_0
+    );
+SYNC_OUT_INST_0_i_11: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"FFFFFFFE"
+    )
+        port map (
+      I0 => SYNC_OUT_INST_0_i_21_n_0,
+      I1 => SYNC_OUT_INST_0_i_22_n_0,
+      I2 => SYNC_OUT_INST_0_i_23_n_0,
+      I3 => SYNC_OUT_INST_0_i_17_n_0,
+      I4 => SYNC_OUT_INST_0_i_18_n_0,
+      O => SYNC_OUT_INST_0_i_11_n_0
+    );
+SYNC_OUT_INST_0_i_12: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"FFFFFFFFFFFFFF9A"
+    )
+        port map (
+      I0 => current_line_reg(9),
+      I1 => current_line_reg(8),
+      I2 => current_line_reg(5),
+      I3 => current_line_reg(7),
+      I4 => SYNC_OUT_INST_0_i_22_n_0,
+      I5 => SYNC_OUT_INST_0_i_21_n_0,
+      O => SYNC_OUT_INST_0_i_12_n_0
+    );
+SYNC_OUT_INST_0_i_13: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"AAAAAA80"
+    )
+        port map (
+      I0 => current_column_reg(4),
+      I1 => current_column_reg(1),
+      I2 => current_column_reg(0),
+      I3 => current_column_reg(2),
+      I4 => current_column_reg(3),
+      O => SYNC_OUT_INST_0_i_13_n_0
+    );
+SYNC_OUT_INST_0_i_14: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"00FF50003FFF0000"
+    )
+        port map (
+      I0 => SYNC_OUT_INST_0_i_10_n_0,
+      I1 => SYNC_OUT_INST_0_i_13_n_0,
+      I2 => current_column_reg(5),
+      I3 => current_column_reg(7),
+      I4 => current_column_reg(8),
+      I5 => current_column_reg(6),
+      O => SYNC_OUT_INST_0_i_14_n_0
+    );
+SYNC_OUT_INST_0_i_15: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0300050500000505"
+    )
+        port map (
+      I0 => SYNC_OUT_INST_0_i_24_n_0,
+      I1 => current_line_reg(8),
+      I2 => current_line_reg(7),
+      I3 => SYNC_OUT_INST_0_i_25_n_0,
+      I4 => current_line_reg(9),
+      I5 => SYNC_OUT_INST_0_i_26_n_0,
       O => SYNC_OUT_INST_0_i_15_n_0
     );
 SYNC_OUT_INST_0_i_16: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"0005030500050005"
+      INIT => X"000000000000AA02"
     )
         port map (
-      I0 => SYNC_OUT_INST_0_i_26_n_0,
-      I1 => current_line_reg(8),
-      I2 => current_line_reg(7),
-      I3 => current_line_reg(9),
-      I4 => SYNC_OUT_INST_0_i_27_n_0,
-      I5 => \current_line[9]_i_6_n_0\,
+      I0 => SYNC_OUT_INST_0_i_27_n_0,
+      I1 => current_line_reg(2),
+      I2 => current_line_reg(3),
+      I3 => current_line_reg(5),
+      I4 => SYNC_OUT_INST_0_i_28_n_0,
+      I5 => SYNC_OUT_INST_0_i_29_n_0,
       O => SYNC_OUT_INST_0_i_16_n_0
     );
-SYNC_OUT_INST_0_i_17: unisim.vcomponents.LUT6
+SYNC_OUT_INST_0_i_17: unisim.vcomponents.LUT4
     generic map(
-      INIT => X"000000000000888A"
+      INIT => X"FFFE"
     )
         port map (
-      I0 => SYNC_OUT_INST_0_i_28_n_0,
-      I1 => current_line_reg(5),
-      I2 => current_line_reg(2),
-      I3 => current_line_reg(3),
-      I4 => SYNC_OUT_INST_0_i_29_n_0,
-      I5 => SYNC_OUT_INST_0_i_30_n_0,
+      I0 => current_column_reg(6),
+      I1 => current_column_reg(5),
+      I2 => current_column_reg(7),
+      I3 => current_column_reg(8),
       O => SYNC_OUT_INST_0_i_17_n_0
     );
-SYNC_OUT_INST_0_i_18: unisim.vcomponents.LUT6
+SYNC_OUT_INST_0_i_18: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"FFF8000000000000"
+      INIT => X"EAAAAAAA"
     )
         port map (
-      I0 => current_column_reg(1),
-      I1 => current_column_reg(0),
-      I2 => current_column_reg(2),
-      I3 => current_column_reg(3),
-      I4 => current_column_reg(5),
-      I5 => current_column_reg(4),
+      I0 => current_column_reg(4),
+      I1 => current_column_reg(2),
+      I2 => current_column_reg(0),
+      I3 => current_column_reg(1),
+      I4 => current_column_reg(3),
       O => SYNC_OUT_INST_0_i_18_n_0
     );
-SYNC_OUT_INST_0_i_19: unisim.vcomponents.LUT6
+SYNC_OUT_INST_0_i_19: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"7F7F7F7FFFFF7FFF"
+      INIT => X"00001000"
     )
         port map (
-      I0 => current_line_reg(0),
-      I1 => current_line_reg(1),
-      I2 => current_line_reg(2),
-      I3 => current_line_reg(4),
-      I4 => current_line_reg(6),
-      I5 => current_line_reg(3),
+      I0 => current_line_reg(3),
+      I1 => current_line_reg(2),
+      I2 => current_line_reg(1),
+      I3 => current_line_reg(0),
+      I4 => current_line_reg(5),
       O => SYNC_OUT_INST_0_i_19_n_0
     );
 SYNC_OUT_INST_0_i_2: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0000000002AAAAAA"
+    )
+        port map (
+      I0 => SYNC_OUT_INST_0_i_12_n_0,
+      I1 => SYNC_OUT_INST_0_i_13_n_0,
+      I2 => current_column_reg(5),
+      I3 => current_column_reg(7),
+      I4 => current_column_reg(6),
+      I5 => current_column_reg(8),
+      O => SYNC_OUT_INST_0_i_2_n_0
+    );
+SYNC_OUT_INST_0_i_20: unisim.vcomponents.LUT3
+    generic map(
+      INIT => X"BA"
+    )
+        port map (
+      I0 => current_line_reg(1),
+      I1 => current_line_reg(4),
+      I2 => current_line_reg(5),
+      O => SYNC_OUT_INST_0_i_20_n_0
+    );
+SYNC_OUT_INST_0_i_21: unisim.vcomponents.LUT6
     generic map(
       INIT => X"DFDFDFFFBFFEFF7F"
     )
@@ -6907,80 +6946,32 @@ SYNC_OUT_INST_0_i_2: unisim.vcomponents.LUT6
       I3 => current_line_reg(3),
       I4 => current_line_reg(2),
       I5 => current_line_reg(8),
-      O => SYNC_OUT_INST_0_i_2_n_0
-    );
-SYNC_OUT_INST_0_i_20: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"4F"
-    )
-        port map (
-      I0 => current_line_reg(4),
-      I1 => current_line_reg(5),
-      I2 => current_line_reg(3),
-      O => SYNC_OUT_INST_0_i_20_n_0
-    );
-SYNC_OUT_INST_0_i_21: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"00000008"
-    )
-        port map (
-      I0 => current_line_reg(0),
-      I1 => current_line_reg(1),
-      I2 => current_line_reg(2),
-      I3 => current_line_reg(3),
-      I4 => current_line_reg(5),
       O => SYNC_OUT_INST_0_i_21_n_0
     );
 SYNC_OUT_INST_0_i_22: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"AAAA08AA"
+      INIT => X"D7FF3C00"
     )
         port map (
-      I0 => current_line_reg(3),
-      I1 => current_line_reg(0),
-      I2 => current_line_reg(2),
-      I3 => current_line_reg(4),
-      I4 => current_line_reg(6),
+      I0 => current_line_reg(0),
+      I1 => current_line_reg(4),
+      I2 => current_line_reg(3),
+      I3 => current_line_reg(2),
+      I4 => current_line_reg(1),
       O => SYNC_OUT_INST_0_i_22_n_0
     );
-SYNC_OUT_INST_0_i_23: unisim.vcomponents.LUT6
+SYNC_OUT_INST_0_i_23: unisim.vcomponents.LUT4
     generic map(
-      INIT => X"FFFFFFFF0D0DFF01"
-    )
-        port map (
-      I0 => current_line_reg(6),
-      I1 => current_line_reg(2),
-      I2 => current_line_reg(3),
-      I3 => current_line_reg(5),
-      I4 => current_line_reg(4),
-      I5 => current_line_reg(1),
-      O => SYNC_OUT_INST_0_i_23_n_0
-    );
-SYNC_OUT_INST_0_i_24: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"FBFBFFFFFFFFBFFE"
+      INIT => X"FBAE"
     )
         port map (
       I0 => current_line_reg(7),
       I1 => current_line_reg(5),
       I2 => current_line_reg(8),
-      I3 => current_line_reg(4),
-      I4 => current_line_reg(9),
-      I5 => current_line_reg(6),
-      O => SYNC_OUT_INST_0_i_24_n_0
+      I3 => current_line_reg(9),
+      O => SYNC_OUT_INST_0_i_23_n_0
     );
-SYNC_OUT_INST_0_i_25: unisim.vcomponents.LUT4
-    generic map(
-      INIT => X"FEEE"
-    )
-        port map (
-      I0 => current_column_reg(3),
-      I1 => current_column_reg(2),
-      I2 => current_column_reg(0),
-      I3 => current_column_reg(1),
-      O => SYNC_OUT_INST_0_i_25_n_0
-    );
-SYNC_OUT_INST_0_i_26: unisim.vcomponents.LUT5
+SYNC_OUT_INST_0_i_24: unisim.vcomponents.LUT5
     generic map(
       INIT => X"DFFFFFFE"
     )
@@ -6990,18 +6981,28 @@ SYNC_OUT_INST_0_i_26: unisim.vcomponents.LUT5
       I2 => current_line_reg(4),
       I3 => current_line_reg(5),
       I4 => current_line_reg(3),
-      O => SYNC_OUT_INST_0_i_26_n_0
+      O => SYNC_OUT_INST_0_i_24_n_0
     );
-SYNC_OUT_INST_0_i_27: unisim.vcomponents.LUT2
+SYNC_OUT_INST_0_i_25: unisim.vcomponents.LUT2
     generic map(
-      INIT => X"E"
+      INIT => X"1"
     )
         port map (
       I0 => current_line_reg(2),
       I1 => current_line_reg(3),
-      O => SYNC_OUT_INST_0_i_27_n_0
+      O => SYNC_OUT_INST_0_i_25_n_0
     );
-SYNC_OUT_INST_0_i_28: unisim.vcomponents.LUT6
+SYNC_OUT_INST_0_i_26: unisim.vcomponents.LUT3
+    generic map(
+      INIT => X"80"
+    )
+        port map (
+      I0 => current_line_reg(6),
+      I1 => current_line_reg(5),
+      I2 => current_line_reg(4),
+      O => SYNC_OUT_INST_0_i_26_n_0
+    );
+SYNC_OUT_INST_0_i_27: unisim.vcomponents.LUT6
     generic map(
       INIT => X"AAAABABBAAAAAABB"
     )
@@ -7012,9 +7013,9 @@ SYNC_OUT_INST_0_i_28: unisim.vcomponents.LUT6
       I3 => current_line_reg(5),
       I4 => current_line_reg(6),
       I5 => current_line_reg(4),
-      O => SYNC_OUT_INST_0_i_28_n_0
+      O => SYNC_OUT_INST_0_i_27_n_0
     );
-SYNC_OUT_INST_0_i_29: unisim.vcomponents.LUT6
+SYNC_OUT_INST_0_i_28: unisim.vcomponents.LUT6
     generic map(
       INIT => X"EEFFFFFF0E0E0E0E"
     )
@@ -7025,109 +7026,108 @@ SYNC_OUT_INST_0_i_29: unisim.vcomponents.LUT6
       I3 => current_line_reg(6),
       I4 => current_line_reg(9),
       I5 => current_line_reg(3),
+      O => SYNC_OUT_INST_0_i_28_n_0
+    );
+SYNC_OUT_INST_0_i_29: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"FFFF2AFF"
+    )
+        port map (
+      I0 => current_line_reg(5),
+      I1 => current_line_reg(1),
+      I2 => current_line_reg(2),
+      I3 => current_line_reg(0),
+      I4 => current_line_reg(7),
       O => SYNC_OUT_INST_0_i_29_n_0
     );
-SYNC_OUT_INST_0_i_3: unisim.vcomponents.LUT6
+SYNC_OUT_INST_0_i_3: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"DFFDFFFFFFFFCFFC"
+      INIT => X"FFAE00A2"
     )
         port map (
-      I0 => current_line_reg(0),
-      I1 => current_line_reg(7),
-      I2 => SYNC_OUT_INST_0_i_11_n_0,
-      I3 => current_line_reg(9),
-      I4 => current_line_reg(1),
-      I5 => SYNC_OUT_INST_0_i_12_n_0,
+      I0 => SYNC_OUT_INST_0_i_6_n_0,
+      I1 => SYNC_OUT_INST_0_i_9_n_0,
+      I2 => SYNC_OUT_INST_0_i_8_n_0,
+      I3 => SYNC_OUT_INST_0_i_7_n_0,
+      I4 => SYNC_OUT_INST_0_i_14_n_0,
       O => SYNC_OUT_INST_0_i_3_n_0
-    );
-SYNC_OUT_INST_0_i_30: unisim.vcomponents.LUT5
-    generic map(
-      INIT => X"DDFDFDFD"
-    )
-        port map (
-      I0 => current_line_reg(0),
-      I1 => current_line_reg(7),
-      I2 => current_line_reg(5),
-      I3 => current_line_reg(1),
-      I4 => current_line_reg(2),
-      O => SYNC_OUT_INST_0_i_30_n_0
     );
 SYNC_OUT_INST_0_i_4: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"B8FCB8B8B8FFB8B8"
+      INIT => X"FFFFFFFF4F5E0000"
     )
         port map (
-      I0 => SYNC_OUT_INST_0_i_7_n_0,
-      I1 => SYNC_OUT_INST_0_i_8_n_0,
-      I2 => SYNC_OUT_INST_0_i_10_n_0,
-      I3 => SYNC_OUT_INST_0_i_13_n_0,
-      I4 => SYNC_OUT_INST_0_i_14_n_0,
-      I5 => SYNC_OUT_INST_0_i_15_n_0,
+      I0 => current_line_reg(2),
+      I1 => current_line_reg(3),
+      I2 => current_line_reg(1),
+      I3 => current_line_reg(4),
+      I4 => SYNC_OUT_INST_0_i_15_n_0,
+      I5 => SYNC_OUT_INST_0_i_16_n_0,
       O => SYNC_OUT_INST_0_i_4_n_0
     );
 SYNC_OUT_INST_0_i_5: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"FFFFFFFF0DFE0000"
+      INIT => X"EAAAEAAAEAAAAAAB"
     )
         port map (
-      I0 => current_line_reg(4),
-      I1 => current_line_reg(3),
-      I2 => current_line_reg(2),
-      I3 => current_line_reg(1),
-      I4 => SYNC_OUT_INST_0_i_16_n_0,
-      I5 => SYNC_OUT_INST_0_i_17_n_0,
+      I0 => SYNC_OUT_INST_0_i_17_n_0,
+      I1 => current_column_reg(2),
+      I2 => current_column_reg(3),
+      I3 => current_column_reg(4),
+      I4 => current_column_reg(0),
+      I5 => current_column_reg(1),
       O => SYNC_OUT_INST_0_i_5_n_0
     );
 SYNC_OUT_INST_0_i_6: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"0155555555555554"
-    )
-        port map (
-      I0 => SYNC_OUT_INST_0_i_13_n_0,
-      I1 => current_column_reg(0),
-      I2 => current_column_reg(1),
-      I3 => current_column_reg(4),
-      I4 => current_column_reg(2),
-      I5 => current_column_reg(3),
-      O => SYNC_OUT_INST_0_i_6_n_0
-    );
-SYNC_OUT_INST_0_i_7: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"000FFFFF20200000"
-    )
-        port map (
-      I0 => current_column_reg(5),
-      I1 => SYNC_OUT_INST_0_i_15_n_0,
-      I2 => current_column_reg(6),
-      I3 => SYNC_OUT_INST_0_i_18_n_0,
-      I4 => current_column_reg(7),
-      I5 => current_column_reg(8),
-      O => SYNC_OUT_INST_0_i_7_n_0
-    );
-SYNC_OUT_INST_0_i_8: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"FFFFFFFF0B0B0B00"
-    )
-        port map (
-      I0 => SYNC_OUT_INST_0_i_19_n_0,
-      I1 => SYNC_OUT_INST_0_i_20_n_0,
-      I2 => SYNC_OUT_INST_0_i_21_n_0,
-      I3 => SYNC_OUT_INST_0_i_22_n_0,
-      I4 => SYNC_OUT_INST_0_i_23_n_0,
-      I5 => SYNC_OUT_INST_0_i_24_n_0,
-      O => SYNC_OUT_INST_0_i_8_n_0
-    );
-SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"1515155515551555"
+      INIT => X"0000000000004000"
     )
         port map (
       I0 => current_column_reg(8),
       I1 => current_column_reg(6),
       I2 => current_column_reg(7),
       I3 => current_column_reg(5),
-      I4 => current_column_reg(4),
-      I5 => SYNC_OUT_INST_0_i_25_n_0,
+      I4 => SYNC_OUT_INST_0_i_10_n_0,
+      I5 => SYNC_OUT_INST_0_i_18_n_0,
+      O => SYNC_OUT_INST_0_i_6_n_0
+    );
+SYNC_OUT_INST_0_i_7: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"FBFBFFFFFFFFBFFE"
+    )
+        port map (
+      I0 => current_line_reg(7),
+      I1 => current_line_reg(5),
+      I2 => current_line_reg(8),
+      I3 => current_line_reg(4),
+      I4 => current_line_reg(9),
+      I5 => current_line_reg(6),
+      O => SYNC_OUT_INST_0_i_7_n_0
+    );
+SYNC_OUT_INST_0_i_8: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"FFFFFFFF11040004"
+    )
+        port map (
+      I0 => \current_line[7]_i_2_n_0\,
+      I1 => current_line_reg(4),
+      I2 => current_line_reg(6),
+      I3 => current_line_reg(3),
+      I4 => current_line_reg(5),
+      I5 => SYNC_OUT_INST_0_i_19_n_0,
+      O => SYNC_OUT_INST_0_i_8_n_0
+    );
+SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"FFFFAFEFFAAAFAFF"
+    )
+        port map (
+      I0 => SYNC_OUT_INST_0_i_20_n_0,
+      I1 => current_line_reg(0),
+      I2 => current_line_reg(4),
+      I3 => current_line_reg(2),
+      I4 => current_line_reg(6),
+      I5 => current_line_reg(3),
       O => SYNC_OUT_INST_0_i_9_n_0
     );
 \current_column[0]_i_1\: unisim.vcomponents.LUT1
@@ -7153,20 +7153,20 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => current_column_reg(2),
-      I1 => current_column_reg(1),
-      I2 => current_column_reg(0),
+      I1 => current_column_reg(0),
+      I2 => current_column_reg(1),
       O => p_0_in(2)
     );
 \current_column[3]_i_1\: unisim.vcomponents.LUT4
     generic map(
-      INIT => X"7F80"
+      INIT => X"6AAA"
     )
         port map (
-      I0 => current_column_reg(0),
+      I0 => current_column_reg(3),
       I1 => current_column_reg(1),
-      I2 => current_column_reg(2),
-      I3 => current_column_reg(3),
-      O => p_0_in(3)
+      I2 => current_column_reg(0),
+      I3 => current_column_reg(2),
+      O => \current_column[3]_i_1_n_0\
     );
 \current_column[4]_i_1\: unisim.vcomponents.LUT5
     generic map(
@@ -7174,9 +7174,9 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => current_column_reg(4),
-      I1 => current_column_reg(0),
-      I2 => current_column_reg(1),
-      I3 => current_column_reg(2),
+      I1 => current_column_reg(2),
+      I2 => current_column_reg(0),
+      I3 => current_column_reg(1),
       I4 => current_column_reg(3),
       O => p_0_in(4)
     );
@@ -7186,29 +7186,29 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => current_column_reg(5),
-      I1 => current_column_reg(3),
-      I2 => current_column_reg(2),
+      I1 => current_column_reg(1),
+      I2 => current_column_reg(0),
       I3 => current_column_reg(4),
-      I4 => current_column_reg(1),
-      I5 => current_column_reg(0),
+      I4 => current_column_reg(3),
+      I5 => current_column_reg(2),
       O => \current_column[5]_i_1_n_0\
     );
 \current_column[6]_i_1\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"A6AAAAAAAAAAAAAA"
+      INIT => X"6AAAAAAAAAAAAAAA"
     )
         port map (
       I0 => current_column_reg(6),
-      I1 => current_column_reg(5),
-      I2 => \current_column[6]_i_2_n_0\,
+      I1 => current_column_reg(2),
+      I2 => current_column_reg(3),
       I3 => current_column_reg(4),
-      I4 => current_column_reg(2),
-      I5 => current_column_reg(3),
-      O => \current_column[6]_i_1_n_0\
+      I4 => \current_column[6]_i_2_n_0\,
+      I5 => current_column_reg(5),
+      O => p_0_in(6)
     );
 \current_column[6]_i_2\: unisim.vcomponents.LUT2
     generic map(
-      INIT => X"7"
+      INIT => X"8"
     )
         port map (
       I0 => current_column_reg(1),
@@ -7217,12 +7217,12 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     );
 \current_column[7]_i_1\: unisim.vcomponents.LUT4
     generic map(
-      INIT => X"9AAA"
+      INIT => X"A6AA"
     )
         port map (
       I0 => current_column_reg(7),
-      I1 => \current_column[9]_i_3_n_0\,
-      I2 => current_column_reg(5),
+      I1 => current_column_reg(5),
+      I2 => \current_column[9]_i_3_n_0\,
       I3 => current_column_reg(6),
       O => p_0_in(7)
     );
@@ -7252,14 +7252,14 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     );
 \current_column[9]_i_2\: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"00008000"
+      INIT => X"00800000"
     )
         port map (
-      I0 => current_column_reg(8),
-      I1 => current_column_reg(6),
-      I2 => current_column_reg(7),
-      I3 => current_column_reg(5),
-      I4 => \current_column[9]_i_3_n_0\,
+      I0 => current_column_reg(6),
+      I1 => current_column_reg(7),
+      I2 => current_column_reg(5),
+      I3 => \current_column[9]_i_3_n_0\,
+      I4 => current_column_reg(8),
       O => p_0_in(9)
     );
 \current_column[9]_i_3\: unisim.vcomponents.LUT5
@@ -7267,11 +7267,11 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       INIT => X"7FFFFFFF"
     )
         port map (
-      I0 => current_column_reg(0),
-      I1 => current_column_reg(1),
+      I0 => current_column_reg(2),
+      I1 => current_column_reg(3),
       I2 => current_column_reg(4),
-      I3 => current_column_reg(2),
-      I4 => current_column_reg(3),
+      I3 => current_column_reg(0),
+      I4 => current_column_reg(1),
       O => \current_column[9]_i_3_n_0\
     );
 \current_column_reg[0]\: unisim.vcomponents.FDSE
@@ -7314,7 +7314,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
         port map (
       C => CLK_IN,
       CE => '1',
-      D => p_0_in(3),
+      D => \current_column[3]_i_1_n_0\,
       Q => current_column_reg(3),
       R => \current_column[9]_i_1_n_0\
     );
@@ -7347,7 +7347,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
         port map (
       C => CLK_IN,
       CE => '1',
-      D => \current_column[6]_i_1_n_0\,
+      D => p_0_in(6),
       Q => current_column_reg(6),
       R => \current_column[9]_i_1_n_0\
     );
@@ -7401,7 +7401,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I1 => current_line_reg(0),
       O => \p_0_in__0\(1)
     );
-\current_line[2]_i_1\: unisim.vcomponents.LUT3
+\current_line[2]_i_1__0\: unisim.vcomponents.LUT3
     generic map(
       INIT => X"6A"
     )
@@ -7409,7 +7409,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I0 => current_line_reg(2),
       I1 => current_line_reg(0),
       I2 => current_line_reg(1),
-      O => \p_0_in__0\(2)
+      O => \current_line[2]_i_1__0_n_0\
     );
 \current_line[3]_i_1__0\: unisim.vcomponents.LUT4
     generic map(
@@ -7422,69 +7422,42 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I3 => current_line_reg(2),
       O => \current_line[3]_i_1__0_n_0\
     );
-\current_line[4]_i_1\: unisim.vcomponents.LUT5
+\current_line[4]_i_1\: unisim.vcomponents.LUT3
+    generic map(
+      INIT => X"F4"
+    )
+        port map (
+      I0 => \^packet_trigger\,
+      I1 => FRAME_TRIGGER,
+      I2 => RESET,
+      O => SR(0)
+    );
+\current_line[4]_i_1__0\: unisim.vcomponents.LUT5
     generic map(
       INIT => X"6AAAAAAA"
     )
         port map (
       I0 => current_line_reg(4),
-      I1 => current_line_reg(2),
-      I2 => current_line_reg(1),
-      I3 => current_line_reg(0),
-      I4 => current_line_reg(3),
-      O => \p_0_in__0\(4)
-    );
-\current_line[4]_i_1__0\: unisim.vcomponents.LUT4
-    generic map(
-      INIT => X"FF80"
-    )
-        port map (
-      I0 => Q(0),
-      I1 => Q(1),
-      I2 => \^packet_trigger\,
-      I3 => RESET,
-      O => SR(0)
+      I1 => current_line_reg(3),
+      I2 => current_line_reg(2),
+      I3 => current_line_reg(1),
+      I4 => current_line_reg(0),
+      O => \current_line[4]_i_1__0_n_0\
     );
 \current_line[4]_i_2\: unisim.vcomponents.LUT6
     generic map(
-      INIT => X"0000000000105555"
+      INIT => X"0000000000000010"
     )
         port map (
       I0 => \current_line[4]_i_4_n_0\,
-      I1 => current_line_reg(5),
-      I2 => current_line_reg(8),
-      I3 => current_line_reg(4),
-      I4 => current_line_reg(6),
-      I5 => \current_line[4]_i_5_n_0\,
+      I1 => \current_line[4]_i_5_n_0\,
+      I2 => \current_line[4]_i_6_n_0\,
+      I3 => \current_line[4]_i_7_n_0\,
+      I4 => \current_line[4]_i_8_n_0\,
+      I5 => \current_line[4]_i_9_n_0\,
       O => \^packet_trigger\
     );
-\current_line[4]_i_4\: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"FFFFFFFF7FFF0000"
-    )
-        port map (
-      I0 => current_line_reg(2),
-      I1 => current_line_reg(1),
-      I2 => current_line_reg(4),
-      I3 => current_line_reg(3),
-      I4 => current_line_reg(5),
-      I5 => \current_line[4]_i_6_n_0\,
-      O => \current_line[4]_i_4_n_0\
-    );
-\current_line[4]_i_5\: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"FFFFFFFFEEEEEFEE"
-    )
-        port map (
-      I0 => \current_line[4]_i_7_n_0\,
-      I1 => \current_line[4]_i_8_n_0\,
-      I2 => current_line_reg(5),
-      I3 => current_line_reg(8),
-      I4 => current_line_reg(6),
-      I5 => \current_line[4]_i_9_n_0\,
-      O => \current_line[4]_i_5_n_0\
-    );
-\current_line[4]_i_6\: unisim.vcomponents.LUT5
+\current_line[4]_i_4\: unisim.vcomponents.LUT5
     generic map(
       INIT => X"FFFEFFFF"
     )
@@ -7494,9 +7467,56 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I2 => current_column_reg(3),
       I3 => current_column_reg(4),
       I4 => current_column_reg(6),
+      O => \current_line[4]_i_4_n_0\
+    );
+\current_line[4]_i_5\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"7FFFFFFF7F7F7F7F"
+    )
+        port map (
+      I0 => current_column_reg(1),
+      I1 => current_column_reg(0),
+      I2 => current_column_reg(2),
+      I3 => current_line_reg(3),
+      I4 => current_line_reg(4),
+      I5 => current_line_reg(5),
+      O => \current_line[4]_i_5_n_0\
+    );
+\current_line[4]_i_6\: unisim.vcomponents.LUT4
+    generic map(
+      INIT => X"04FF"
+    )
+        port map (
+      I0 => current_line_reg(5),
+      I1 => current_line_reg(8),
+      I2 => current_line_reg(4),
+      I3 => current_line_reg(6),
       O => \current_line[4]_i_6_n_0\
     );
-\current_line[4]_i_7\: unisim.vcomponents.LUT6
+\current_line[4]_i_7\: unisim.vcomponents.LUT3
+    generic map(
+      INIT => X"70"
+    )
+        port map (
+      I0 => current_line_reg(2),
+      I1 => current_line_reg(1),
+      I2 => current_line_reg(5),
+      O => \current_line[4]_i_7_n_0\
+    );
+\current_line[4]_i_8\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"FEFEFEFEFEFFFEFE"
+    )
+        port map (
+      I0 => current_column_reg(5),
+      I1 => current_column_reg(7),
+      I2 => current_column_reg(8),
+      I3 => current_line_reg(5),
+      I4 => current_line_reg(8),
+      I5 => current_line_reg(6),
+      O => \current_line[4]_i_8_n_0\
+    );
+\current_line[4]_i_9\: unisim.vcomponents.LUT6
     generic map(
       INIT => X"00000000E0A5A5A5"
     )
@@ -7507,26 +7527,6 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I3 => current_line_reg(2),
       I4 => current_line_reg(1),
       I5 => current_line_reg(8),
-      O => \current_line[4]_i_7_n_0\
-    );
-\current_line[4]_i_8\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"FE"
-    )
-        port map (
-      I0 => current_column_reg(8),
-      I1 => current_column_reg(7),
-      I2 => current_column_reg(5),
-      O => \current_line[4]_i_8_n_0\
-    );
-\current_line[4]_i_9\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"7F"
-    )
-        port map (
-      I0 => current_column_reg(0),
-      I1 => current_column_reg(1),
-      I2 => current_column_reg(2),
       O => \current_line[4]_i_9_n_0\
     );
 \current_line[5]_i_1\: unisim.vcomponents.LUT6
@@ -7540,18 +7540,18 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I3 => current_line_reg(2),
       I4 => current_line_reg(1),
       I5 => current_line_reg(0),
-      O => \p_0_in__0\(5)
+      O => \current_line[5]_i_1_n_0\
     );
 \current_line[6]_i_1\: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"A6AAAAAA"
+      INIT => X"9AAAAAAA"
     )
         port map (
       I0 => current_line_reg(6),
-      I1 => current_line_reg(5),
-      I2 => \current_line[9]_i_7_n_0\,
-      I3 => current_line_reg(4),
-      I4 => current_line_reg(3),
+      I1 => \current_line[7]_i_2_n_0\,
+      I2 => current_line_reg(4),
+      I3 => current_line_reg(3),
+      I4 => current_line_reg(5),
       O => \p_0_in__0\(6)
     );
 \current_line[7]_i_1\: unisim.vcomponents.LUT6
@@ -7562,46 +7562,39 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I0 => current_line_reg(7),
       I1 => current_line_reg(6),
       I2 => current_line_reg(5),
-      I3 => current_line_reg(4),
-      I4 => current_line_reg(3),
-      I5 => \current_line[9]_i_7_n_0\,
+      I3 => current_line_reg(3),
+      I4 => current_line_reg(4),
+      I5 => \current_line[7]_i_2_n_0\,
       O => \p_0_in__0\(7)
     );
-\current_line[8]_i_1\: unisim.vcomponents.LUT6
+\current_line[7]_i_2\: unisim.vcomponents.LUT3
     generic map(
-      INIT => X"6AAAAAAAAAAAAAAA"
+      INIT => X"7F"
+    )
+        port map (
+      I0 => current_line_reg(2),
+      I1 => current_line_reg(1),
+      I2 => current_line_reg(0),
+      O => \current_line[7]_i_2_n_0\
+    );
+\current_line[8]_i_1\: unisim.vcomponents.LUT4
+    generic map(
+      INIT => X"6AAA"
     )
         port map (
       I0 => current_line_reg(8),
-      I1 => \current_line[8]_i_2_n_0\,
-      I2 => current_line_reg(4),
-      I3 => current_line_reg(5),
-      I4 => current_line_reg(6),
-      I5 => current_line_reg(7),
+      I1 => \current_line[9]_i_5_n_0\,
+      I2 => current_line_reg(6),
+      I3 => current_line_reg(7),
       O => \p_0_in__0\(8)
     );
-\current_line[8]_i_2\: unisim.vcomponents.LUT4
+\current_line[9]_i_1\: unisim.vcomponents.LUT2
     generic map(
-      INIT => X"8000"
+      INIT => X"E"
     )
         port map (
-      I0 => current_line_reg(3),
-      I1 => current_line_reg(0),
-      I2 => current_line_reg(1),
-      I3 => current_line_reg(2),
-      O => \current_line[8]_i_2_n_0\
-    );
-\current_line[9]_i_1\: unisim.vcomponents.LUT6
-    generic map(
-      INIT => X"AAAAFFFEAAAAAAAA"
-    )
-        port map (
-      I0 => RESET,
-      I1 => \current_line[9]_i_4_n_0\,
-      I2 => current_line_reg(8),
-      I3 => current_line_reg(7),
-      I4 => \current_line[9]_i_5_n_0\,
-      I5 => current_line_reg(9),
+      I0 => FRAME_TRIGGER,
+      I1 => RESET,
       O => \current_line[9]_i_1_n_0\
     );
 \current_line[9]_i_2\: unisim.vcomponents.LUT4
@@ -7613,35 +7606,59 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I1 => current_column_reg(7),
       I2 => current_column_reg(6),
       I3 => \current_column_reg__0\(9),
-      O => \current_line[9]_i_2_n_0\
+      O => current_line0
     );
-\current_line[9]_i_3\: unisim.vcomponents.LUT6
+\current_line[9]_i_3\: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"AAAA6AAAAAAAAAAA"
+      INIT => X"6AAAAAAA"
     )
         port map (
       I0 => current_line_reg(9),
       I1 => current_line_reg(7),
-      I2 => \current_line[9]_i_6_n_0\,
-      I3 => current_line_reg(3),
-      I4 => \current_line[9]_i_7_n_0\,
-      I5 => current_line_reg(8),
+      I2 => current_line_reg(6),
+      I3 => \current_line[9]_i_5_n_0\,
+      I4 => current_line_reg(8),
       O => \p_0_in__0\(9)
     );
-\current_line[9]_i_4\: unisim.vcomponents.LUT6
+\current_line[9]_i_4\: unisim.vcomponents.LUT5
     generic map(
-      INIT => X"8080808080808000"
+      INIT => X"0000FE00"
+    )
+        port map (
+      I0 => current_line_reg(7),
+      I1 => current_line_reg(8),
+      I2 => \current_line[9]_i_6_n_0\,
+      I3 => current_line_reg(9),
+      I4 => \current_line[9]_i_7_n_0\,
+      O => FRAME_TRIGGER
+    );
+\current_line[9]_i_5\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"8000000000000000"
+    )
+        port map (
+      I0 => current_line_reg(5),
+      I1 => current_line_reg(3),
+      I2 => current_line_reg(4),
+      I3 => current_line_reg(2),
+      I4 => current_line_reg(1),
+      I5 => current_line_reg(0),
+      O => \current_line[9]_i_5_n_0\
+    );
+\current_line[9]_i_6\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"8080800080808080"
     )
         port map (
       I0 => current_line_reg(4),
       I1 => current_line_reg(5),
       I2 => current_line_reg(6),
-      I3 => SYNC_OUT_INST_0_i_27_n_0,
-      I4 => current_line_reg(1),
-      I5 => current_line_reg(0),
-      O => \current_line[9]_i_4_n_0\
+      I3 => current_line_reg(1),
+      I4 => current_line_reg(0),
+      I5 => SYNC_OUT_INST_0_i_25_n_0,
+      O => \current_line[9]_i_6_n_0\
     );
-\current_line[9]_i_5\: unisim.vcomponents.LUT4
+\current_line[9]_i_7\: unisim.vcomponents.LUT4
     generic map(
       INIT => X"1555"
     )
@@ -7650,26 +7667,6 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
       I1 => current_column_reg(6),
       I2 => current_column_reg(7),
       I3 => current_column_reg(8),
-      O => \current_line[9]_i_5_n_0\
-    );
-\current_line[9]_i_6\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"80"
-    )
-        port map (
-      I0 => current_line_reg(6),
-      I1 => current_line_reg(5),
-      I2 => current_line_reg(4),
-      O => \current_line[9]_i_6_n_0\
-    );
-\current_line[9]_i_7\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"7F"
-    )
-        port map (
-      I0 => current_line_reg(2),
-      I1 => current_line_reg(1),
-      I2 => current_line_reg(0),
       O => \current_line[9]_i_7_n_0\
     );
 \current_line_reg[0]\: unisim.vcomponents.FDSE
@@ -7678,7 +7675,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
+      CE => current_line0,
       D => \current_line[0]_i_1_n_0\,
       Q => current_line_reg(0),
       S => \current_line[9]_i_1_n_0\
@@ -7689,7 +7686,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
+      CE => current_line0,
       D => \p_0_in__0\(1),
       Q => current_line_reg(1),
       R => \current_line[9]_i_1_n_0\
@@ -7700,8 +7697,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
-      D => \p_0_in__0\(2),
+      CE => current_line0,
+      D => \current_line[2]_i_1__0_n_0\,
       Q => current_line_reg(2),
       R => \current_line[9]_i_1_n_0\
     );
@@ -7711,7 +7708,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
+      CE => current_line0,
       D => \current_line[3]_i_1__0_n_0\,
       Q => current_line_reg(3),
       R => \current_line[9]_i_1_n_0\
@@ -7722,8 +7719,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
-      D => \p_0_in__0\(4),
+      CE => current_line0,
+      D => \current_line[4]_i_1__0_n_0\,
       Q => current_line_reg(4),
       R => \current_line[9]_i_1_n_0\
     );
@@ -7733,8 +7730,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
-      D => \p_0_in__0\(5),
+      CE => current_line0,
+      D => \current_line[5]_i_1_n_0\,
       Q => current_line_reg(5),
       R => \current_line[9]_i_1_n_0\
     );
@@ -7744,7 +7741,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
+      CE => current_line0,
       D => \p_0_in__0\(6),
       Q => current_line_reg(6),
       R => \current_line[9]_i_1_n_0\
@@ -7755,7 +7752,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
+      CE => current_line0,
       D => \p_0_in__0\(7),
       Q => current_line_reg(7),
       R => \current_line[9]_i_1_n_0\
@@ -7766,7 +7763,7 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
+      CE => current_line0,
       D => \p_0_in__0\(8),
       Q => current_line_reg(8),
       R => \current_line[9]_i_1_n_0\
@@ -7777,10 +7774,23 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       C => CLK_IN,
-      CE => \current_line[9]_i_2_n_0\,
+      CE => current_line0,
       D => \p_0_in__0\(9),
       Q => current_line_reg(9),
       R => \current_line[9]_i_1_n_0\
+    );
+\current_state[0]_i_2\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0100FF00FF00FF00"
+    )
+        port map (
+      I0 => \current_state_reg[1]\(1),
+      I1 => \current_state_reg[1]\(2),
+      I2 => \current_state_reg[1]\(0),
+      I3 => \^packet_trigger\,
+      I4 => \current_state_reg[1]\(3),
+      I5 => \current_state_reg[1]\(4),
+      O => load_trigger
     );
 \current_state[111]_i_1\: unisim.vcomponents.LUT3
     generic map(
@@ -7788,8 +7798,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(0),
+      I1 => \^current_line_reg[1]_0\,
+      I2 => Q(0),
       O => D(0)
     );
 \current_state[119]_i_1\: unisim.vcomponents.LUT3
@@ -7798,8 +7808,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(1),
+      I1 => \^current_line_reg[1]_0\,
+      I2 => Q(1),
       O => D(1)
     );
 \current_state[127]_i_1\: unisim.vcomponents.LUT3
@@ -7808,8 +7818,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(2),
+      I1 => \^current_line_reg[1]_0\,
+      I2 => Q(2),
       O => D(2)
     );
 \current_state[135]_i_1\: unisim.vcomponents.LUT3
@@ -7818,9 +7828,22 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(3),
+      I1 => \^current_line_reg[1]_0\,
+      I2 => Q(3),
       O => D(3)
+    );
+\current_state[137]_i_2\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0100FF00FF00FF00"
+    )
+        port map (
+      I0 => \current_state_reg[1]\(1),
+      I1 => \current_state_reg[1]\(2),
+      I2 => \current_state_reg[1]\(0),
+      I3 => \^packet_trigger\,
+      I4 => \current_state_reg[1]\(3),
+      I5 => \current_state_reg[1]\(4),
+      O => \^current_line_reg[1]_0\
     );
 \current_state[143]_i_1\: unisim.vcomponents.LUT3
     generic map(
@@ -7828,8 +7851,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(4),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(4),
       O => D(4)
     );
 \current_state[151]_i_1\: unisim.vcomponents.LUT3
@@ -7838,8 +7861,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(5),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(5),
       O => D(5)
     );
 \current_state[159]_i_1\: unisim.vcomponents.LUT3
@@ -7848,8 +7871,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(6),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(6),
       O => D(6)
     );
 \current_state[167]_i_1\: unisim.vcomponents.LUT3
@@ -7858,8 +7881,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(7),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(7),
       O => D(7)
     );
 \current_state[175]_i_1\: unisim.vcomponents.LUT3
@@ -7868,8 +7891,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(8),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(8),
       O => D(8)
     );
 \current_state[183]_i_1\: unisim.vcomponents.LUT3
@@ -7878,8 +7901,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(9),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(9),
       O => D(9)
     );
 \current_state[191]_i_1\: unisim.vcomponents.LUT3
@@ -7888,8 +7911,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(10),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(10),
       O => D(10)
     );
 \current_state[199]_i_1\: unisim.vcomponents.LUT3
@@ -7898,8 +7921,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(11),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(11),
       O => D(11)
     );
 \current_state[207]_i_1\: unisim.vcomponents.LUT3
@@ -7908,8 +7931,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(12),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(12),
       O => D(12)
     );
 \current_state[215]_i_1\: unisim.vcomponents.LUT3
@@ -7918,8 +7941,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(13),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(13),
       O => D(13)
     );
 \current_state[223]_i_1\: unisim.vcomponents.LUT3
@@ -7928,8 +7951,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(14),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(14),
       O => D(14)
     );
 \current_state[231]_i_1\: unisim.vcomponents.LUT3
@@ -7938,8 +7961,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(15),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(15),
       O => D(15)
     );
 \current_state[239]_i_1\: unisim.vcomponents.LUT3
@@ -7948,8 +7971,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(16),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(16),
       O => D(16)
     );
 \current_state[247]_i_1\: unisim.vcomponents.LUT3
@@ -7958,9 +7981,22 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(17),
+      I1 => \^current_line_reg[1]_1\,
+      I2 => Q(17),
       O => D(17)
+    );
+\current_state[248]_i_2\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0100FF00FF00FF00"
+    )
+        port map (
+      I0 => \current_state_reg[1]\(1),
+      I1 => \current_state_reg[1]\(2),
+      I2 => \current_state_reg[1]\(0),
+      I3 => \^packet_trigger\,
+      I4 => \current_state_reg[1]\(3),
+      I5 => \current_state_reg[1]\(4),
+      O => \^current_line_reg[1]_1\
     );
 \current_state[255]_i_1\: unisim.vcomponents.LUT3
     generic map(
@@ -7968,8 +8004,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(18),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(18),
       O => D(18)
     );
 \current_state[263]_i_1\: unisim.vcomponents.LUT3
@@ -7978,8 +8014,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(19),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(19),
       O => D(19)
     );
 \current_state[271]_i_1\: unisim.vcomponents.LUT3
@@ -7988,8 +8024,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(20),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(20),
       O => D(20)
     );
 \current_state[279]_i_1\: unisim.vcomponents.LUT3
@@ -7998,8 +8034,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(21),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(21),
       O => D(21)
     );
 \current_state[287]_i_1\: unisim.vcomponents.LUT3
@@ -8008,8 +8044,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(22),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(22),
       O => D(22)
     );
 \current_state[295]_i_1\: unisim.vcomponents.LUT3
@@ -8018,8 +8054,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(23),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(23),
       O => D(23)
     );
 \current_state[303]_i_1\: unisim.vcomponents.LUT3
@@ -8028,8 +8064,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(24),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(24),
       O => D(24)
     );
 \current_state[311]_i_1\: unisim.vcomponents.LUT3
@@ -8038,8 +8074,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(25),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(25),
       O => D(25)
     );
 \current_state[319]_i_1\: unisim.vcomponents.LUT3
@@ -8048,8 +8084,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(26),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(26),
       O => D(26)
     );
 \current_state[327]_i_1\: unisim.vcomponents.LUT3
@@ -8058,8 +8094,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(27),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(27),
       O => D(27)
     );
 \current_state[335]_i_1\: unisim.vcomponents.LUT3
@@ -8068,8 +8104,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(28),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(28),
       O => D(28)
     );
 \current_state[343]_i_1\: unisim.vcomponents.LUT3
@@ -8078,8 +8114,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(29),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(29),
       O => D(29)
     );
 \current_state[351]_i_1\: unisim.vcomponents.LUT3
@@ -8088,8 +8124,8 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
-      I2 => \current_state_reg[351]\(30),
+      I1 => \^current_line_reg[1]_2\,
+      I2 => Q(30),
       O => D(30)
     );
 \current_state[359]_i_1\: unisim.vcomponents.LUT2
@@ -8098,8 +8134,21 @@ SYNC_OUT_INST_0_i_9: unisim.vcomponents.LUT6
     )
         port map (
       I0 => PACKET_DATA(0),
-      I1 => \^packet_trigger\,
+      I1 => \^current_line_reg[1]_2\,
       O => D(31)
+    );
+\current_state[359]_i_3\: unisim.vcomponents.LUT6
+    generic map(
+      INIT => X"0100FF00FF00FF00"
+    )
+        port map (
+      I0 => \current_state_reg[1]\(1),
+      I1 => \current_state_reg[1]\(2),
+      I2 => \current_state_reg[1]\(0),
+      I3 => \^packet_trigger\,
+      I4 => \current_state_reg[1]\(3),
+      I5 => \current_state_reg[1]\(4),
+      O => \^current_line_reg[1]_2\
     );
 end STRUCTURE;
 library IEEE;
@@ -8121,15 +8170,19 @@ architecture STRUCTURE of system_teletext_controller_0_0_teletext_generator is
   signal PACKET_DATA : STD_LOGIC_VECTOR ( 7 to 7 );
   signal current_line : STD_LOGIC_VECTOR ( 4 downto 0 );
   signal current_state : STD_LOGIC_VECTOR ( 352 downto 112 );
+  signal load_trigger : STD_LOGIC;
   signal next_line : STD_LOGIC_VECTOR ( 4 downto 0 );
   signal next_state : STD_LOGIC_VECTOR ( 359 downto 111 );
   signal packet_trigger : STD_LOGIC;
   signal sync_gen_n_0 : STD_LOGIC;
+  signal sync_gen_n_34 : STD_LOGIC;
+  signal sync_gen_n_35 : STD_LOGIC;
+  signal sync_gen_n_36 : STD_LOGIC;
   attribute SOFT_HLUTNM : string;
-  attribute SOFT_HLUTNM of \current_line[1]_i_1__0\ : label is "soft_lutpair144";
-  attribute SOFT_HLUTNM of \current_line[2]_i_1__0\ : label is "soft_lutpair144";
-  attribute SOFT_HLUTNM of \current_line[3]_i_1\ : label is "soft_lutpair143";
-  attribute SOFT_HLUTNM of \current_line[4]_i_3\ : label is "soft_lutpair143";
+  attribute SOFT_HLUTNM of \current_line[1]_i_1__0\ : label is "soft_lutpair142";
+  attribute SOFT_HLUTNM of \current_line[2]_i_1\ : label is "soft_lutpair142";
+  attribute SOFT_HLUTNM of \current_line[3]_i_1\ : label is "soft_lutpair141";
+  attribute SOFT_HLUTNM of \current_line[4]_i_3\ : label is "soft_lutpair141";
 begin
 \current_line[0]_i_1__0\: unisim.vcomponents.LUT1
     generic map(
@@ -8148,7 +8201,7 @@ begin
       I1 => current_line(1),
       O => next_line(1)
     );
-\current_line[2]_i_1__0\: unisim.vcomponents.LUT3
+\current_line[2]_i_1\: unisim.vcomponents.LUT3
     generic map(
       INIT => X"78"
     )
@@ -8305,8 +8358,11 @@ data_out_shift: entity work.system_teletext_controller_0_0_shift_register
       Q(1) => current_state(112),
       Q(0) => DATA_OUT,
       RESET => RESET,
+      \current_state_reg[137]_0\ => sync_gen_n_34,
+      \current_state_reg[248]_0\ => sync_gen_n_35,
       \current_state_reg[354]_0\(4 downto 0) => current_line(4 downto 0),
-      packet_trigger => packet_trigger
+      \current_state_reg[358]_0\ => sync_gen_n_36,
+      load_trigger => load_trigger
     );
 sync_gen: entity work.system_teletext_controller_0_0_sync_generator
      port map (
@@ -8344,41 +8400,45 @@ sync_gen: entity work.system_teletext_controller_0_0_sync_generator
       D(1) => next_state(119),
       D(0) => next_state(111),
       PACKET_DATA(0) => PACKET_DATA(7),
-      Q(1 downto 0) => current_line(4 downto 3),
+      Q(30) => current_state(352),
+      Q(29) => current_state(344),
+      Q(28) => current_state(336),
+      Q(27) => current_state(328),
+      Q(26) => current_state(320),
+      Q(25) => current_state(312),
+      Q(24) => current_state(304),
+      Q(23) => current_state(296),
+      Q(22) => current_state(288),
+      Q(21) => current_state(280),
+      Q(20) => current_state(272),
+      Q(19) => current_state(264),
+      Q(18) => current_state(256),
+      Q(17) => current_state(248),
+      Q(16) => current_state(240),
+      Q(15) => current_state(232),
+      Q(14) => current_state(224),
+      Q(13) => current_state(216),
+      Q(12) => current_state(208),
+      Q(11) => current_state(200),
+      Q(10) => current_state(192),
+      Q(9) => current_state(184),
+      Q(8) => current_state(176),
+      Q(7) => current_state(168),
+      Q(6) => current_state(160),
+      Q(5) => current_state(152),
+      Q(4) => current_state(144),
+      Q(3) => current_state(136),
+      Q(2) => current_state(128),
+      Q(1) => current_state(120),
+      Q(0) => current_state(112),
       RESET => RESET,
       SR(0) => sync_gen_n_0,
       SYNC_OUT => SYNC_OUT,
-      \current_state_reg[351]\(30) => current_state(352),
-      \current_state_reg[351]\(29) => current_state(344),
-      \current_state_reg[351]\(28) => current_state(336),
-      \current_state_reg[351]\(27) => current_state(328),
-      \current_state_reg[351]\(26) => current_state(320),
-      \current_state_reg[351]\(25) => current_state(312),
-      \current_state_reg[351]\(24) => current_state(304),
-      \current_state_reg[351]\(23) => current_state(296),
-      \current_state_reg[351]\(22) => current_state(288),
-      \current_state_reg[351]\(21) => current_state(280),
-      \current_state_reg[351]\(20) => current_state(272),
-      \current_state_reg[351]\(19) => current_state(264),
-      \current_state_reg[351]\(18) => current_state(256),
-      \current_state_reg[351]\(17) => current_state(248),
-      \current_state_reg[351]\(16) => current_state(240),
-      \current_state_reg[351]\(15) => current_state(232),
-      \current_state_reg[351]\(14) => current_state(224),
-      \current_state_reg[351]\(13) => current_state(216),
-      \current_state_reg[351]\(12) => current_state(208),
-      \current_state_reg[351]\(11) => current_state(200),
-      \current_state_reg[351]\(10) => current_state(192),
-      \current_state_reg[351]\(9) => current_state(184),
-      \current_state_reg[351]\(8) => current_state(176),
-      \current_state_reg[351]\(7) => current_state(168),
-      \current_state_reg[351]\(6) => current_state(160),
-      \current_state_reg[351]\(5) => current_state(152),
-      \current_state_reg[351]\(4) => current_state(144),
-      \current_state_reg[351]\(3) => current_state(136),
-      \current_state_reg[351]\(2) => current_state(128),
-      \current_state_reg[351]\(1) => current_state(120),
-      \current_state_reg[351]\(0) => current_state(112),
+      \current_line_reg[1]_0\ => sync_gen_n_34,
+      \current_line_reg[1]_1\ => sync_gen_n_35,
+      \current_line_reg[1]_2\ => sync_gen_n_36,
+      \current_state_reg[1]\(4 downto 0) => current_line(4 downto 0),
+      load_trigger => load_trigger,
       packet_trigger => packet_trigger
     );
 end STRUCTURE;
