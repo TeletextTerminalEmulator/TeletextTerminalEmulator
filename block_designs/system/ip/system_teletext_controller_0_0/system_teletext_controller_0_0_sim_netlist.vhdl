@@ -1,10 +1,10 @@
--- Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2022.2.2 (win64) Build 3788238 Tue Feb 21 20:00:34 MST 2023
--- Date        : Mon Aug 14 16:29:34 2023
--- Host        : Memmert running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim
---               c:/Users/jwachsmuth/Documents/teletext/block_designs/system/ip/system_teletext_controller_0_0/system_teletext_controller_0_0_sim_netlist.vhdl
+-- Tool Version: Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+-- Date        : Mon Sep  4 15:06:15 2023
+-- Host        : JOROLF-LAPTOP running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim -rename_top system_teletext_controller_0_0 -prefix
+--               system_teletext_controller_0_0_ system_teletext_controller_0_0_sim_netlist.vhdl
 -- Design      : system_teletext_controller_0_0
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -27,8 +27,6 @@ entity system_teletext_controller_0_0_shift_register is
     RESET : in STD_LOGIC;
     CLK_IN : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of system_teletext_controller_0_0_shift_register : entity is "shift_register";
 end system_teletext_controller_0_0_shift_register;
 
 architecture STRUCTURE of system_teletext_controller_0_0_shift_register is
@@ -6631,8 +6629,6 @@ entity system_teletext_controller_0_0_sync_generator is
     \current_state_reg[1]\ : in STD_LOGIC_VECTOR ( 4 downto 0 );
     CLK_IN : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of system_teletext_controller_0_0_sync_generator : entity is "sync_generator";
 end system_teletext_controller_0_0_sync_generator;
 
 architecture STRUCTURE of system_teletext_controller_0_0_sync_generator is
@@ -8162,8 +8158,6 @@ entity system_teletext_controller_0_0_teletext_generator is
     RESET : in STD_LOGIC;
     CLK_IN : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of system_teletext_controller_0_0_teletext_generator : entity is "teletext_generator";
 end system_teletext_controller_0_0_teletext_generator;
 
 architecture STRUCTURE of system_teletext_controller_0_0_teletext_generator is
@@ -8453,8 +8447,6 @@ entity system_teletext_controller_0_0_teletext_controller is
     RESET : in STD_LOGIC;
     CLK_IN : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of system_teletext_controller_0_0_teletext_controller : entity is "teletext_controller";
 end system_teletext_controller_0_0_teletext_controller;
 
 architecture STRUCTURE of system_teletext_controller_0_0_teletext_controller is
@@ -8488,7 +8480,7 @@ entity system_teletext_controller_0_0 is
   attribute IP_DEFINITION_SOURCE : string;
   attribute IP_DEFINITION_SOURCE of system_teletext_controller_0_0 : entity is "module_ref";
   attribute X_CORE_INFO : string;
-  attribute X_CORE_INFO of system_teletext_controller_0_0 : entity is "teletext_controller,Vivado 2022.2.2";
+  attribute X_CORE_INFO of system_teletext_controller_0_0 : entity is "teletext_controller,Vivado 2022.2";
 end system_teletext_controller_0_0;
 
 architecture STRUCTURE of system_teletext_controller_0_0 is

@@ -6,7 +6,7 @@
       "name": "system",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "Hierarchical",
-      "tool_version": "2022.2.2",
+      "tool_version": "2022.2",
       "validated": "true"
     },
     "design_tree": {
@@ -93,19 +93,19 @@
         "inst_hier_path": "clk_wiz_0",
         "parameters": {
           "CLKOUT1_JITTER": {
-            "value": "429.404"
+            "value": "465.341"
           },
           "CLKOUT1_PHASE_ERROR": {
-            "value": "301.475"
+            "value": "307.283"
           },
           "CLKOUT1_REQUESTED_OUT_FREQ": {
-            "value": "7"
+            "value": "6.9375"
           },
           "MMCM_CLKFBOUT_MULT_F": {
-            "value": "44.625"
+            "value": "41.625"
           },
           "MMCM_CLKOUT0_DIVIDE_F": {
-            "value": "127.500"
+            "value": "120.000"
           },
           "MMCM_DIVCLK_DIVIDE": {
             "value": "5"
@@ -127,7 +127,7 @@
             "direction": "I",
             "parameters": {
               "FREQ_HZ": {
-                "value": "7000000",
+                "value": "6937500",
                 "value_src": "ip_prop"
               },
               "PHASE": {

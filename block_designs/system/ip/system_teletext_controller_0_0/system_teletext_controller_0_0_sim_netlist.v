@@ -1,10 +1,10 @@
-// Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2022.2.2 (win64) Build 3788238 Tue Feb 21 20:00:34 MST 2023
-// Date        : Mon Aug 14 16:29:34 2023
-// Host        : Memmert running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim
-//               c:/Users/jwachsmuth/Documents/teletext/block_designs/system/ip/system_teletext_controller_0_0/system_teletext_controller_0_0_sim_netlist.v
+// Tool Version: Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+// Date        : Mon Sep  4 15:06:15 2023
+// Host        : JOROLF-LAPTOP running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim -rename_top system_teletext_controller_0_0 -prefix
+//               system_teletext_controller_0_0_ system_teletext_controller_0_0_sim_netlist.v
 // Design      : system_teletext_controller_0_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -12,35 +12,6 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "system_teletext_controller_0_0,teletext_controller,{}" *) (* DowngradeIPIdentifiedWarnings = "yes" *) (* IP_DEFINITION_SOURCE = "module_ref" *) 
-(* X_CORE_INFO = "teletext_controller,Vivado 2022.2.2" *) 
-(* NotValidForBitStream *)
-module system_teletext_controller_0_0
-   (CLK_IN,
-    RESET,
-    DATA_OUT,
-    SYNC_OUT,
-    CLK_OUT);
-  input CLK_IN;
-  (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 RESET RST" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME RESET, POLARITY ACTIVE_LOW, INSERT_VIP 0" *) input RESET;
-  output DATA_OUT;
-  output SYNC_OUT;
-  output CLK_OUT;
-
-  wire CLK_IN;
-  wire DATA_OUT;
-  wire RESET;
-  wire SYNC_OUT;
-
-  assign CLK_OUT = CLK_IN;
-  system_teletext_controller_0_0_teletext_controller inst
-       (.CLK_IN(CLK_IN),
-        .DATA_OUT(DATA_OUT),
-        .RESET(RESET),
-        .SYNC_OUT(SYNC_OUT));
-endmodule
-
-(* ORIG_REF_NAME = "shift_register" *) 
 module system_teletext_controller_0_0_shift_register
    (Q,
     PACKET_DATA,
@@ -4934,7 +4905,6 @@ module system_teletext_controller_0_0_shift_register
         .R(RESET));
 endmodule
 
-(* ORIG_REF_NAME = "sync_generator" *) 
 module system_teletext_controller_0_0_sync_generator
    (SR,
     packet_trigger,
@@ -6111,7 +6081,34 @@ module system_teletext_controller_0_0_sync_generator
         .O(\current_line_reg[1]_2 ));
 endmodule
 
-(* ORIG_REF_NAME = "teletext_controller" *) 
+(* CHECK_LICENSE_TYPE = "system_teletext_controller_0_0,teletext_controller,{}" *) (* DowngradeIPIdentifiedWarnings = "yes" *) (* IP_DEFINITION_SOURCE = "module_ref" *) 
+(* X_CORE_INFO = "teletext_controller,Vivado 2022.2" *) 
+(* NotValidForBitStream *)
+module system_teletext_controller_0_0
+   (CLK_IN,
+    RESET,
+    DATA_OUT,
+    SYNC_OUT,
+    CLK_OUT);
+  input CLK_IN;
+  (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 RESET RST" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME RESET, POLARITY ACTIVE_LOW, INSERT_VIP 0" *) input RESET;
+  output DATA_OUT;
+  output SYNC_OUT;
+  output CLK_OUT;
+
+  wire CLK_IN;
+  wire DATA_OUT;
+  wire RESET;
+  wire SYNC_OUT;
+
+  assign CLK_OUT = CLK_IN;
+  system_teletext_controller_0_0_teletext_controller inst
+       (.CLK_IN(CLK_IN),
+        .DATA_OUT(DATA_OUT),
+        .RESET(RESET),
+        .SYNC_OUT(SYNC_OUT));
+endmodule
+
 module system_teletext_controller_0_0_teletext_controller
    (SYNC_OUT,
     DATA_OUT,
@@ -6134,7 +6131,6 @@ module system_teletext_controller_0_0_teletext_controller
         .SYNC_OUT(SYNC_OUT));
 endmodule
 
-(* ORIG_REF_NAME = "teletext_generator" *) 
 module system_teletext_controller_0_0_teletext_generator
    (SYNC_OUT,
     DATA_OUT,
