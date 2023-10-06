@@ -49,11 +49,14 @@ end framebuffer;
 
 architecture Behavioral of framebuffer is
 
-signal data_in      : TELETEXT_CHAR;
-signal data_out     : TELETEXT_CHAR;
-signal write_address: std_logic_vector(10 downto 0);
-signal read_address : std_logic_vector(10 downto 0);
-signal write_enable : std_logic_vector(0 downto 0);
+signal data_in              : TELETEXT_CHAR;
+signal data_out             : TELETEXT_CHAR;
+signal write_address        : std_logic_vector(10 downto 0);
+signal read_address         : std_logic_vector(10 downto 0);
+signal write_enable         : std_logic_vector(0 downto 0);
+signal current_column       : unsigned(5 downto 0);
+signal next_column          : unsigned(5 downto 0);
+signal current_out_index    : unsigned(4 downto 0);
 
 begin
 
@@ -161,5 +164,6 @@ BRAM_SDP_MACRO_inst : BRAM_SDP_MACRO
    );
    -- End of BRAM_SDP_MACRO_inst instantiation
 
+    
 
 end Behavioral;
