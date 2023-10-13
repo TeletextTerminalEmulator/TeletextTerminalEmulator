@@ -11,25 +11,21 @@
 
 module system_wrapper
    (CLK_IN,
-    CLK_OUT,
     DATA_OUT,
     RESET,
     SYNC_OUT);
   input CLK_IN;
-  output CLK_OUT;
   output DATA_OUT;
   input RESET;
   output SYNC_OUT;
 
   wire CLK_IN;
-  wire CLK_OUT;
   wire DATA_OUT;
   wire RESET;
   wire SYNC_OUT;
 
   system system_i
        (.CLK_IN(CLK_IN),
-        .CLK_OUT(CLK_OUT),
         .DATA_OUT(DATA_OUT),
         .RESET(RESET),
         .SYNC_OUT(SYNC_OUT));

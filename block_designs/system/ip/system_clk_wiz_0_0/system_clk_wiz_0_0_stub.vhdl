@@ -1,10 +1,10 @@
 -- Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2022.2.2 (win64) Build 3788238 Tue Feb 21 20:00:34 MST 2023
--- Date        : Fri Oct  6 10:21:48 2023
--- Host        : Memmert running 64-bit major release  (build 9200)
+-- Date        : Fri Oct 13 14:47:38 2023
+-- Host        : Joris-Desktop running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub
---               c:/Users/jwachsmuth/Documents/teletext/block_designs/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_stub.vhdl
+--               e:/Dokumente/teletext/block_designs/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_stub.vhdl
 -- Design      : system_clk_wiz_0_0
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7a35tcpg236-1

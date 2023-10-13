@@ -49,16 +49,21 @@ end framebuffer;
 
 architecture Behavioral of framebuffer is
 
-signal data_in              : TELETEXT_CHAR;
-signal data_out             : TELETEXT_CHAR;
+signal data_in              : TELETEXT_CHAR := (others => '0');
+signal data_out             : TELETEXT_CHAR := (others => '0');
 signal write_address        : std_logic_vector(10 downto 0);
 signal read_address         : std_logic_vector(10 downto 0);
 signal write_enable         : std_logic_vector(0 downto 0);
-signal current_column       : unsigned(5 downto 0);
+signal current_column       : unsigned(5 downto 0) := (others => '0');
 signal next_column          : unsigned(5 downto 0);
-signal current_out_index    : unsigned(4 downto 0);
+signal current_out_index    : unsigned(4 downto 0) := (others => '0');
+signal next_line_out        : TELETEXT_LINE;
+signal current_line_out     : TELETEXT_LINE := (others => (others => '0'));
 
 begin
+
+read_address <= std_logic_vector(current_out_index) & std_logic_vector((current_column + 1) mod TELETEXT_LINE'length);
+LINE_OUT <= current_line_out;
 
 BRAM_SDP_MACRO_inst : BRAM_SDP_MACRO
    generic map (
@@ -164,6 +169,30 @@ BRAM_SDP_MACRO_inst : BRAM_SDP_MACRO
    );
    -- End of BRAM_SDP_MACRO_inst instantiation
 
+    -- read section
+    reg_p: process(LINE_OUT_CLOCK, next_column)
+    begin
+        if rising_edge(LINE_OUT_CLOCK) then
+            current_column <= next_column;
+            current_out_index <= LINE_OUT_INDEX;
+            current_line_out <= next_line_out;
+        end if;
+    end process;
     
-
+    read_col_p: process(current_column, current_out_index, LINE_OUT_INDEX)
+    begin
+        if current_out_index /= LINE_OUT_INDEX then
+            next_column <= (others => '0');
+        else
+            next_column <= (current_column + 1) mod TELETEXT_LINE'length;
+        end if;
+    end process;
+    
+    ram_out_to_line_p: process(data_out, current_column)
+    begin
+        next_line_out <= current_line_out;
+        next_line_out(to_integer(current_column)) <= data_out;
+    end process;
+    
+    -- write section
 end Behavioral;

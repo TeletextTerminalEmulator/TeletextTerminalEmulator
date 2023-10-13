@@ -36,10 +36,12 @@ entity teletext_generator is
     port(
         CLK_IN              : in    std_logic;
         RESET_N             : in    std_logic;
-        TELETEXT_FRAME      : in    TELETEXT_FRAME;
+        LINE_IN             : in    TELETEXT_LINE;
         PAGE_CONTROL_BITS   : in    CONTROL_BITS;
         PAGE_NUMBER         : in    unsigned (7 downto 0);
         MAGAZINE_NUMBER     : in    unsigned (2 downto 0);
+        
+        LINE_INDEX          : out   unsigned (4 downto 0);
         
         DATA_OUT            : out   std_logic;
         SYNC_OUT            : out   std_logic
@@ -100,9 +102,11 @@ signal teletext_normal_data         : std_logic_vector (319 downto 0);
 signal teletext_page_header_data    : std_logic_vector (319 downto 0); 
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
-signal current_teletext_data_line   : TELETEXT_ARRAY (39 downto 0);
 
 begin
+
+    LINE_INDEX <= current_line;
+
     sync_gen : sync_generator
     port map (CLK_IN   => CLK_IN,
               RESET_N  => RESET_N,
@@ -130,7 +134,7 @@ begin
     
     packet_normal_gen : packet_normal_generator
     port map(
-        DATA_BYTES => current_teletext_data_line,
+        DATA_BYTES => LINE_IN,
         PACKET_DATA => teletext_normal_data
     );
     
@@ -139,7 +143,7 @@ begin
         PAGE_NUMBER => PAGE_NUMBER,
         PAGE_SUB_CODE => (others => '0'),
         CONTROL_BITS => PAGE_CONTROL_BITS,
-        DATA_BYTES => current_teletext_data_line(39 downto 8),
+        DATA_BYTES => LINE_IN(39 downto 8),
         PACKET_DATA => teletext_page_header_data
     );
     
@@ -183,12 +187,4 @@ begin
             load_trigger <= '0';
         end if;
     end process;
-    
-    current_data_line_p: process (current_line, TELETEXT_FRAME)
-    begin
-        current_teletext_data_line <= TELETEXT_FRAME(to_integer(current_line));
-    end process;
-    
-    
-    
 end Behavioral;
