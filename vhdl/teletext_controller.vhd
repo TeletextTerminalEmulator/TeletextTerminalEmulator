@@ -63,17 +63,17 @@ component framebuffer is
         -- AXI side
         RESET           : in    std_logic;
         CLK_IN          : in    std_logic;
+        
+        WRITE_ENABLE    : in    std_logic;
+        DATA_IN         : in    TELETEXT_CHAR;
+        INPUT_LINE      : in    unsigned(4 downto 0);
+        INPUT_COLUMN    : in    unsigned(5 downto 0);
     
         -- Teletextgenerator side
         LINE_OUT_CLOCK  : in    std_logic;
         LINE_OUT_INDEX  : in    unsigned(4 downto 0);
         LINE_OUT        : out   TELETEXT_LINE
     );
-end component;
-
-component clock_divider is
-    Port ( CLK_IN : in STD_LOGIC;
-           CLK_OUT : out STD_LOGIC);
 end component;
 
 signal page_control_bits : CONTROL_BITS := (
@@ -92,6 +92,14 @@ signal magazine_number : unsigned (2 downto 0) := "001";
 signal reset_n : std_logic;
 signal teletext_line : TELETEXT_LINE;
 signal line_index : unsigned (4 downto 0);
+
+-- BRAM interface signals
+signal write_enable     : std_logic;
+signal data_in          : TELETEXT_CHAR;
+signal input_line       : unsigned(4 downto 0);
+signal input_column     : unsigned(5 downto 0);
+
+
 
 begin
     reset_n <= not RESET;
@@ -113,6 +121,11 @@ begin
     port map(
         RESET => RESET,
         CLK_IN => CLK_IN,
+        
+        WRITE_ENABLE => write_enable,
+        DATA_IN => data_in,
+        INPUT_LINE => input_line,
+        INPUT_COLUMN => input_column,
         
         LINE_OUT_CLOCK => TELETEXT_CLK,
         LINE_OUT_INDEX => line_index,
