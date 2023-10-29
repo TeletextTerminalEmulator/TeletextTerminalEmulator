@@ -1,10 +1,10 @@
--- Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
+-- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2022.2.2 (win64) Build 3788238 Tue Feb 21 20:00:34 MST 2023
--- Date        : Fri Oct 20 14:17:25 2023
--- Host        : Memmert running 64-bit major release  (build 9200)
+-- Tool Version: Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+-- Date        : Sun Oct 29 23:53:58 2023
+-- Host        : JOROLF-LAPTOP running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
---               c:/Users/jwachsmuth/Documents/teletext/block_designs/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_sim_netlist.vhdl
+--               c:/Users/Jorol/Documents/Uni/teletext/teletext/block_designs/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_sim_netlist.vhdl
 -- Design      : system_clk_wiz_0_0
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -85,16 +85,16 @@ clkout2_buf: unisim.vcomponents.BUFG
 mmcm_adv_inst: unisim.vcomponents.MMCME2_ADV
     generic map(
       BANDWIDTH => "OPTIMIZED",
-      CLKFBOUT_MULT_F => 6.000000,
+      CLKFBOUT_MULT_F => 8.875000,
       CLKFBOUT_PHASE => 0.000000,
       CLKFBOUT_USE_FINE_PS => false,
       CLKIN1_PERIOD => 10.000000,
       CLKIN2_PERIOD => 0.000000,
-      CLKOUT0_DIVIDE_F => 86.500000,
+      CLKOUT0_DIVIDE_F => 8.875000,
       CLKOUT0_DUTY_CYCLE => 0.500000,
       CLKOUT0_PHASE => 0.000000,
       CLKOUT0_USE_FINE_PS => false,
-      CLKOUT1_DIVIDE => 6,
+      CLKOUT1_DIVIDE => 128,
       CLKOUT1_DUTY_CYCLE => 0.500000,
       CLKOUT1_PHASE => 0.000000,
       CLKOUT1_USE_FINE_PS => false,

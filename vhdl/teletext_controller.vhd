@@ -26,6 +26,7 @@ use work.types_pkg.all;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
+use IEEE.MATH_REAL.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -37,71 +38,71 @@ entity teletext_controller is
         AXI_DATA_WIDTH : integer := 32;
         AXI_ADDR_WIDTH : integer := 6
     );
-    Port ( CLK_IN : in STD_LOGIC;
-           TELETEXT_CLK : in STD_LOGIC;
-           DATA_OUT : out STD_LOGIC;
-           SYNC_OUT : out STD_LOGIC;
-           
-           -- Global Clock Signal
-		S_AXI_ACLK	: in std_logic;
-		-- Global Reset Signal. This Signal is Active LOW
-		S_AXI_ARESETN	: in std_logic;
-		-- Write address (issued by master, acceped by Slave)
-		S_AXI_AWADDR	: in std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
-		-- Write channel Protection type. This signal indicates the
-    		-- privilege and security level of the transaction, and whether
-    		-- the transaction is a data access or an instruction access.
-		S_AXI_AWPROT	: in std_logic_vector(2 downto 0);
-		-- Write address valid. This signal indicates that the master signaling
-    		-- valid write address and control information.
-		S_AXI_AWVALID	: in std_logic;
-		-- Write address ready. This signal indicates that the slave is ready
-    		-- to accept an address and associated control signals.
-		S_AXI_AWREADY	: out std_logic;
-		-- Write data (issued by master, acceped by Slave) 
-		S_AXI_WDATA	: in std_logic_vector(AXI_DATA_WIDTH-1 downto 0);
-		-- Write strobes. This signal indicates which byte lanes hold
-    		-- valid data. There is one write strobe bit for each eight
-    		-- bits of the write data bus.    
-		S_AXI_WSTRB	: in std_logic_vector((AXI_DATA_WIDTH/8)-1 downto 0);
-		-- Write valid. This signal indicates that valid write
-    		-- data and strobes are available.
-		S_AXI_WVALID	: in std_logic;
-		-- Write ready. This signal indicates that the slave
-    		-- can accept the write data.
-		S_AXI_WREADY	: out std_logic;
-		-- Write response. This signal indicates the status
-    		-- of the write transaction.
-		S_AXI_BRESP	: out std_logic_vector(1 downto 0);
-		-- Write response valid. This signal indicates that the channel
-    		-- is signaling a valid write response.
-		S_AXI_BVALID	: out std_logic;
-		-- Response ready. This signal indicates that the master
-    		-- can accept a write response.
-		S_AXI_BREADY	: in std_logic;
-		-- Read address (issued by master, acceped by Slave)
-		S_AXI_ARADDR	: in std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
-		-- Protection type. This signal indicates the privilege
-    		-- and security level of the transaction, and whether the
-    		-- transaction is a data access or an instruction access.
-		S_AXI_ARPROT	: in std_logic_vector(2 downto 0);
-		-- Read address valid. This signal indicates that the channel
-    		-- is signaling valid read address and control information.
-		S_AXI_ARVALID	: in std_logic;
-		-- Read address ready. This signal indicates that the slave is
-    		-- ready to accept an address and associated control signals.
-		S_AXI_ARREADY	: out std_logic;
-		-- Read data (issued by slave)
-		S_AXI_RDATA	: out std_logic_vector(AXI_DATA_WIDTH-1 downto 0);
-		-- Read response. This signal indicates the status of the
-    		-- read transfer.
-		S_AXI_RRESP	: out std_logic_vector(1 downto 0);
-		-- Read valid. This signal indicates that the channel is
-    		-- signaling the required read data.
-		S_AXI_RVALID	: out std_logic;
-		-- Read ready. This signal indicates that the master can
-    		-- accept the read data and response information.
-		S_AXI_RREADY	: in std_logic
+    Port (
+        TELETEXT_CLK : in STD_LOGIC;
+        DATA_OUT : out STD_LOGIC;
+        SYNC_OUT : out STD_LOGIC;
+        
+        -- Global Clock Signal
+        S_AXI_ACLK	: in std_logic;
+        -- Global Reset Signal. This Signal is Active LOW
+        S_AXI_ARESETN	: in std_logic;
+        -- Write address (issued by master, acceped by Slave)
+        S_AXI_AWADDR	: in std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
+        -- Write channel Protection type. This signal indicates the
+            -- privilege and security level of the transaction, and whether
+            -- the transaction is a data access or an instruction access.
+        S_AXI_AWPROT	: in std_logic_vector(2 downto 0);
+        -- Write address valid. This signal indicates that the master signaling
+            -- valid write address and control information.
+        S_AXI_AWVALID	: in std_logic;
+        -- Write address ready. This signal indicates that the slave is ready
+            -- to accept an address and associated control signals.
+        S_AXI_AWREADY	: out std_logic;
+        -- Write data (issued by master, acceped by Slave) 
+        S_AXI_WDATA	: in std_logic_vector(AXI_DATA_WIDTH-1 downto 0);
+        -- Write strobes. This signal indicates which byte lanes hold
+            -- valid data. There is one write strobe bit for each eight
+            -- bits of the write data bus.    
+        S_AXI_WSTRB	: in std_logic_vector((AXI_DATA_WIDTH/8)-1 downto 0);
+        -- Write valid. This signal indicates that valid write
+            -- data and strobes are available.
+        S_AXI_WVALID	: in std_logic;
+        -- Write ready. This signal indicates that the slave
+            -- can accept the write data.
+        S_AXI_WREADY	: out std_logic;
+        -- Write response. This signal indicates the status
+            -- of the write transaction.
+        S_AXI_BRESP	: out std_logic_vector(1 downto 0);
+        -- Write response valid. This signal indicates that the channel
+            -- is signaling a valid write response.
+        S_AXI_BVALID	: out std_logic;
+        -- Response ready. This signal indicates that the master
+            -- can accept a write response.
+        S_AXI_BREADY	: in std_logic;
+        -- Read address (issued by master, acceped by Slave)
+        S_AXI_ARADDR	: in std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
+        -- Protection type. This signal indicates the privilege
+            -- and security level of the transaction, and whether the
+            -- transaction is a data access or an instruction access.
+        S_AXI_ARPROT	: in std_logic_vector(2 downto 0);
+        -- Read address valid. This signal indicates that the channel
+            -- is signaling valid read address and control information.
+        S_AXI_ARVALID	: in std_logic;
+        -- Read address ready. This signal indicates that the slave is
+            -- ready to accept an address and associated control signals.
+        S_AXI_ARREADY	: out std_logic;
+        -- Read data (issued by slave)
+        S_AXI_RDATA	: out std_logic_vector(AXI_DATA_WIDTH-1 downto 0);
+        -- Read response. This signal indicates the status of the
+            -- read transfer.
+        S_AXI_RRESP	: out std_logic_vector(1 downto 0);
+        -- Read valid. This signal indicates that the channel is
+            -- signaling the required read data.
+        S_AXI_RVALID	: out std_logic;
+        -- Read ready. This signal indicates that the master can
+            -- accept the read data and response information.
+        S_AXI_RREADY	: in std_logic
     );
 end teletext_controller;
 
@@ -146,25 +147,32 @@ signal teletext_line : TELETEXT_LINE;
 signal line_index : unsigned (4 downto 0);
 
 -- BRAM interface signals
-signal write_enable     : std_logic;
+signal write_enable     : std_logic := '0';
 signal data_in          : TELETEXT_CHAR;
 signal input_line       : unsigned(4 downto 0);
 signal input_column     : unsigned(5 downto 0);
 
--- AXI4LITE signals
+-- AXI4 Transaction registers
 
-signal axi_awaddr	: std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
-signal axi_awready	: std_logic;
-signal axi_wready	: std_logic;
-signal axi_bresp	: std_logic_vector(1 downto 0);
-signal axi_bvalid	: std_logic;
-signal axi_araddr	: std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
-signal axi_arready	: std_logic;
-signal axi_rdata	: std_logic_vector(AXI_DATA_WIDTH-1 downto 0);
-signal axi_rresp	: std_logic_vector(1 downto 0);
-signal axi_rvalid	: std_logic;
+signal current_axi_write_address  : std_logic_vector(AXI_ADDR_WIDTH-1 downto 0) := (others => '0');
+signal next_axi_write_address     : std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
+
+signal current_axi_write_response   : std_logic_vector(1 downto 0) := "00";
+signal next_axi_write_response      : std_logic_vector(1 downto 0);
+
+-- AXI4 Transaction stages
+
+signal current_axi_awready : std_logic := '1';
+signal next_axi_awready : std_logic;
+signal current_axi_dwready : std_logic := '0';
+signal next_axi_dwready : std_logic;
+signal current_axi_bvalid : std_logic := '0';
+signal next_axi_bvalid : std_logic;
 
 -- AXI4LITE registers
+constant ADDRESS_LSB: integer := integer(ceil(log2(real(AXI_DATA_WIDTH / 8))));
+constant ADDRESS_MSB: integer := 4 - 1 + ADDRESS_LSB; -- 
+
 signal current_page_control_bits : CONTROL_BITS := (
     ERASE_PAGE => '0',
     NEWSFLASH => '0',
@@ -184,14 +192,15 @@ signal next_magazine_number : unsigned (2 downto 0);
 
 begin
 
-    S_AXI_AWREADY	<= axi_awready;
-	S_AXI_WREADY	<= axi_wready;
-	S_AXI_BRESP	<= axi_bresp;
-	S_AXI_BVALID	<= axi_bvalid;
-	S_AXI_ARREADY	<= axi_arready;
-	S_AXI_RDATA	<= axi_rdata;
-	S_AXI_RRESP	<= axi_rresp;
-	S_AXI_RVALID	<= axi_rvalid;
+    -- TODO
+    S_AXI_AWREADY	<= current_axi_awready;
+	S_AXI_WREADY	<= current_axi_dwready;
+	S_AXI_BRESP	<= current_axi_write_response;
+	S_AXI_BVALID	<= current_axi_bvalid;
+	S_AXI_ARREADY	<= '0';
+	S_AXI_RDATA	<= (others => '0');
+	S_AXI_RRESP	<= "00";
+	S_AXI_RVALID	<= '0';
     
     reset <= not S_AXI_ARESETN;
     
@@ -211,7 +220,7 @@ begin
     framebuf: framebuffer
     port map(
         RESET => reset,
-        CLK_IN => CLK_IN,
+        CLK_IN => S_AXI_ACLK,
         
         WRITE_ENABLE => write_enable,
         DATA_IN => data_in,
@@ -240,12 +249,99 @@ begin
                 );
                 current_page_number <= (others => '0');
                 current_magazine_number <= "001";
+                
+                current_axi_write_address <= (others => '0');
+                current_axi_write_response <= (others => '0');
+                
+                current_axi_awready <= '1';
+                current_axi_dwready <= '0';
+                current_axi_bvalid <= '0';
             else
                 current_page_control_bits <= next_page_control_bits;
                 current_page_number <= next_page_number;
                 current_magazine_number <= next_magazine_number;
+                
+                current_axi_write_address <= next_axi_write_address;
+                current_axi_write_response <= next_axi_write_response;
+                
+                current_axi_awready <= next_axi_awready;
+                current_axi_dwready <= next_axi_dwready;
+                current_axi_bvalid <= next_axi_bvalid;
             end if;
         end if;
+    end process;
+    
+    write_address_handshake: process(S_AXI_AWVALID, S_AXI_AWADDR, S_AXI_BREADY, current_axi_write_address, current_axi_awready, current_axi_bvalid)
+    begin
+        next_axi_write_address <= current_axi_write_address;
+        next_axi_awready <= current_axi_awready;
+    
+        if S_AXI_AWVALID = '1' and current_axi_awready = '1' then
+            next_axi_write_address <= S_AXI_AWADDR;
+            next_axi_awready <= '0';
+        elsif S_AXI_BREADY = '1' and current_axi_bvalid = '1' then
+            next_axi_awready <= '1';
+        end if;
+    end process;
+    
+    write_data_handshake: process(S_AXI_AWVALID, S_AXI_WVALID, current_axi_awready, current_axi_dwready, current_axi_write_response,
+                                    current_page_number, current_magazine_number, current_page_control_bits, current_axi_write_address,
+                                    S_AXI_WDATA, S_AXI_WSTRB)
+    begin
+        next_axi_dwready <= current_axi_dwready;
+        -- Should be handled here because the response depends on the place the data is written to
+        next_axi_write_response <= current_axi_write_response; 
+        
+        next_page_number <= current_page_number;
+        next_magazine_number <= current_magazine_number;
+        next_page_control_bits <= current_page_control_bits;
+        
+        if S_AXI_AWVALID = '1' and current_axi_awready = '1' then
+            next_axi_dwready <= '1';
+        elsif S_AXI_WVALID = '1' and current_axi_dwready = '1' then
+            next_axi_dwready <= '0';
+            next_axi_write_response <= "00";
+            
+            case current_axi_write_address(ADDRESS_MSB downto ADDRESS_LSB) is
+                when "0000" =>
+                    if S_AXI_WSTRB(0) = '1' then next_page_number <= unsigned(S_AXI_WDATA(7 downto 0)); end if;
+                    if S_AXI_WSTRB(1) = '1' then next_magazine_number <= unsigned(S_AXI_WDATA(10 downto 8)); end if;
+                    
+                    if S_AXI_WSTRB(3 downto 2) /= "00" then
+                        next_axi_write_response <= "10"; -- SLVERR
+                    end if;
+                when "0100" =>
+                    if S_AXI_WSTRB(0) = '1' then next_page_control_bits.ERASE_PAGE <= S_AXI_WDATA(0); end if;
+                    if S_AXI_WSTRB(1) = '1' then next_page_control_bits.NEWSFLASH <= S_AXI_WDATA(8); end if;
+                    if S_AXI_WSTRB(2) = '1' then next_page_control_bits.SUBTITLE <= S_AXI_WDATA(16); end if;
+                    if S_AXI_WSTRB(3) = '1' then next_page_control_bits.SUPPRESS_HEADER <= S_AXI_WDATA(24); end if;
+                when "0101" =>
+                    if S_AXI_WSTRB(0) = '1' then next_page_control_bits.UPDATE_INDICATOR <= S_AXI_WDATA(0); end if;
+                    if S_AXI_WSTRB(1) = '1' then next_page_control_bits.INTERRUPTED_SEQUENCE <= S_AXI_WDATA(8); end if;
+                    if S_AXI_WSTRB(2) = '1' then next_page_control_bits.INHIBIT_DISPLAY <= S_AXI_WDATA(16); end if;
+                    if S_AXI_WSTRB(3) = '1' then next_page_control_bits.MAGAZINE_SERIAL <= S_AXI_WDATA(24); end if;
+                when "0110" =>
+                    if S_AXI_WSTRB(0) = '1' then next_page_control_bits.NATIONAL_OPTION_CHARACTER_SUBSET <= S_AXI_WDATA(2 downto 0); end if;
+                    
+                    if S_AXI_WSTRB(3 downto 1) /= "000" then
+                        next_axi_write_response <= "10"; -- SLVERR
+                    end if;
+                when "1000" =>
+                    -- TODO implement printing characters
+                when others =>
+                    next_axi_write_response <= "10";
+            end case;
+        end if;
+    end process;
+    
+    write_response_handshake: process(current_axi_dwready)
+    begin
+        next_axi_bvalid <= current_axi_bvalid;
+        if S_AXI_WVALID = '1' and current_axi_dwready = '1' then
+            next_axi_bvalid <= '1';
+        elsif S_AXI_BREADY = '1' and current_axi_bvalid = '1' then
+            next_axi_bvalid <= '0';
+        end if;        
     end process;
 
 end Behavioral;
