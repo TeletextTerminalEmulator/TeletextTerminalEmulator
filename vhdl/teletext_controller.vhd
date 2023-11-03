@@ -164,6 +164,12 @@ signal next_axi_write_address     : std_logic_vector(AXI_ADDR_WIDTH-1 downto 0);
 signal current_axi_write_response   : std_logic_vector(1 downto 0) := "00";
 signal next_axi_write_response      : std_logic_vector(1 downto 0);
 
+signal current_axi_read_response    : std_logic_vector(1 downto 0) := "00";
+signal next_axi_read_response       : std_logic_vector(1 downto 0);
+
+signal current_axi_read_data        : std_logic_vector(AXI_DATA_WIDTH-1 downto 0) := (others => '0');
+signal next_axi_read_data           : std_logic_vector(AXI_DATA_WIDTH-1 downto 0);
+
 -- AXI4 Transaction stages
 
 signal current_axi_awready : std_logic := '1';
@@ -172,6 +178,11 @@ signal current_axi_dwready : std_logic := '0';
 signal next_axi_dwready : std_logic;
 signal current_axi_bvalid : std_logic := '0';
 signal next_axi_bvalid : std_logic;
+
+signal current_axi_arready : std_logic := '1';
+signal next_axi_arready : std_logic;
+signal current_axi_drvalid : std_logic := '0';
+signal next_axi_drvalid : std_logic;
 
 -- AXI4LITE registers
 constant ADDRESS_LSB: integer := integer(ceil(log2(real(AXI_DATA_WIDTH / 8))));
@@ -195,16 +206,15 @@ signal next_page_number : unsigned (7 downto 0);
 signal next_magazine_number : unsigned (2 downto 0);
 
 begin
-
-    -- TODO
     S_AXI_AWREADY	<= current_axi_awready;
 	S_AXI_WREADY	<= current_axi_dwready;
 	S_AXI_BRESP	<= current_axi_write_response;
 	S_AXI_BVALID	<= current_axi_bvalid;
-	S_AXI_ARREADY	<= '0';
-	S_AXI_RDATA	<= (others => '0');
-	S_AXI_RRESP	<= "00";
-	S_AXI_RVALID	<= '0';
+	
+	S_AXI_ARREADY	<= current_axi_arready;
+	S_AXI_RDATA	<= current_axi_read_data;
+	S_AXI_RRESP	<= current_axi_read_response;
+	S_AXI_RVALID	<= current_axi_drvalid;
     
     reset <= not S_AXI_ARESETN;
     
@@ -265,6 +275,12 @@ begin
                 current_data_in <= (others => '0');
                 current_input_line <= (others => '0');
                 current_input_column <= (others => '0');
+                
+                current_axi_read_data <= (others => '0');
+                current_axi_read_response <= "00";
+                
+                current_axi_arready <= '1';
+                current_axi_drvalid <= '0';
             else
                 current_page_control_bits <= next_page_control_bits;
                 current_page_number <= next_page_number;
@@ -281,6 +297,12 @@ begin
                 current_data_in <= next_data_in;
                 current_input_line <= next_input_line;
                 current_input_column <= next_input_column;
+                
+                current_axi_read_data <= next_axi_read_data;
+                current_axi_read_response <= next_axi_read_response;
+                
+                current_axi_arready <= next_axi_arready;
+                current_axi_drvalid <= next_axi_drvalid;
             end if;
         end if;
     end process;
@@ -372,4 +394,46 @@ begin
         end if;        
     end process;
 
+    read_address_handshake: process(current_axi_arready, S_AXI_ARVALID, S_AXI_ARADDR, S_AXI_RREADY, current_axi_drvalid)
+    begin
+        next_axi_arready <= current_axi_arready;
+    
+        if S_AXI_ARVALID = '1' and current_axi_arready = '1' then
+            next_axi_arready <= '0';
+        elsif S_AXI_RREADY = '1' and current_axi_drvalid = '1' then
+            next_axi_arready <= '1';
+        end if;
+    end process;
+    
+    read_data_handshake: process(S_AXI_RREADY, current_axi_drvalid)
+    begin
+        next_axi_drvalid <= current_axi_drvalid;
+        next_axi_read_response <= current_axi_read_response;
+        if S_AXI_ARVALID = '1' and current_axi_arready = '1' then
+            next_axi_read_response <= "00"; -- OKAY
+            next_axi_read_data <= (others => '0');
+            case S_AXI_ARADDR(ADDRESS_MSB downto ADDRESS_LSB) is
+                when "0000" =>
+                    next_axi_read_data(7 downto 0) <= std_logic_vector(current_page_number);
+                    next_axi_read_data(10 downto 8) <= std_logic_vector(current_magazine_number);
+                when "0100" =>
+                    next_axi_read_data(0) <= current_page_control_bits.ERASE_PAGE;
+                    next_axi_read_data(8) <= current_page_control_bits.NEWSFLASH;
+                    next_axi_read_data(16) <= current_page_control_bits.SUBTITLE;
+                    next_axi_read_data(24) <= current_page_control_bits.SUPPRESS_HEADER;
+                when "0101" =>
+                    next_axi_read_data(0) <= current_page_control_bits.UPDATE_INDICATOR;
+                    next_axi_read_data(8) <= current_page_control_bits.INTERRUPTED_SEQUENCE;
+                    next_axi_read_data(16) <= current_page_control_bits.INHIBIT_DISPLAY;
+                    next_axi_read_data(24) <= current_page_control_bits.MAGAZINE_SERIAL;
+                when "0110" =>
+                    next_axi_read_data(2 downto 0) <= current_page_control_bits.NATIONAL_OPTION_CHARACTER_SUBSET;
+                when others =>
+                    next_axi_read_response <= "10"; -- SLVERR
+            end case;
+            next_axi_drvalid <= '1';
+        elsif S_AXI_RREADY = '1' and current_axi_drvalid = '1' then
+            next_axi_drvalid <= '0';
+        end if;
+    end process;
 end Behavioral;
