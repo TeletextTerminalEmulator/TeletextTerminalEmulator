@@ -147,10 +147,14 @@ signal teletext_line : TELETEXT_LINE;
 signal line_index : unsigned (4 downto 0);
 
 -- BRAM interface signals
-signal write_enable     : std_logic := '0';
-signal data_in          : TELETEXT_CHAR;
-signal input_line       : unsigned(4 downto 0);
-signal input_column     : unsigned(5 downto 0);
+signal current_write_enable     : std_logic := '0';
+signal next_write_enable        : std_logic;
+signal current_data_in          : TELETEXT_CHAR;
+signal next_data_in             : TELETEXT_CHAR;
+signal current_input_line       : unsigned(4 downto 0);
+signal next_input_line          : unsigned(4 downto 0);
+signal current_input_column     : unsigned(5 downto 0);
+signal next_input_column        : unsigned(5 downto 0);
 
 -- AXI4 Transaction registers
 
@@ -222,10 +226,10 @@ begin
         RESET => reset,
         CLK_IN => S_AXI_ACLK,
         
-        WRITE_ENABLE => write_enable,
-        DATA_IN => data_in,
-        INPUT_LINE => input_line,
-        INPUT_COLUMN => input_column,
+        WRITE_ENABLE => current_write_enable,
+        DATA_IN => current_data_in,
+        INPUT_LINE => current_input_line,
+        INPUT_COLUMN => current_input_column,
         
         LINE_OUT_CLOCK => TELETEXT_CLK,
         LINE_OUT_INDEX => line_index,
@@ -256,6 +260,11 @@ begin
                 current_axi_awready <= '1';
                 current_axi_dwready <= '0';
                 current_axi_bvalid <= '0';
+                
+                current_write_enable <= '0';
+                current_data_in <= (others => '0');
+                current_input_line <= (others => '0');
+                current_input_column <= (others => '0');
             else
                 current_page_control_bits <= next_page_control_bits;
                 current_page_number <= next_page_number;
@@ -267,6 +276,11 @@ begin
                 current_axi_awready <= next_axi_awready;
                 current_axi_dwready <= next_axi_dwready;
                 current_axi_bvalid <= next_axi_bvalid;
+                
+                current_write_enable <= next_write_enable;
+                current_data_in <= next_data_in;
+                current_input_line <= next_input_line;
+                current_input_column <= next_input_column;
             end if;
         end if;
     end process;
@@ -286,7 +300,7 @@ begin
     
     write_data_handshake: process(S_AXI_AWVALID, S_AXI_WVALID, current_axi_awready, current_axi_dwready, current_axi_write_response,
                                     current_page_number, current_magazine_number, current_page_control_bits, current_axi_write_address,
-                                    S_AXI_WDATA, S_AXI_WSTRB)
+                                    S_AXI_WDATA, S_AXI_WSTRB, current_write_enable, current_data_in, current_input_line, current_input_column)
     begin
         next_axi_dwready <= current_axi_dwready;
         -- Should be handled here because the response depends on the place the data is written to
@@ -295,6 +309,11 @@ begin
         next_page_number <= current_page_number;
         next_magazine_number <= current_magazine_number;
         next_page_control_bits <= current_page_control_bits;
+        
+        next_write_enable <= current_write_enable;
+        next_data_in <= current_data_in;
+        next_input_line <= current_input_line;
+        next_input_column <= current_input_column;
         
         if S_AXI_AWVALID = '1' and current_axi_awready = '1' then
             next_axi_dwready <= '1';
@@ -327,14 +346,23 @@ begin
                         next_axi_write_response <= "10"; -- SLVERR
                     end if;
                 when "1000" =>
-                    -- TODO implement printing characters
+                    if S_AXI_WSTRB = "1111" then
+                        next_input_line <= unsigned(S_AXI_WDATA(31 downto 24));
+                        next_input_column <= unsigned(S_AXI_WDATA(23 downto 16));
+                        next_data_in <= S_AXI_WDATA(6 downto 0);
+                        next_write_enable <= '1';
+                    else
+                        next_axi_write_response <= "10"; -- SLVERR
+                    end if;
                 when others =>
                     next_axi_write_response <= "10";
             end case;
+        elsif current_write_enable = '1' then
+            next_write_enable <= '0';
         end if;
     end process;
     
-    write_response_handshake: process(current_axi_dwready)
+    write_response_handshake: process(current_axi_dwready, S_AXI_WVALID, current_axi_dwready, S_AXI_BREADY, current_axi_bvalid)
     begin
         next_axi_bvalid <= current_axi_bvalid;
         if S_AXI_WVALID = '1' and current_axi_dwready = '1' then

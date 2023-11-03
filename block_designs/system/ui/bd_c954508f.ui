@@ -21,39 +21,27 @@
    "Reduced Jogs_TopLeft":"-178,-93",
    "guistr":"# # String gsaved with Nlview 7.0r6  2020-01-29 bk=1.5227 VDI=41 GEI=36 GUI=JA:10.0 non-TLS
 #  -string -flagsOSRD
-preplace port port-id_RESET -pg 1 -lvl 0 -x 0 -y 130 -defaultsOSRD
+preplace port port-id_RESET -pg 1 -lvl 0 -x -10 -y 130 -defaultsOSRD
 preplace port port-id_DATA_OUT -pg 1 -lvl 6 -x 1710 -y 250 -defaultsOSRD
 preplace port port-id_SYNC_OUT -pg 1 -lvl 6 -x 1710 -y 270 -defaultsOSRD
-preplace port port-id_CLK_IN -pg 1 -lvl 0 -x 0 -y 260 -defaultsOSRD
+preplace port port-id_CLK_IN -pg 1 -lvl 0 -x -10 -y 260 -defaultsOSRD
 preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 110 -y 250 -defaultsOSRD
-preplace inst axi_vip_0 -pg 1 -lvl 3 -x 660 -y 90 -defaultsOSRD
+preplace inst axi_vip_0 -pg 1 -lvl 3 -x 670 -y 90 -defaultsOSRD
 preplace inst axi_vip_0_axi_periph -pg 1 -lvl 4 -x 1010 -y 120 -defaultsOSRD
-preplace inst rst_clk_wiz_0_100M -pg 1 -lvl 2 -x 380 -y 150 -defaultsOSRD
+preplace inst rst_clk_wiz_0_100M -pg 1 -lvl 2 -x 390 -y 150 -defaultsOSRD
 preplace inst teletext_controller_0 -pg 1 -lvl 5 -x 1540 -y 260 -defaultsOSRD
-preplace inst axi_vip_0_axi_periph|s00_couplers -pg 1 -lvl 1 -x 1120 -y 130 -defaultsOSRD
 preplace netloc CLK_IN_1 1 0 1 NJ 260
-preplace netloc RESET_1 1 0 2 20 130 NJ
-preplace netloc teletext_controller_0_DATA_OUT 1 5 1 NJ 250
-preplace netloc teletext_controller_0_SYNC_OUT 1 5 1 NJ 270
-preplace netloc clk_wiz_0_clk_out1 1 1 4 200 50 550 160 770 270 NJ
+preplace netloc RESET_1 1 0 2 10 130 NJ
+preplace netloc clk_wiz_0_clk_out1 1 1 4 200 50 560 20 780 270 NJ
 preplace netloc clk_wiz_0_clk_out2 1 1 4 N 250 NJ 250 NJ 250 NJ
 preplace netloc clk_wiz_0_locked 1 1 1 210 190n
-preplace netloc rst_clk_wiz_0_100M_peripheral_aresetn 1 2 3 560 190 760 290 NJ
-preplace netloc axi_vip_0_M_AXI 1 3 1 N 90
-preplace netloc axi_vip_0_axi_periph_M00_AXI 1 4 1 1390 90n
-preplace netloc axi_vip_0_axi_periph|axi_vip_0_axi_periph_ACLK_net 1 0 1 920 110n
-preplace netloc axi_vip_0_axi_periph|axi_vip_0_axi_periph_ARESETN_net 1 0 1 930 130n
-preplace netloc axi_vip_0_axi_periph|S00_ACLK_1 1 0 1 N 150
-preplace netloc axi_vip_0_axi_periph|S00_ARESETN_1 1 0 1 N 170
-preplace netloc axi_vip_0_axi_periph|axi_vip_0_axi_periph_to_s00_couplers 1 0 1 N 90
-preplace netloc axi_vip_0_axi_periph|s00_couplers_to_axi_vip_0_axi_periph 1 1 1 N 90
-preplace netloc axi_vip_0_axi_periph|s00_couplers|s00_couplers_to_s00_couplers 1 0 1 N 90
-levelinfo -pg 1 0 110 380 660 1010 1540 1710
-levelinfo -hier axi_vip_0_axi_periph * 1120 *
-levelinfo -hier axi_vip_0_axi_periph|s00_couplers * *
-pagesize -pg 1 -db -bbox -sgen -100 0 1840 350
-pagesize -hier axi_vip_0_axi_periph -db -bbox -sgen 890 30 1300 220
-pagesize -hier axi_vip_0_axi_periph|s00_couplers -db -bbox -sgen 1040 60 1200 200
+preplace netloc rst_clk_wiz_0_100M_peripheral_aresetn 1 2 3 560 160 770 290 NJ
+preplace netloc teletext_controller_0_DATA_OUT 1 5 1 NJ 250
+preplace netloc teletext_controller_0_SYNC_OUT 1 5 1 NJ 270
+preplace netloc axi_vip_0_M_AXI 1 3 1 770 60n
+preplace netloc axi_vip_0_axi_periph_M00_AXI 1 4 1 1160 120n
+levelinfo -pg 1 -10 110 390 670 1010 1540 1710
+pagesize -pg 1 -db -bbox -sgen -110 0 1840 350
 "
 }
 {
