@@ -102,7 +102,6 @@ def main():
     sdopts.add_argument("--with-spi-sdcard",       action="store_true", help="Enable SPI-mode SDCard support.")
     sdopts.add_argument("--with-sdcard",           action="store_true", help="Enable SDCard support.")
     parser.add_target_argument("--sdcard-adapter",                      help="SDCard PMOD adapter (digilent or numato).")
-    viopts = parser.target_group.add_mutually_exclusive_group()
     args = parser.parse_args()
     argdict = parser.soc_argdict
     argdict['bus_standard'] = "axi-lite"

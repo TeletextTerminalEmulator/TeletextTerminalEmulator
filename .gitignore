@@ -75,6 +75,11 @@ xvlog.*
 
 
 /.idea
+/.vscode
+__pycache__/
+/litex_build
+
+
 # Added by cargo
 
 /target
