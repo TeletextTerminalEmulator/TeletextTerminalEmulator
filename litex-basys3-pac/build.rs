@@ -8,10 +8,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Command::new("../litex/basys3_build.py")
         .arg(format!("--output-dir={out_dir}/litex_basys3"))
-        .arg(format!("--csr-svd={out_dir}/{SVD_NAME}"))
+        .arg(format!("--soc-svd={out_dir}/{SVD_NAME}"))
         .arg(format!("--memory-x={out_dir}/{LINKER_SCRIPT_NAME}"))
-        .arg("--cpu-variant=minimal")
         .arg("--no-compile")
+        .arg("--build")
         .status()?;
 
     println!("cargo:rustc-link-search={out_dir}"); // Let linker find the generated linker script
