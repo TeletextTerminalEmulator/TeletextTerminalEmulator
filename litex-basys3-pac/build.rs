@@ -6,7 +6,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     const SVD_NAME: &str = "soc.svd";
     let out_dir = env::var("OUT_DIR")?;
 
-    Command::new("../litex/basys3_build.py")
+    Command::new("python3")
+        .arg("../litex/basys3_build.py")
         .arg(format!("--output-dir={out_dir}/litex_basys3"))
         .arg(format!("--soc-svd={out_dir}/{SVD_NAME}"))
         .arg(format!("--memory-x={out_dir}/{LINKER_SCRIPT_NAME}"))
