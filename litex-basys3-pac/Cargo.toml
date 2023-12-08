@@ -14,10 +14,13 @@ bare-metal = "1.0"
 riscv = "0.10"
 vcell = "0.1"
 riscv-rt = { optional = true, version = "0.11" }
+critical-section = {optional = true, version = "1.1.2"}
 
 [build-dependencies]
 svd2rust = { version = "0.31", default-features = false }
+ldscript-parser = "0.2.0"
 
 [features]
 default = ["rt"]
 rt = ["dep:riscv-rt"]
+critical-section = ["dep:critical-section", "riscv/critical-section-single-hart"]

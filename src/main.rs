@@ -18,7 +18,7 @@ const SYSTEM_CLOCK_FREQUENCY: u32 = 100_000_000;
 
 #[entry]
 fn main() -> ! {
-    let peripherals = unsafe { Peripherals::steal() };
+    let peripherals = Peripherals::take().unwrap();
     let mut uart = Uart::new(peripherals.UART);
     writeln!(uart, "Peripherals initialized").unwrap();
 
