@@ -14,7 +14,7 @@ litex_hal::timer! {
     Timer: litex_basys3_pac::TIMER0,
 }
 
-const SYSTEM_CLOCK_FREQUENCY: u32 = 1_000_000;
+const SYSTEM_CLOCK_FREQUENCY: u32 = 100_000_000;
 
 #[entry]
 fn main() -> ! {
