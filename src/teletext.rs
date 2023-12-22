@@ -1,135 +1,103 @@
-use core::ptr;
+use crate::teletext_interface::{RawTeletextInterface, TeletextInterface};
+use crate::character_set::{NationalOptionCharacterSubset, char_to_teletext};
+use litex_basys3_pac::mem_map;
+use crate::error::{Result, TeletextError};
 
-pub enum NationalOptionCharacterSubset {
-    English,
-    German,
-    Swedish,
-    Finnish,
-    Hungarian,
-    Italian,
-    French,
-    Portuguese,
-    Spanish,
-    Czech,
-    Slovak,
-}
+const LINE_COUNT: u8 = 24;
+const COLUMN_COUNT: u8 = 40;
 
-impl NationalOptionCharacterSubset {
-    fn value(&self) -> u8 {
-        match *self {
-            NationalOptionCharacterSubset::English => 0b000,
-            NationalOptionCharacterSubset::German => 0b001,
-            NationalOptionCharacterSubset::Swedish |
-            NationalOptionCharacterSubset::Finnish |
-            NationalOptionCharacterSubset::Hungarian => 0b010,
-            NationalOptionCharacterSubset::Italian => 0b011,
-            NationalOptionCharacterSubset::French => 0b100,
-            NationalOptionCharacterSubset::Portuguese |
-            NationalOptionCharacterSubset::Spanish => 0b101,
-            NationalOptionCharacterSubset::Czech |
-            NationalOptionCharacterSubset::Slovak => 0b110,
-        }
-    }
-
-    fn from_value(val: u8) -> NationalOptionCharacterSubset {
-        match val {
-            0b000 => NationalOptionCharacterSubset::English,
-            0b001 => NationalOptionCharacterSubset::German,
-            0b010 => NationalOptionCharacterSubset::Swedish,
-            0b011 => NationalOptionCharacterSubset::Italian,
-            0b100 => NationalOptionCharacterSubset::French,
-            0b101 => NationalOptionCharacterSubset::Portuguese,
-            0b110 => NationalOptionCharacterSubset::Czech,
-            _ => panic!("Invalid National Option Character Subset")
-        }
-    }
-}
-
-struct ControlBits {
-    erase_page: bool,
-    newsflash: bool,
-    subtitle: bool,
-    suppress_header: bool,
-    update_indicator: bool,
-    interrupted_sequence: bool,
-    inhibit_display: bool,
-    magazine_serial: bool,
-    national_option_character_subset: NationalOptionCharacterSubset
+#[derive(Debug, Default, Clone, Copy)]
+pub struct ControlBits {
+    pub erase_page: bool,
+    pub newsflash: bool,
+    pub subtitle: bool,
+    pub suppress_header: bool,
+    pub update_indicator: bool,
+    pub interrupted_sequence: bool,
+    pub inhibit_display: bool,
+    pub magazine_serial: bool,
+    pub national_option_character_subset: NationalOptionCharacterSubset
 }
 
 pub struct TeletextChar(pub u8);
 
-pub trait TeletextInterface {
-    fn page_number(&self) -> u8;
-    fn magazine_number(&self) -> u8;
-    fn set_magazine_page_number(&self, new_magazine: u8, new_page: u8);
-    fn control_bits(&self) -> ControlBits;
-    fn set_control_bits(&self, new_control_bits: ControlBits);
-    fn write_char(&self, char: TeletextChar, col: u8, line: u8);
+pub struct Teletext<T: TeletextInterface> {
+    interface: T,
+    configuration: ControlBits,
+    page_number: u8,
+    magazine_number: u8,
 }
 
-pub(crate) struct RawTeletextInterface {
-    base_address: *mut u32
-}
 
-impl RawTeletextInterface {
-    pub(crate) unsafe fn new(base_address: usize) -> RawTeletextInterface {
-        return RawTeletextInterface {
-            base_address: base_address as *mut u32
-        }
-    }
-}
-
-impl TeletextInterface for RawTeletextInterface {
-    fn page_number(&self) -> u8 {
-        return unsafe { ptr::read_volatile(self.base_address as *const u8)}
+impl<T: TeletextInterface> Teletext<T> {
+    pub fn new(interface: T) -> Teletext<T> {
+        let teletext = Teletext {
+            page_number: interface.page_number(),
+            magazine_number: interface.magazine_number(),
+            configuration: interface.control_bits(),
+            interface,
+        };
+        teletext.init_page();
+        return teletext;
     }
 
-    fn magazine_number(&self) -> u8 {
-        return unsafe { ptr::read_volatile(self.base_address as *const u16) >> 8 } as u8
-    }
-
-    fn set_magazine_page_number(&self, new_magazine: u8, new_page: u8) {
-        let value = ((new_magazine as u16) << 8) | new_page as u16;
-        unsafe { ptr::write_volatile(self.base_address as *mut u16, value) }
-    }
-
-    fn control_bits(&self) -> ControlBits {
-        let part1 = unsafe { ptr::read_volatile(self.base_address.offset(4)) };
-        let part2 = unsafe { ptr::read_volatile(self.base_address.offset(5)) };
-        let part3 = unsafe { ptr::read_volatile(self.base_address.offset(6) as *const u8) };
-        return ControlBits {
-            erase_page: part1 & 1 != 0,
-            newsflash: part1 >> 8 & 1 != 0,
-            subtitle: part1 >> 16 & 1 != 0,
-            suppress_header: part1 >> 24 & 1 != 0,
-            update_indicator: part2 & 1 != 0,
-            interrupted_sequence: part2 >> 8 & 1 != 0,
-            inhibit_display: part2 >> 16 & 1 != 0,
-            magazine_serial: part2 >> 24 & 1 != 0,
-            national_option_character_subset: NationalOptionCharacterSubset::from_value(part3),
+    fn init_page(&self) {
+        for line in 0..LINE_COUNT {
+            for col in 0..COLUMN_COUNT {
+                self.set_char(' ', line, col).expect("The space character should always be convertable");
+            }
         }
     }
 
-    fn set_control_bits(&self, new_control_bits: ControlBits) {
-        let part1 = ((new_control_bits.suppress_header as u32) << 24) |
-            ((new_control_bits.subtitle as u32) << 16) |
-            ((new_control_bits.newsflash as u32) << 8) |
-            new_control_bits.erase_page as u32;
-        let part2 = ((new_control_bits.magazine_serial as u32) << 24) |
-            ((new_control_bits.inhibit_display as u32) << 16) |
-            ((new_control_bits.interrupted_sequence as u32) << 8) |
-            new_control_bits.update_indicator as u32;
-        let part3 = new_control_bits.national_option_character_subset.value();
-        unsafe {
-            ptr::write_volatile(self.base_address.offset(4), part1);
-            ptr::write_volatile(self.base_address.offset(5), part2);
-            ptr::write_volatile(self.base_address.offset(6) as *mut u8, part3);
+    pub fn set_char(&self, c: char, row: u8, col: u8) -> Result<()> {
+        if row >= LINE_COUNT {
+            return Err(TeletextError::OutOfBounds{param: stringify!(row), value: row as usize});
         }
+        if col >= COLUMN_COUNT {
+            return Err(TeletextError::OutOfBounds{param: stringify!(col), value: col as usize});
+        }
+        self.interface.write_char(char_to_teletext(c, self.configuration.national_option_character_subset)?, col, row);
+        Ok(())
     }
 
-    fn write_char(&self, char: TeletextChar, col: u8, line: u8) {
-        let value = ((line as u32) << 24) | ((col as u32) << 16) | char.0 as u32;
-        unsafe { ptr::write_volatile(self.base_address.offset(8), value) }
+    pub fn set_config(&mut self, config: ControlBits) {
+        self.configuration = config;
+        self.interface.set_control_bits(config);
+    }
+
+    pub fn get_config(&self) -> ControlBits {
+        self.configuration
+    }
+
+    pub fn set_page(&mut self, new_page: u8) {
+        self.page_number = new_page;
+        self.interface.set_magazine_page_number(self.magazine_number, new_page);
+    }
+
+    pub fn get_page(&self) -> u8 {
+        self.page_number
+    }
+
+    pub fn set_magazine(&mut self, new_magazine: u8) -> Result<()> {
+        if new_magazine > 7 {
+            return Err(TeletextError::OutOfBounds {
+                param: stringify!(new_magazine),
+                value: new_magazine as usize,
+            });
+        }
+        self.magazine_number = new_magazine;
+        self.interface.set_magazine_page_number(new_magazine, self.page_number);
+        Ok(())
+    }
+
+    pub fn get_magazine(&self) -> u8 {
+        self.magazine_number
+    }
+}
+
+impl Teletext<RawTeletextInterface> {
+    pub unsafe fn new_raw() -> Teletext<RawTeletextInterface> {
+        let interface = RawTeletextInterface::new(mem_map::TELETEXT_ORIGIN);
+        Teletext::new(interface)
     }
 }
