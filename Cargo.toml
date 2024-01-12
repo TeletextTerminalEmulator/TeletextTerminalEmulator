@@ -6,7 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-litex-hal = "0.4.0"
+litex-hal = { git = "https://github.com/PercyJW-2/rust-litex-hal.git" }
+# litex-hal = { path = "../rust-litex-hal" }
 litex-basys3-pac = { path = "./litex-basys3-pac", features = ["rt", "critical-section"] }
 panic-halt = "0.2.0"
 

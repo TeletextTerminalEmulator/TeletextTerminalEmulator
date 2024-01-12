@@ -7,6 +7,7 @@ mod character_set;
 mod error;
 
 use core::fmt::Write;
+use litex_hal::nb::block;
 use litex_hal::prelude::*;
 use litex_basys3_pac::{riscv_rt::entry, Peripherals};
 use crate::teletext::Teletext;
@@ -33,13 +34,14 @@ fn main() -> ! {
     for (col, ch) in "Hallo Welt!".chars().enumerate() {
         teletext.set_char(ch, 7, col as u8).expect("Values should be fine");
     }
-
-    let mut timer = Timer::new(peripherals.TIMER0, SYSTEM_CLOCK_FREQUENCY);
-    let mut uptime: u32 = 0;
     loop {
-        timer.delay_ms(1000_u32);
-        uptime += 1;
-        //teletext.set_char((((uptime % 0x60) as u8) + 0x20) as char, 0, 5);
-        writeln!(uart, "Uptime: {} seconds", uptime).unwrap();
+        let ch = block!(uart.read()).expect("Infallible");
+
+        teletext.set_char(ch as char, 8, 0).or_else( |error| {
+                teletext.set_char('?', 8, 0)
+            }
+        ).expect("Should be handled");
+        block!(uart.write(ch)).expect("Infallible");
     }
+
 }
