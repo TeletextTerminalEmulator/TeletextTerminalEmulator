@@ -48,4 +48,6 @@ package types_pkg is
     type TELETEXT_ARRAY is array (natural range <>) of TELETEXT_CHAR;
     subtype TELETEXT_LINE is TELETEXT_ARRAY(39 downto 0);
     type TELETEXT_FRAME is array (24 downto 0) of TELETEXT_LINE;
+    subtype TRIPLET is std_logic_vector(17 downto 0);
+    type TRIPLET_ARRAY is array (natural range <>) of TRIPLET;
 end package types_pkg;
