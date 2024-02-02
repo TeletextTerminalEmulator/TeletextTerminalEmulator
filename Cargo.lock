@@ -197,6 +197,7 @@ dependencies = [
 [[package]]
 name = "litex-hal"
 version = "0.4.0"
+source = "git+https://github.com/PercyJW-2/rust-litex-hal.git#c2b12ea869fb1834294aadf3db7ff21209e88af5"
 dependencies = [
  "embedded-hal",
  "nb 1.1.0",

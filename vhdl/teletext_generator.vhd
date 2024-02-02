@@ -94,14 +94,25 @@ component packet_page_header_generator
     );
 end component;
 
+component packet_enhancement_generator is
+    port(
+        DESIGNATION_IN : in unsigned(3 downto 0);
+        TRIPLETS_IN : in TRIPLET_ARRAY(12 downto 0);
+        PACKET_DATA : out STD_LOGIC_VECTOR (319 downto 0)
+    );
+end component;
+
 signal packet_trigger               : std_logic;
 signal load_trigger                 : std_logic;
 signal frame_trigger                : std_logic;
+signal packet_designator            : unsigned (3 downto 0) := (others => '0');
 signal teletext_packet              : std_logic_vector (359 downto 0) := (others => '1');
 signal teletext_normal_data         : std_logic_vector (319 downto 0);
 signal teletext_page_header_data    : std_logic_vector (319 downto 0); 
+signal teletext_enhancement_data    : std_logic_vector (319 downto 0);
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
+signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0);
 
 begin
 
@@ -136,6 +147,13 @@ begin
     port map(
         DATA_BYTES => LINE_IN,
         PACKET_DATA => teletext_normal_data
+    );
+    
+    packet_enhancement_gen : packet_enhancement_generator
+    port map(
+        DESIGNATION_IN => packet_designator,
+        TRIPLETS_IN => enhancement_triplets,
+        PACKET_DATA => teletext_enhancement_data
     );
     
     packet_page_header_gen : packet_page_header_generator
@@ -177,8 +195,11 @@ begin
     begin
         if current_line = 0 then
             teletext_packet(359 downto 40) <= teletext_page_header_data;
-        else
+        elsif current_line <= 24 then
             teletext_packet(359 downto 40) <= teletext_normal_data;
+        else
+            -- TODO: set Designation
+            teletext_packet(359 downto 40) <= teletext_enhancement_data;
         end if;
         
         if current_line <= 24 then

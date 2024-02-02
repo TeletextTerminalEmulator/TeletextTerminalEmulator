@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 26.01.2024 13:46:18
 -- Design Name: 
--- Module Name: packet_enhancement_gen - Behavioral
+-- Module Name: packet_enhancement_generator - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -15,7 +15,7 @@
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
 
 
@@ -32,13 +32,13 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity packet_enhancement_gen is
+entity packet_enhancement_generator is
     Port ( DESIGNATION_IN : in unsigned(3 downto 0);
            TRIPLETS_IN : in TRIPLET_ARRAY(12 downto 0);
            PACKET_DATA : out STD_LOGIC_VECTOR (319 downto 0));
-end packet_enhancement_gen;
+end packet_enhancement_generator;
 
-architecture Behavioral of packet_enhancement_gen is
+architecture Behavioral of packet_enhancement_generator is
 
     component hamming_8_4 is
         Port ( DATA_IN : in STD_LOGIC_VECTOR (3 downto 0);
