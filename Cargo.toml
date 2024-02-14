@@ -10,6 +10,8 @@ litex-hal = { git = "https://github.com/PercyJW-2/rust-litex-hal.git" }
 # litex-hal = { path = "../rust-litex-hal" }
 litex-basys3-pac = { path = "./litex-basys3-pac", features = ["rt", "critical-section"] }
 panic-halt = "0.2.0"
+embedded-alloc = "0.5.1"
+alacritty_terminal = { path = "./alacritty_terminal" }
 
 [workspace]
 members = ["litex-basys3-pac", "xtask"]

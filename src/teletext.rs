@@ -1,3 +1,4 @@
+use alacritty_terminal::grid::Dimensions;
 use crate::teletext_interface::{RawTeletextInterface, TeletextInterface};
 use crate::character_set::{NationalOptionCharacterSubset, char_to_teletext};
 use litex_basys3_pac::mem_map;
@@ -92,6 +93,22 @@ impl<T: TeletextInterface> Teletext<T> {
 
     pub fn get_magazine(&self) -> u8 {
         self.magazine_number
+    }
+}
+
+pub struct TeletextDimensions;
+
+impl Dimensions for TeletextDimensions {
+    fn total_lines(&self) -> usize {
+        self.screen_lines()
+    }
+
+    fn screen_lines(&self) -> usize {
+        24
+    }
+
+    fn columns(&self) -> usize {
+        40
     }
 }
 
