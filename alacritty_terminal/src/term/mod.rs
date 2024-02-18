@@ -19,7 +19,7 @@ use unicode_width::UnicodeWidthChar;
 
 use crate::event::{Event, EventListener, WindowSize};
 use crate::grid::{Dimensions, Grid, GridIterator, Scroll};
-use crate::index::{self, Boundary, Column, Direction, Line, Point, Side};
+use crate::index::{self, Boundary, Column, Direction, Line, Point};
 //use crate::selection::{Selection, SelectionRange, SelectionType};
 use crate::term::cell::{Cell, Flags, LineLength};
 use crate::term::color::Colors;
@@ -398,13 +398,6 @@ impl<T> Term<T> {
         self.grid.scroll_display(scroll);
         self.event_proxy.send_event(Event::MouseCursorDirty);
 
-        // Clamp vi mode cursor to the viewport.
-        let viewport_start = -(self.grid.display_offset() as i32);
-        let viewport_end = viewport_start + self.bottommost_line().0;
-        //let vi_cursor_line = &mut self.vi_mode_cursor.point.line.0;
-        //*vi_cursor_line = cmp::min(viewport_end, cmp::max(viewport_start, *vi_cursor_line));
-        //self.vi_mode_recompute_selection();
-
         // Damage everything if display offset changed.
         if old_display_offset != self.grid().display_offset() {
             self.mark_fully_damaged();
@@ -670,37 +663,16 @@ impl<T> Term<T> {
 
         debug!("New num_cols is {} and num_lines is {}", num_cols, num_lines);
 
-        // Move vi mode cursor with the content.
-        let history_size = self.history_size();
-        let mut delta = num_lines as i32 - old_lines as i32;
-        let min_delta = cmp::min(0, num_lines as i32 - self.grid.cursor.point.line.0 - 1);
-        delta = cmp::min(cmp::max(delta, min_delta), history_size as i32);
-        //self.vi_mode_cursor.point.line += delta;
-
         let is_alt = self.mode.contains(TermMode::ALT_SCREEN);
         self.grid.resize(!is_alt, num_lines, num_cols);
         self.inactive_grid.resize(is_alt, num_lines, num_cols);
 
-        // Invalidate selection and tabs only when necessary.
+        // Invalidate tabs only when necessary.
         if old_cols != num_cols {
-            //self.selection = None;
-
             // Recreate tabs list.
             self.tabs.resize(num_cols);
-        } /*else if let Some(selection) = self.selection.take() {
-            let max_lines = cmp::max(num_lines, old_lines) as i32;
-            let range = Line(0)..Line(max_lines);
-            self.selection = selection.rotate(self, &range, -delta);
-        }*/
+        }
 
-        // Clamp vi cursor to viewport.
-        //let vi_point = self.vi_mode_cursor.point;
-        let viewport_top = Line(-(self.grid.display_offset() as i32));
-        let viewport_bottom = viewport_top + self.bottommost_line();
-        /*self.vi_mode_cursor.point.line =
-            cmp::max(cmp::min(vi_point.line, viewport_bottom), viewport_top);
-        self.vi_mode_cursor.point.column = cmp::min(vi_point.column, self.last_column());
-        */
         // Reset scrolling region.
         self.scroll_region = Line(0)..Line(self.screen_lines() as i32);
 
@@ -751,16 +723,6 @@ impl<T> Term<T> {
 
         let region = origin..self.scroll_region.end;
 
-        // Scroll selection.
-        //self.selection =
-        //    self.selection.take().and_then(|s| s.rotate(self, &region, -(lines as i32)));
-
-        // Scroll vi mode cursor.
-        /*let line = &mut self.vi_mode_cursor.point.line;
-        if region.start <= *line && region.end > *line {
-            *line = cmp::min(*line + lines, region.end - 1);
-        }*/
-
         // Scroll between origin and bottom
         self.grid.scroll_down(&region, lines);
         self.mark_fully_damaged();
@@ -778,18 +740,8 @@ impl<T> Term<T> {
 
         let region = origin..self.scroll_region.end;
 
-        // Scroll selection.
-        //self.selection = self.selection.take().and_then(|s| s.rotate(self, &region, lines as i32));
-
         self.grid.scroll_up(&region, lines);
 
-        // Scroll vi mode cursor.
-        let viewport_top = Line(-(self.grid.display_offset() as i32));
-        let top = if region.start == 0 { viewport_top } else { region.start };
-        /*let line = &mut self.vi_mode_cursor.point.line;
-        if (top <= *line) && region.end > *line {
-            *line = cmp::max(*line - lines, top);
-        }*/
         self.mark_fully_damaged();
     }
 
@@ -1625,9 +1577,6 @@ impl<T: EventListener> Handler for Term<T> {
         for cell in &mut row[left..right] {
             *cell = bg.into();
         }
-
-        let range = self.grid.cursor.point.line..=self.grid.cursor.point.line;
-        //self.selection = self.selection.take().filter(|s| !s.intersects_range(range));
     }
 
     /// Set the indexed color value.
@@ -1656,12 +1605,10 @@ impl<T: EventListener> Handler for Term<T> {
             )
         });
 
-        unsafe {
-            self.event_proxy.send_event(Event::ColorRequest(
-                index,
-                Arc::from(func),
-            ));
-        }
+        self.event_proxy.send_event(Event::ColorRequest(
+            index,
+            Arc::from(func),
+        ));
     }
 
     /// Reset the indexed color to original value.
@@ -1747,9 +1694,6 @@ impl<T: EventListener> Handler for Term<T> {
                 for cell in &mut self.grid[cursor.line][..end] {
                     *cell = bg.into();
                 }
-
-                let range = Line(0)..=cursor.line;
-                //self.selection = self.selection.take().filter(|s| !s.intersects_range(range));
             },
             ansi::ClearMode::Below => {
                 let cursor = self.grid.cursor.point;
@@ -1760,23 +1704,12 @@ impl<T: EventListener> Handler for Term<T> {
                 if (cursor.line.0 as usize) < screen_lines - 1 {
                     self.grid.reset_region((cursor.line + 1)..);
                 }
-
-                let range = cursor.line..Line(screen_lines as i32);
-                //self.selection = self.selection.take().filter(|s| !s.intersects_range(range));
             },
             ansi::ClearMode::All => {
                 if self.mode.contains(TermMode::ALT_SCREEN) {
                     self.grid.reset_region(..);
                 } else {
-                    let old_offset = self.grid.display_offset();
-
                     self.grid.clear_viewport();
-
-                    // Compute number of lines scrolled by clearing the viewport.
-                    let lines = self.grid.display_offset().saturating_sub(old_offset);
-
-                    //self.vi_mode_cursor.point.line =
-                    //    (self.vi_mode_cursor.point.line - lines).grid_clamp(self, Boundary::Grid);
                 }
 
                 //self.selection = None;
