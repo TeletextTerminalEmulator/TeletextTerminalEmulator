@@ -30,9 +30,8 @@ fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<Strin
 
     cmd!(
         sh,
-        "cargo objcopy --target {TARGET} -- -O binary {bin_path}"
-    )
-    .run()?;
+        "cargo objcopy {release_flag...} --target {TARGET} -- -O binary {bin_path}"
+    ).run()?;
 
     Ok(bin_path)
 }
