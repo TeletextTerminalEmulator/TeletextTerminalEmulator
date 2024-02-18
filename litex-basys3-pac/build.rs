@@ -1,5 +1,5 @@
-use std::{env, error::Error, fs, process::Command};
 use ldscript_parser::RootItem;
+use std::{env, error::Error, fs, process::Command};
 use svd2rust::{Config, Target};
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -46,8 +46,12 @@ fn main() -> Result<(), Box<dyn Error>> {
                     let region_name = region.name.to_uppercase();
                     let region_origin = region.origin;
                     let region_length = region.length;
-                    mem_map_rs.push_str(&format!("pub const {region_name}_ORIGIN: usize = {region_origin};\n"));
-                    mem_map_rs.push_str(&format!("pub const {region_name}_LENGTH: usize = {region_length};\n"))
+                    mem_map_rs.push_str(&format!(
+                        "pub const {region_name}_ORIGIN: usize = {region_origin};\n"
+                    ));
+                    mem_map_rs.push_str(&format!(
+                        "pub const {region_name}_LENGTH: usize = {region_length};\n"
+                    ))
                 }
             }
             _ => {}

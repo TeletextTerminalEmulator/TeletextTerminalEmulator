@@ -1,6 +1,6 @@
-use core::fmt::Debug;
-use crate::teletext::TeletextChar;
 use crate::error::{Result, TeletextError};
+use crate::teletext::TeletextChar;
+use core::fmt::Debug;
 
 #[derive(Debug, Default, Copy, Clone)]
 pub enum NationalOptionCharacterSubset {
@@ -19,32 +19,23 @@ pub enum NationalOptionCharacterSubset {
 }
 
 impl NationalOptionCharacterSubset {
-
     fn has_char(&self, ch: char) -> Result<u8> {
         use NationalOptionCharacterSubset::*;
-        
+
         macro_rules! subset_code {
             ($pattern:pat, $code:expr) => {
                 match self {
                     $pattern => $code,
-                    _ => return Err(TeletextError::InvalidSubset(ch, *self))
+                    _ => return Err(TeletextError::InvalidSubset(ch, *self)),
                 }
             };
         }
 
         Ok(match ch {
-            '#' => {
-                match self {
-                    English |
-                    French  |
-                    Italian => 0x5f,
-                    Czech |
-                    Slovak |
-                    German |
-                    Swedish |
-                    Finnish => 0x23,
-                    _ => return Err(TeletextError::InvalidSubset(ch, *self))
-                }
+            '#' => match self {
+                English | French | Italian => 0x5f,
+                Czech | Slovak | German | Swedish | Finnish => 0x23,
+                _ => return Err(TeletextError::InvalidSubset(ch, *self)),
             },
             // English
             '£' => subset_code!(English | Italian, 0x23),
@@ -71,12 +62,10 @@ impl NationalOptionCharacterSubset {
             'ö' => subset_code!(German | Swedish | Finnish, 0x7c),
             'ü' => subset_code!(German, 0x7d),
             'ß' => subset_code!(German, 0x7e),
-            _ => return Err(TeletextError::InvalidChar(ch))
+            _ => return Err(TeletextError::InvalidChar(ch)),
         })
     }
-
 }
-
 
 pub fn char_to_teletext(ch: char, subset: NationalOptionCharacterSubset) -> Result<TeletextChar> {
     Ok(TeletextChar(match ch {
@@ -110,4 +99,3 @@ pub fn char_to_teletext(ch: char, subset: NationalOptionCharacterSubset) -> Resu
         _ => subset.has_char(ch)?,
     }))
 }
-
