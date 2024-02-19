@@ -12,6 +12,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         .arg(format!("--output-dir={out_dir}/litex_basys3"))
         .arg(format!("--soc-svd={out_dir}/{SVD_NAME}"))
         .arg(format!("--memory-x={out_dir}/{LINKER_SCRIPT_NAME}"))
+        .args(["--integrated-rom-size", "1048576"])
+        .args(["--integrated-sram-size", "131072"])
         .arg("--no-compile")
         .arg("--build")
         .status()?;
@@ -40,21 +42,18 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut mem_map_rs = String::new();
 
     for root_item in parsed_script {
-        match root_item {
-            RootItem::Memory { regions } => {
-                for region in regions {
-                    let region_name = region.name.to_uppercase();
-                    let region_origin = region.origin;
-                    let region_length = region.length;
-                    mem_map_rs.push_str(&format!(
-                        "pub const {region_name}_ORIGIN: usize = {region_origin};\n"
-                    ));
-                    mem_map_rs.push_str(&format!(
-                        "pub const {region_name}_LENGTH: usize = {region_length};\n"
-                    ))
-                }
+        if let RootItem::Memory { regions } = root_item {
+            for region in regions {
+                let region_name = region.name.to_uppercase();
+                let region_origin = region.origin;
+                let region_length = region.length;
+                mem_map_rs.push_str(&format!(
+                    "pub const {region_name}_ORIGIN: usize = {region_origin};\n"
+                ));
+                mem_map_rs.push_str(&format!(
+                    "pub const {region_name}_LENGTH: usize = {region_length};\n"
+                ))
             }
-            _ => {}
         }
     }
     fs::write("src/mem_map.rs", mem_map_rs)?;
