@@ -25,8 +25,9 @@ impl NationalOptionCharacterSubset {
             | NationalOptionCharacterSubset::Hungarian => 0b010,
             NationalOptionCharacterSubset::Italian => 0b011,
             NationalOptionCharacterSubset::French => 0b100,
-            NationalOptionCharacterSubset::Portuguese 
-            | NationalOptionCharacterSubset::Spanish => 0b101,
+            NationalOptionCharacterSubset::Portuguese | NationalOptionCharacterSubset::Spanish => {
+                0b101
+            }
             NationalOptionCharacterSubset::Czech | NationalOptionCharacterSubset::Slovak => 0b110,
         }
     }

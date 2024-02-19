@@ -11,6 +11,7 @@ litex-hal = { git = "https://github.com/PercyJW-2/rust-litex-hal.git" }
 litex-basys3-pac = { path = "./litex-basys3-pac", features = ["rt", "critical-section"] }
 embedded-alloc = "0.5.1"
 alacritty_terminal = { path = "./alacritty_terminal" }
+portable-atomic = { version = "1.4.0", features = ["critical-section"] }
 
 [workspace]
 members = ["litex-basys3-pac", "xtask"]

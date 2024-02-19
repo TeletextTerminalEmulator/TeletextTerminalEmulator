@@ -575,6 +575,7 @@ dependencies = [
  "embedded-alloc",
  "litex-basys3-pac",
  "litex-hal",
+ "portable-atomic 1.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
