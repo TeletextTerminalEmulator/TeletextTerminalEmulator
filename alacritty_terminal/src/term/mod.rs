@@ -20,10 +20,8 @@ use unicode_width::UnicodeWidthChar;
 use crate::event::{Event, EventListener, WindowSize};
 use crate::grid::{Dimensions, Grid, GridIterator, Scroll};
 use crate::index::{self, Boundary, Column, Direction, Line, Point};
-//use crate::selection::{Selection, SelectionRange, SelectionType};
 use crate::term::cell::{Cell, Flags, LineLength};
 use crate::term::color::Colors;
-//use crate::vi_mode::{ViModeCursor, ViMotion};
 use crate::vte::ansi::{
     self, Attr, CharsetIndex, Color, CursorShape, CursorStyle, Handler, Hyperlink, KeyboardModes,
     KeyboardModesApplyBehavior, NamedColor, NamedMode, NamedPrivateMode, PrivateMode, Rgb,
@@ -75,7 +73,7 @@ bitflags! {
         const MOUSE_MODE              = 0b0000_0000_0010_0000_0100_1000;
         const UTF8_MOUSE              = 0b0000_0000_0100_0000_0000_0000;
         const ALTERNATE_SCROLL        = 0b0000_0000_1000_0000_0000_0000;
-        const VI                      = 0b0000_0001_0000_0000_0000_0000;
+        //const VI                      = 0b0000_0001_0000_0000_0000_0000;
         const URGENCY_HINTS           = 0b0000_0010_0000_0000_0000_0000;
         const DISAMBIGUATE_ESC_CODES  = 0b0000_0100_0000_0000_0000_0000;
         const REPORT_EVENT_TYPES      = 0b0000_1000_0000_0000_0000_0000;
@@ -273,11 +271,6 @@ pub struct Term<T> {
     /// Terminal focus controlling the cursor shape.
     pub is_focused: bool,
 
-    /// Cursor for keyboard selection.
-    /*pub vi_mode_cursor: ViModeCursor,
-
-    pub selection: Option<Selection>,
-*/
     /// Currently active grid.
     ///
     /// Tracks the screen buffer currently in use. While the alternate screen buffer is active,
@@ -342,9 +335,6 @@ pub struct Config {
     /// Default cursor style to reset the cursor to.
     pub default_cursor_style: CursorStyle,
 
-    /// Cursor style for Vi mode.
-    pub vi_mode_cursor_style: Option<CursorStyle>,
-
     /// The characters which terminate semantic selection.
     ///
     /// The default value is [`SEMANTIC_ESCAPE_CHARS`].
@@ -363,7 +353,6 @@ impl Default for Config {
             scrolling_history: 10000,
             semantic_escape_chars: SEMANTIC_ESCAPE_CHARS.to_owned(),
             default_cursor_style: Default::default(),
-            vi_mode_cursor_style: Default::default(),
             kitty_keyboard: Default::default(),
             osc52: Default::default(),
         }
@@ -423,7 +412,6 @@ impl<T> Term<T> {
             grid,
             inactive_grid: alt,
             active_charset: Default::default(),
-            //vi_mode_cursor: Default::default(),
             tabs,
             mode: Default::default(),
             scroll_region,
@@ -435,7 +423,6 @@ impl<T> Term<T> {
             title_stack: Default::default(),
             keyboard_mode_stack: Default::default(),
             inactive_keyboard_mode_stack: Default::default(),
-            //selection: None,
             damage,
             config: options,
         }
@@ -521,35 +508,6 @@ impl<T> Term<T> {
         // Damage everything on config updates.
         self.mark_fully_damaged();
     }
-
-    /// Convert the active selection to a String.
-    /*pub fn selection_to_string(&self) -> Option<String> {
-        let selection_range = self.selection.as_ref().and_then(|s| s.to_range(self))?;
-        let SelectionRange { start, end, .. } = selection_range;
-
-        let mut res = String::new();
-
-        match self.selection.as_ref() {
-            Some(Selection { ty: SelectionType::Block, .. }) => {
-                for line in (start.line.0..end.line.0).map(Line::from) {
-                    res += self
-                        .line_to_string(line, start.column..end.column, start.column.0 != 0)
-                        .trim_end();
-                    res += "\n";
-                }
-
-                res += self.line_to_string(end.line, start.column..end.column, true).trim_end();
-            },
-            Some(Selection { ty: SelectionType::Lines, .. }) => {
-                res = self.bounds_to_string(start, end) + "\n";
-            },
-            _ => {
-                res = self.bounds_to_string(start, end);
-            },
-        }
-
-        Some(res)
-    }*/
 
     /// Convert range between two points to a String.
     pub fn bounds_to_string(&self, start: Point, end: Point) -> String {
@@ -706,7 +664,6 @@ impl<T> Term<T> {
 
         mem::swap(&mut self.grid, &mut self.inactive_grid);
         self.mode ^= TermMode::ALT_SCREEN;
-        //self.selection = None;
         self.mark_fully_damaged();
     }
 
@@ -766,76 +723,6 @@ impl<T> Term<T> {
         self.event_proxy.send_event(Event::Exit);
     }
 
-    /// Toggle the vi mode.
-    /*#[inline]
-    pub fn toggle_vi_mode(&mut self)
-    where
-        T: EventListener,
-    {
-        self.mode ^= TermMode::VI;
-
-        if self.mode.contains(TermMode::VI) {
-            let display_offset = self.grid.display_offset() as i32;
-            if self.grid.cursor.point.line > self.bottommost_line() - display_offset {
-                // Move cursor to top-left if terminal cursor is not visible.
-                let point = Point::new(Line(-display_offset), Column(0));
-                self.vi_mode_cursor = ViModeCursor::new(point);
-            } else {
-                // Reset vi mode cursor position to match primary cursor.
-                self.vi_mode_cursor = ViModeCursor::new(self.grid.cursor.point);
-            }
-        }
-
-        // Update UI about cursor blinking state changes.
-        self.event_proxy.send_event(Event::CursorBlinkingChange);
-    }
-
-    /// Move vi mode cursor.
-    #[inline]
-    pub fn vi_motion(&mut self, motion: ViMotion)
-    where
-        T: EventListener,
-    {
-        // Require vi mode to be active.
-        if !self.mode.contains(TermMode::VI) {
-            return;
-        }
-
-        // Move cursor.
-        self.vi_mode_cursor = self.vi_mode_cursor.motion(self, motion);
-        self.vi_mode_recompute_selection();
-    }
-
-    /// Move vi cursor to a point in the grid.
-    #[inline]
-    pub fn vi_goto_point(&mut self, point: Point)
-    where
-        T: EventListener,
-    {
-        // Move viewport to make point visible.
-        self.scroll_to_point(point);
-
-        // Move vi cursor to the point.
-        self.vi_mode_cursor.point = point;
-
-        self.vi_mode_recompute_selection();
-    }
-
-    /// Update the active selection to match the vi mode cursor position.
-    #[inline]
-    fn vi_mode_recompute_selection(&mut self) {
-        // Require vi mode to be active.
-        if !self.mode.contains(TermMode::VI) {
-            return;
-        }
-
-        // Update only if non-empty selection is present.
-        if let Some(selection) = self.selection.as_mut().filter(|s| !s.is_empty()) {
-            selection.update(self.vi_mode_cursor.point, Side::Left);
-            selection.include_all();
-        }
-    }
-    */
     /// Scroll display to point if it is outside of viewport.
     pub fn scroll_to_point(&mut self, point: Point)
     where
@@ -887,17 +774,9 @@ impl<T> Term<T> {
     }
 
     /// Active terminal cursor style.
-    ///
-    /// While vi mode is active, this will automatically return the vi mode cursor style.
     #[inline]
     pub fn cursor_style(&self) -> CursorStyle {
-        let cursor_style = self.cursor_style.unwrap_or(self.config.default_cursor_style);
-
-        if self.mode.contains(TermMode::VI) {
-            self.config.vi_mode_cursor_style.unwrap_or(cursor_style)
-        } else {
-            cursor_style
-        }
+        self.cursor_style.unwrap_or(self.config.default_cursor_style)
     }
 
     pub fn colors(&self) -> &Colors {
@@ -1711,16 +1590,9 @@ impl<T: EventListener> Handler for Term<T> {
                 } else {
                     self.grid.clear_viewport();
                 }
-
-                //self.selection = None;
             },
             ansi::ClearMode::Saved if self.history_size() > 0 => {
                 self.grid.clear_history();
-
-                /*self.vi_mode_cursor.point.line =
-                    self.vi_mode_cursor.point.line.grid_clamp(self, Boundary::Cursor);
-
-                self.selection = self.selection.take().filter(|s| !s.intersects_range(..Line(0)));*/
             },
             // We have no history to clear.
             ansi::ClearMode::Saved => (),
@@ -1756,13 +1628,9 @@ impl<T: EventListener> Handler for Term<T> {
         self.tabs = TabStops::new(self.columns());
         self.title_stack = Vec::new();
         self.title = None;
-        //self.selection = None;
-        //self.vi_mode_cursor = Default::default();
         self.keyboard_mode_stack = Default::default();
         self.inactive_keyboard_mode_stack = Default::default();
 
-        // Preserve vi mode across resets.
-        self.mode &= TermMode::VI;
         self.mode.insert(TermMode::default());
 
         self.event_proxy.send_event(Event::CursorBlinkingChange);
@@ -2286,17 +2154,16 @@ pub struct RenderableCursor {
 impl RenderableCursor {
     fn new<T>(term: &Term<T>) -> Self {
         // Cursor position.
-        //let vi_mode = term.mode().contains(TermMode::VI);
-        let mut point = /*if vi_mode { term.vi_mode_cursor.point } else {*/ term.grid.cursor.point /*}*/;
+        let mut point = term.grid.cursor.point;
         if term.grid[point].flags.contains(Flags::WIDE_CHAR_SPACER) {
             point.column -= 1;
         }
 
         // Cursor shape.
-        let shape = if /* !vi_mode &&*/ !term.mode().contains(TermMode::SHOW_CURSOR) {
-            CursorShape::Hidden
-        } else {
+        let shape = if term.mode().contains(TermMode::SHOW_CURSOR) {
             term.cursor_style().shape
+        } else {
+            CursorShape::Hidden
         };
 
         Self { shape, point }
@@ -2426,12 +2293,9 @@ pub mod test {
 mod tests {
     use super::*;
 
-    use core::mem;
-
     use crate::event::VoidListener;
-    use crate::grid::{Grid, Scroll};
-    use crate::index::{Column, Point, Side};
-    use crate::term::cell::{Cell, Flags};
+    use crate::grid::Scroll;
+    use crate::index::{Column, Point};
     use crate::term::test::TermSize;
     use crate::vte::ansi::{self, CharsetIndex, Handler, StandardCharset};
 

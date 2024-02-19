@@ -15,11 +15,8 @@ pub(crate) use portable_atomic as atomic;
 pub mod event;
 pub mod grid;
 pub mod index;
-//pub mod selection;
 pub mod sync;
 pub mod term;
-//pub mod thread;
-//pub mod vi_mode;
 
 pub use crate::grid::Grid;
 pub use crate::term::Term;

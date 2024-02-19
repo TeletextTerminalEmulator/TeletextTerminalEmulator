@@ -2,7 +2,6 @@
 //!
 //! Most importantly, a fair mutex is included.
 
-//use parking_lot::{Mutex, MutexGuard};
 use spin::{Mutex, MutexGuard};
 
 /// A fair mutex.
