@@ -13,5 +13,11 @@ embedded-alloc = "0.5.1"
 alacritty_terminal = { path = "./alacritty_terminal" }
 portable-atomic = { version = "1.4.0", features = ["critical-section"] }
 
+[profile.release]
+opt-level = "z"
+lto = true
+panic = "abort"
+codegen-units = 1
+
 [workspace]
 members = ["litex-basys3-pac", "xtask"]

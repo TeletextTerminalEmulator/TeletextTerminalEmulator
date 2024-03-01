@@ -13,7 +13,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .arg(format!("--soc-svd={out_dir}/{SVD_NAME}"))
         .arg(format!("--memory-x={out_dir}/{LINKER_SCRIPT_NAME}"))
         .args(["--integrated-rom-size", "1048576"])
-        .args(["--integrated-sram-size", "131072"])
+        .args(["--integrated-sram-size", "65536"])
         .arg("--no-compile")
         .arg("--build")
         .status()?;

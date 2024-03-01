@@ -41,9 +41,12 @@ fn synthesize(sh: &Shell, project_dir: &str, bin_path: &str) -> Result<()> {
     let build_script = format!("{project_dir}/litex/basys3_build.py");
     let out_dir = format!("{project_dir}/litex_build");
 
+    // 128 KiB = 131072 bytes
+    // 64  KiB = 65536 bytes
+
     cmd!(
         sh,
-        "python3 {build_script} --build --integrated-sram-size 131072 --integrated-rom-init={bin_path} --output-dir={out_dir} --no-compile-software"
+        "python3 {build_script} --build --integrated-sram-size 65536 --integrated-rom-init={bin_path} --output-dir={out_dir} --no-compile-software"
     ).run()?;
 
     Ok(())
