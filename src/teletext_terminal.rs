@@ -77,15 +77,16 @@ impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
 pub struct LitexTimeout;
 
 impl Timeout for LitexTimeout {
-    fn set_timeout(&mut self, duration: core::time::Duration) {
-        todo!()
+    fn set_timeout(&mut self, _duration: core::time::Duration) {
+        //TODO
     }
 
     fn clear_timeout(&mut self) {
-        todo!()
+        //TODO
     }
 
     fn pending_timeout(&self) -> bool {
-        todo!()
+        //TODO
+        false
     }
 }
