@@ -59,7 +59,7 @@ begin
     );
     
     triplets_ham :
-    for I in 0 to 17 generate
+    for I in 0 to 12 generate
         triplets_hamx : hamming_24_18 port map (
             DATA_IN => TRIPLETS_IN(I),
             DATA_OUT => PACKET_DATA((I * 24) + 23 + 8 downto I * 24 + 8)

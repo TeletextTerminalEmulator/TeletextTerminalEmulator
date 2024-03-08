@@ -112,9 +112,14 @@ signal teletext_page_header_data    : std_logic_vector (319 downto 0);
 signal teletext_enhancement_data    : std_logic_vector (319 downto 0);
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
-signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0);
+signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (others => (others => '0'));
 
 begin
+    --                          |----||---||-----|
+    enhancement_triplets(0) <= "011101001000000000";
+    enhancement_triplets(1) <= "000000010000011110";
+    enhancement_triplets(2) <= "000000110001000000";
+    enhancement_triplets(3) <= "111111111111110000";
 
     LINE_INDEX <= current_line;
 
@@ -191,7 +196,7 @@ begin
         end if;
     end process;
     
-    switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, packet_trigger)
+    switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, teletext_enhancement_data, packet_trigger)
     begin
         if current_line = 0 then
             teletext_packet(359 downto 40) <= teletext_page_header_data;
@@ -202,7 +207,7 @@ begin
             teletext_packet(359 downto 40) <= teletext_enhancement_data;
         end if;
         
-        if current_line <= 24 then
+        if current_line <= 25 then
             load_trigger <= packet_trigger;
         else
             load_trigger <= '0';
