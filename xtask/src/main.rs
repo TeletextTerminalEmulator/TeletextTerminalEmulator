@@ -20,6 +20,10 @@ struct BuildArgs {
 fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<String> {
     let release = args.release;
 
+    let env = (sh.push_env("CXX_riscv32i_unknown_none_elf", "clang++"),
+        sh.push_env("CXXFLAGS_riscv32i_unknown_none_elf", "--target=riscv32-unknown-none-elf"),
+        sh.push_env("BINDGEN_EXTRA_CLANG_ARGS_riscv32i_unknown_none_elf", "--target=riscv32-unknown-none-elf"));
+
     let release_flag = release.then_some("--release");
     const TARGET: &str = "riscv32i-unknown-none-elf";
 
@@ -34,6 +38,7 @@ fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<Strin
     )
     .run()?;
 
+    drop(env);
     Ok(bin_path)
 }
 
@@ -54,7 +59,7 @@ fn synthesize(sh: &Shell, project_dir: &str, bin_path: &str) -> Result<()> {
 
 fn main() -> Result<()> {
     let sh = Shell::new()?;
-    let project_dir = project_root::get_project_root()?
+        let project_dir = project_root::get_project_root()?
         .to_string_lossy()
         .to_string();
 
