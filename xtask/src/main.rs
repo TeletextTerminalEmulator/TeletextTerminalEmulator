@@ -28,14 +28,11 @@ fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<Strin
     let env = args.backtrace.then(|| {(
         sh.push_env("CXX_riscv32i_unknown_none_elf", "clang++"),
         sh.push_env(
-            "CXXFLAGS_riscv32i_unknown_none_elf",
-            "--target=riscv32-unknown-none-elf",
-        ),
-        sh.push_env(
             "BINDGEN_EXTRA_CLANG_ARGS_riscv32i_unknown_none_elf",
             "--target=riscv32-unknown-none-elf",
         ),
         match cmd!(sh, "llvm-ar")
+            .quiet()
             .ignore_stdout()
             .ignore_status()
             .ignore_stderr()
