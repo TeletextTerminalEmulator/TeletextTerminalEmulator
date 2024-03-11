@@ -5,4 +5,7 @@ xtask = "run --package xtask --"
 rustflags = [
   "-C", "link-arg=-Tmemory.x",
   "-C", "link-arg=-Tlink.x",
+  #"-C", "force-unwind-tables",
+  #"-C", "link-arg=-Wl",
+  #"-C", "link-arg=-Wl,backtrace\\eh_frame.ld"
 ]

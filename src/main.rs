@@ -25,6 +25,7 @@ use litex_hal::nb::{self, block};
 use litex_hal::prelude::*;
 use portable_atomic::{AtomicBool, Ordering};
 use teletext_terminal::LitexTimeout;
+use mini_backtrace::Backtrace;
 
 litex_hal::uart! {
     Uart: litex_basys3_pac::UART,
@@ -139,5 +140,13 @@ fn main() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     writeln!(lock_debug_uart!(), "{}", info).unwrap();
+    let bt = Backtrace::<16>::capture();
+    writeln!(lock_debug_uart!(), "Backtrace:").unwrap();
+    for frame in bt.frames {
+        writeln!(lock_debug_uart!(), "  {:#x}", frame).unwrap();
+    }
+    if bt.frames_omitted {
+        writeln!(lock_debug_uart!(), " ... <frames omitted>").unwrap();
+    }
     loop {}
 }

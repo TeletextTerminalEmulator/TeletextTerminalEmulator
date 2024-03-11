@@ -11,7 +11,7 @@ use super::Row;
 use crate::index::Line;
 
 /// Maximum number of buffered lines outside of the grid for performance optimization.
-const MAX_CACHE_SIZE: usize = 1_000;
+const MAX_CACHE_SIZE: usize = 10;
 
 /// A ring buffer for optimizing indexing and rotation.
 ///
@@ -70,7 +70,14 @@ impl<T> Storage<T> {
         T: Clone + Default,
     {
         // Initialize visible lines; the scrollback buffer is initialized dynamically.
-        let mut inner = Vec::with_capacity(visible_lines);
+        let mut inner = Vec::new();
+        if let Err(e) = inner.try_reserve(visible_lines) {
+            panic!("Could not reserve {visible_lines} lines. {e}");
+        }
+        //inner.try_reserve(visible_lines).expect(""); //TODO
+
+        // let mut inner = Vec::with_capacity(visible_lines);
+
         inner.resize_with(visible_lines, || Row::new(columns));
 
         Storage { inner, zero: 0, visible_lines, len: visible_lines }

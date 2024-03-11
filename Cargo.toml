@@ -12,6 +12,7 @@ litex-basys3-pac = { path = "./litex-basys3-pac", features = ["rt", "critical-se
 embedded-alloc = "0.5.1"
 alacritty_terminal = { path = "./alacritty_terminal" }
 portable-atomic = { version = "1.4.0", features = ["critical-section"] }
+mini-backtrace = "0.1.4"
 
 [profile.release]
 opt-level = "z"
