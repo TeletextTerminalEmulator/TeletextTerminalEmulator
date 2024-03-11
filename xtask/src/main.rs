@@ -20,9 +20,27 @@ struct BuildArgs {
 fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<String> {
     let release = args.release;
 
-    let env = (sh.push_env("CXX_riscv32i_unknown_none_elf", "clang++"),
-        sh.push_env("CXXFLAGS_riscv32i_unknown_none_elf", "--target=riscv32-unknown-none-elf"),
-        sh.push_env("BINDGEN_EXTRA_CLANG_ARGS_riscv32i_unknown_none_elf", "--target=riscv32-unknown-none-elf"));
+    let ar_env = match cmd!(sh, "llvm-ar")
+        .ignore_stdout()
+        .ignore_status()
+        .ignore_stderr()
+        .run()
+    {
+        Ok(_) => Some(sh.push_env("AR_riscv32i_unknown_none_elf", "llvm-ar")),
+        Err(_) => None,
+    };
+
+    let env = (
+        sh.push_env("CXX_riscv32i_unknown_none_elf", "clang++"),
+        sh.push_env(
+            "CXXFLAGS_riscv32i_unknown_none_elf",
+            "--target=riscv32-unknown-none-elf",
+        ),
+        sh.push_env(
+            "BINDGEN_EXTRA_CLANG_ARGS_riscv32i_unknown_none_elf",
+            "--target=riscv32-unknown-none-elf",
+        ),
+    );
 
     let release_flag = release.then_some("--release");
     const TARGET: &str = "riscv32i-unknown-none-elf";
@@ -39,12 +57,15 @@ fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<Strin
     .run()?;
 
     drop(env);
+    drop(ar_env);
     Ok(bin_path)
 }
 
 fn synthesize(sh: &Shell, project_dir: &str, bin_path: &str) -> Result<()> {
     let build_script = format!("{project_dir}/litex/basys3_build.py");
     let out_dir = format!("{project_dir}/litex_build");
+
+    let env = sh.push_env("PYTHONUTF8", "1");
 
     // 128 KiB = 131072 bytes
     // 64  KiB = 65536 bytes
@@ -54,12 +75,13 @@ fn synthesize(sh: &Shell, project_dir: &str, bin_path: &str) -> Result<()> {
         "python3 {build_script} --build --integrated-sram-size 65536 --integrated-rom-init={bin_path} --output-dir={out_dir} --no-compile-software"
     ).run()?;
 
+    drop(env);
     Ok(())
 }
 
 fn main() -> Result<()> {
     let sh = Shell::new()?;
-        let project_dir = project_root::get_project_root()?
+    let project_dir = project_root::get_project_root()?
         .to_string_lossy()
         .to_string();
 
