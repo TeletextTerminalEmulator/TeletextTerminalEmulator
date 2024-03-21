@@ -115,7 +115,10 @@ fn main() -> ! {
         }
     }
 
-    let term_config = Config::default();
+    let term_config = Config {
+        scrolling_history: 0,
+        ..Default::default()
+    };
 
     let mut term = Term::new(
         term_config,
