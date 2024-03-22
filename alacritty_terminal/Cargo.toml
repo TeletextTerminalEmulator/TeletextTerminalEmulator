@@ -19,7 +19,7 @@ portable-atomic_git = { package = "portable-atomic", git = "https://github.com/t
 portable-atomic-util = { git = "https://github.com/taiki-e/portable-atomic.git", features = ["alloc"]}
 #regex-automata = { version = "0.4.3", default-features = false, features = ["syntax", "nfa", "hybrid"] }
 unicode-width = "0.1"
-vte = { version = "0.13.0", default-features = false, features = ["ansi", "no_std"] }
+vte = { git = "https://github.com/jorolf/vte.git", default-features = false, features = ["ansi", "no_std"] }
 
 [dev-dependencies]
 serde_json = "1.0.0"

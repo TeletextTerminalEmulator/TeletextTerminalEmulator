@@ -13,7 +13,7 @@ use crate::teletext::{Teletext, TeletextDimensions};
 use crate::teletext_terminal::TeletextTerminalListener;
 use alacritty_terminal::sync::FairMutex;
 use alacritty_terminal::term::Config;
-use alacritty_terminal::vte::Parser;
+use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
 use core::convert::Infallible;
@@ -126,9 +126,7 @@ fn main() -> ! {
         TeletextTerminalListener(teletext.clone()),
     );
 
-    let mut parser = Parser::new();
-
-    //let mut parser = ansi::Processor::<LitexTimeout>::default();
+    let mut parser = ansi::Processor::<LitexTimeout>::default();
 
     writeln!(lock_debug_uart!(), "Starting event loop").unwrap();
 
