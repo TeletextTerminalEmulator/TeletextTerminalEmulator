@@ -160,6 +160,8 @@ fn main() -> ! {
 fn panic(info: &PanicInfo) -> ! {
     writeln!(lock_debug_uart!(), "Panic!").unwrap();
     writeln!(lock_debug_uart!(), "{}", info).unwrap();
+
+    writeln!(lock_debug_uart!(), "Memory usage: {}. Memory free: {}", HEAP.used(), HEAP.free()).unwrap();
     
     #[cfg(feature = "backtrace")]
     {
