@@ -73,7 +73,7 @@ fn synthesize(sh: &Shell, project_dir: &str, bin_path: &str) -> Result<()> {
 
     cmd!(
         sh,
-        "python3 {build_script} --build --integrated-sram-size 65536 --integrated-rom-init={bin_path} --output-dir={out_dir} --no-compile-software"
+        "python {build_script} --build --integrated-sram-size 65536 --integrated-rom-init={bin_path} --output-dir={out_dir} --no-compile-software"
     ).run()?;
 
     drop(env);
