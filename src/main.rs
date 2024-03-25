@@ -12,7 +12,7 @@ mod teletext_terminal;
 use crate::teletext::{Teletext, TeletextDimensions};
 use crate::teletext_terminal::TeletextTerminalListener;
 use alacritty_terminal::sync::FairMutex;
-use alacritty_terminal::term::Config;
+use alacritty_terminal::term::{Config, TermDamage};
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
@@ -72,15 +72,12 @@ enum Event {
     Redraw,
 }
 
-fn wait_for_event() -> nb::Result<Event, Infallible> {
+fn wait_for_event<T>(term: &Term<T>) -> nb::Result<Event, Infallible> {
     match lock_uart!().read() {
         Ok(byte) => Ok(Event::UartReceived(byte)),
         Err(nb::Error::WouldBlock) => {
-            if TELETEXT_VALID.load(Ordering::Relaxed) {
-                Err(nb::Error::WouldBlock)
-            } else {
-                Ok(Event::Redraw)
-            }
+            //TODO term damage
+            Ok(Event::Redraw)
         }
         Err(err) => Err(err),
     }
@@ -131,10 +128,14 @@ fn main() -> ! {
     writeln!(lock_debug_uart!(), "Starting event loop").unwrap();
 
     loop {
-        match block!(wait_for_event()).expect("Infallible") {
-            Event::UartReceived(byte) => parser.advance(&mut term, byte),
+        match block!(wait_for_event(&term)).expect("Infallible") {
+            Event::UartReceived(byte) => {
+                lock_debug_uart!().write(byte).unwrap();
+                parser.advance(&mut term, byte)
+            },
             Event::Redraw => {
                 for cell in term.grid().display_iter() {
+                    //writeln!(lock_debug_uart!(), "Cell at {}, {}: '{}'", cell.point.line, cell.point.column, cell.c).unwrap();
                     teletext
                         .set_char(
                             cell.c,
@@ -151,6 +152,7 @@ fn main() -> ! {
                         .unwrap();
                 }
                 TELETEXT_VALID.store(true, Ordering::Relaxed);
+                term.reset_damage();
             }
         }
     }

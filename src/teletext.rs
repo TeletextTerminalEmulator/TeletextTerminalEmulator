@@ -159,7 +159,7 @@ impl Dimensions for TeletextDimensions {
     }
 
     fn screen_lines(&self) -> usize {
-        24
+        23
     }
 
     fn columns(&self) -> usize {
