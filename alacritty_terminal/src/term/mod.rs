@@ -229,8 +229,13 @@ struct TermDamageState {
 
 impl TermDamageState {
     fn new(num_cols: usize, num_lines: usize) -> Self {
-        let lines =
-            (0..num_lines).map(|line| LineDamageBounds::undamaged(line, num_cols)).collect();
+        let mut lines = Vec::new();
+
+        if let Err(err) = lines.try_reserve(num_lines) {
+            panic!("Could not allocate term damage lines! {err}");
+        }
+
+        lines.extend((0..num_lines).map(|line| LineDamageBounds::undamaged(line, num_cols)));
 
         Self { full: true, lines, last_cursor: Default::default() }
     }

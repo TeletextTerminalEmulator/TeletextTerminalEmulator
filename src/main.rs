@@ -26,6 +26,9 @@ use litex_hal::prelude::*;
 use portable_atomic::{AtomicBool, Ordering};
 use teletext_terminal::LitexTimeout;
 
+#[cfg(feature = "backtrace")]
+use mini_backtrace::Backtrace;
+
 litex_hal::uart! {
     Uart: litex_basys3_pac::UART,
 }
@@ -100,7 +103,22 @@ fn main() -> ! {
     let teletext = Rc::new(unsafe { Teletext::new_raw() });
     writeln!(lock_debug_uart!(), "Peripherals initialized").unwrap();
 
-    let term_config = Config::default();
+    #[cfg(feature = "backtrace")]
+    {
+        writeln!(lock_debug_uart!(), "Backtrace:").unwrap();
+        let bt = Backtrace::<16>::capture();
+        for frame in bt.frames {
+            writeln!(lock_debug_uart!(), "  {:#x}", frame).unwrap();
+        }
+        if bt.frames_omitted {
+            writeln!(lock_debug_uart!(), " ... <frames omitted>").unwrap();
+        }
+    }
+
+    let term_config = Config {
+        scrolling_history: 0,
+        ..Default::default()
+    };
 
     let mut term = Term::new(
         term_config,
@@ -109,6 +127,8 @@ fn main() -> ! {
     );
 
     let mut parser = ansi::Processor::<LitexTimeout>::default();
+
+    writeln!(lock_debug_uart!(), "Starting event loop").unwrap();
 
     loop {
         match block!(wait_for_event()).expect("Infallible") {
@@ -138,6 +158,21 @@ fn main() -> ! {
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
+    writeln!(lock_debug_uart!(), "Panic!").unwrap();
     writeln!(lock_debug_uart!(), "{}", info).unwrap();
+
+    writeln!(lock_debug_uart!(), "Memory usage: {}. Memory free: {}", HEAP.used(), HEAP.free()).unwrap();
+    
+    #[cfg(feature = "backtrace")]
+    {
+        writeln!(lock_debug_uart!(), "Backtrace:").unwrap();
+        let bt = Backtrace::<16>::capture();
+        for frame in bt.frames {
+            writeln!(lock_debug_uart!(), "  {:#x}", frame).unwrap();
+        }
+        if bt.frames_omitted {
+            writeln!(lock_debug_uart!(), " ... <frames omitted>").unwrap();
+        }
+    }
     loop {}
 }
