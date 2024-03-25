@@ -1,5 +1,6 @@
 use ldscript_parser::RootItem;
 use std::{env, error::Error, fs, process::Command};
+use std::process::exit;
 use svd2rust::{Config, Target};
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -7,7 +8,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     const SVD_NAME: &str = "soc.svd";
     let out_dir = env::var("OUT_DIR")?;
 
-    Command::new("python3")
+    Command::new("python")
         .arg("../litex/basys3_build.py")
         .arg(format!("--output-dir={out_dir}/litex_basys3"))
         .arg(format!("--soc-svd={out_dir}/{SVD_NAME}"))
@@ -35,6 +36,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Write the generate peripheral access code
     fs::write("src/soc.rs", generation.lib_rs)?;
+
+    println!("written svd2rust");
 
     let raw_script = fs::read_to_string(format!("{out_dir}/{LINKER_SCRIPT_NAME}"))?;
     let parsed_script = ldscript_parser::parse(&raw_script)?;
