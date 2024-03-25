@@ -112,14 +112,19 @@ signal teletext_page_header_data    : std_logic_vector (319 downto 0);
 signal teletext_enhancement_data    : std_logic_vector (319 downto 0);
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
-signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (others => (others => '0'));
+signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (others => "111111111111110000");
 
 begin
-    --                          |----||---||-----|
-    enhancement_triplets(0) <= "011101001000000000";
-    enhancement_triplets(1) <= "000000010000011110";
-    enhancement_triplets(2) <= "000000110001000000";
-    enhancement_triplets(3) <= "111111111111110000";
+    --                              |----||---||-----|
+    --enhancement_triplets(12)    <= "011101001000000000";
+    --enhancement_triplets(11)    <= "000000010000011110";
+    --enhancement_triplets(10)    <= "000000110001000000";
+    --enhancement_triplets(9)     <= "111111111111110000";
+    
+    enhancement_triplets(0)     <= "011101001000000000";
+    enhancement_triplets(1)     <= "000000010000011110";
+    enhancement_triplets(2)     <= "000000110001000000";
+    enhancement_triplets(3)     <= "111111111111110000";
 
     LINE_INDEX <= current_line;
 
@@ -202,12 +207,14 @@ begin
             teletext_packet(359 downto 40) <= teletext_page_header_data;
         elsif current_line <= 24 then
             teletext_packet(359 downto 40) <= teletext_normal_data;
-        else
+        elsif current_line = 26 then
             -- TODO: set Designation
             teletext_packet(359 downto 40) <= teletext_enhancement_data;
+        else
+            teletext_packet(359 downto 40) <= (others => '0');
         end if;
         
-        if current_line <= 25 then
+        if current_line <= 24 or current_line = 26 then
             load_trigger <= packet_trigger;
         else
             load_trigger <= '0';
