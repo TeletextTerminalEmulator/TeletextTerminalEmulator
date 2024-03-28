@@ -12,7 +12,7 @@ mod teletext_terminal;
 use crate::teletext::{Teletext, TeletextDimensions};
 use crate::teletext_terminal::TeletextTerminalListener;
 use alacritty_terminal::sync::FairMutex;
-use alacritty_terminal::term::{Config, TermDamage};
+use alacritty_terminal::term::Config;
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
@@ -74,12 +74,15 @@ enum Event {
     Redraw,
 }
 
-fn wait_for_event<T>(term: &Term<T>) -> nb::Result<Event, Infallible> {
+fn wait_for_event() -> nb::Result<Event, Infallible> {
     match lock_uart!().read() {
         Ok(byte) => Ok(Event::UartReceived(byte)),
         Err(nb::Error::WouldBlock) => {
-            //TODO term damage
-            Ok(Event::Redraw)
+            if TELETEXT_VALID.load(Ordering::Relaxed) {
+                Err(nb::Error::WouldBlock)
+            } else {
+                Ok(Event::Redraw)
+            }
         }
         Err(err) => Err(err),
     }
@@ -130,11 +133,12 @@ fn main() -> ! {
     writeln!(lock_debug_uart!(), "Starting event loop").unwrap();
 
     loop {
-        match block!(wait_for_event(&term)).expect("Infallible") {
+        match block!(wait_for_event()).expect("Infallible") {
             Event::UartReceived(byte) => {
                 lock_debug_uart!().write(byte).unwrap();
-                parser.advance(&mut term, byte)
-            },
+                parser.advance(&mut term, byte);
+                TELETEXT_VALID.store(false, Ordering::Relaxed);
+            }
             Event::Redraw => {
                 let mut teletext = teletext.borrow_mut();
 
@@ -174,7 +178,7 @@ fn panic(info: &PanicInfo) -> ! {
         HEAP.free()
     )
     .unwrap();
-    
+
     #[cfg(feature = "backtrace")]
     {
         writeln!(lock_debug_uart!(), "Backtrace:").unwrap();

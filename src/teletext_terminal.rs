@@ -68,7 +68,7 @@ impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
                     .expect("Ansi sequences should always be writeable");
             }
             Event::CursorBlinkingChange => {}
-            Event::Wakeup => crate::TELETEXT_VALID.store(false, portable_atomic::Ordering::Relaxed),
+            Event::Wakeup => {}
             Event::Bell => {}
             Event::Exit => unimplemented!(),
         }
