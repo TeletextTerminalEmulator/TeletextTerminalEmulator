@@ -1,4 +1,4 @@
-use core::{fmt::Write, iter::repeat};
+use core::{cell::RefCell, fmt::Write, iter::repeat};
 
 use alacritty_terminal::{
     event::{Event, EventListener, WindowSize},
@@ -14,7 +14,7 @@ use crate::{
 const HEADER_OFFSET: u8 = 8;
 const HEADER_LENGTH: u8 = teletext::COLUMN_COUNT - HEADER_OFFSET;
 
-pub struct TeletextTerminalListener<T: TeletextInterface>(pub Rc<Teletext<T>>);
+pub struct TeletextTerminalListener<T: TeletextInterface>(pub Rc<RefCell<Teletext<T>>>);
 
 impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
     fn send_event(&self, event: Event) {
@@ -27,6 +27,7 @@ impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
                     .take(HEADER_LENGTH as usize);
 
                 self.0
+                    .borrow_mut()
                     .set_line(title_line, 0, HEADER_OFFSET, Some('?'))
                     .expect("Title line should never exceed bounds");
             }
@@ -34,6 +35,7 @@ impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
                 let reset_title = repeat(' ').take(HEADER_LENGTH as usize);
 
                 self.0
+                    .borrow_mut()
                     .set_line(reset_title, 0, HEADER_OFFSET, Some('?'))
                     .expect("Resetting the title should never fail");
             }

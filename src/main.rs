@@ -16,6 +16,7 @@ use alacritty_terminal::term::{Config, TermDamage};
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
+use core::cell::RefCell;
 use core::convert::Infallible;
 use core::fmt::Write;
 use core::panic::PanicInfo;
@@ -37,6 +38,7 @@ litex_hal::timer! {
     Timer: litex_basys3_pac::TIMER0,
 }
 
+#[allow(dead_code)]
 const SYSTEM_CLOCK_FREQUENCY: u32 = 100_000_000;
 
 #[global_allocator]
@@ -97,7 +99,7 @@ fn main() -> ! {
 
     *DEBUG_UART.lock_unfair() = Some(uart);
 
-    let teletext = Rc::new(unsafe { Teletext::new_raw() });
+    let teletext = Rc::new(RefCell::new(unsafe { Teletext::new_raw() }));
     writeln!(lock_debug_uart!(), "Peripherals initialized").unwrap();
 
     #[cfg(feature = "backtrace")]
@@ -134,8 +136,9 @@ fn main() -> ! {
                 parser.advance(&mut term, byte)
             },
             Event::Redraw => {
+                let mut teletext = teletext.borrow_mut();
+
                 for cell in term.grid().display_iter() {
-                    //writeln!(lock_debug_uart!(), "Cell at {}, {}: '{}'", cell.point.line, cell.point.column, cell.c).unwrap();
                     teletext
                         .set_char(
                             cell.c,
@@ -151,6 +154,7 @@ fn main() -> ! {
                         })
                         .unwrap();
                 }
+
                 TELETEXT_VALID.store(true, Ordering::Relaxed);
                 term.reset_damage();
             }
@@ -163,7 +167,13 @@ fn panic(info: &PanicInfo) -> ! {
     writeln!(lock_debug_uart!(), "Panic!").unwrap();
     writeln!(lock_debug_uart!(), "{}", info).unwrap();
 
-    writeln!(lock_debug_uart!(), "Memory usage: {}. Memory free: {}", HEAP.used(), HEAP.free()).unwrap();
+    writeln!(
+        lock_debug_uart!(),
+        "Memory usage: {}. Memory free: {}",
+        HEAP.used(),
+        HEAP.free()
+    )
+    .unwrap();
     
     #[cfg(feature = "backtrace")]
     {

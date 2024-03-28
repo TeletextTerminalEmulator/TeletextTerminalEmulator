@@ -1,6 +1,5 @@
 use ldscript_parser::RootItem;
 use std::{env, error::Error, fs, process::Command};
-use std::process::exit;
 use svd2rust::{Config, Target};
 
 fn main() -> Result<(), Box<dyn Error>> {

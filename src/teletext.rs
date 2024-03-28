@@ -23,6 +23,7 @@ pub struct ControlBits {
 #[derive(Debug, Default, Clone, Copy)]
 pub struct TeletextChar(pub u8);
 
+#[derive(Debug)]
 pub struct Teletext<T: TeletextInterface> {
     interface: T,
     configuration: ControlBits,
@@ -30,19 +31,20 @@ pub struct Teletext<T: TeletextInterface> {
     magazine_number: u8,
 }
 
+#[allow(dead_code)]
 impl<T: TeletextInterface> Teletext<T> {
     pub fn new(interface: T) -> Teletext<T> {
-        let teletext = Teletext {
+        let mut teletext = Teletext {
             page_number: interface.page_number(),
             magazine_number: interface.magazine_number(),
             configuration: interface.control_bits(),
             interface,
         };
         teletext.init_page();
-        return teletext;
+        teletext
     }
 
-    fn init_page(&self) {
+    fn init_page(&mut self) {
         for line in 0..LINE_COUNT {
             for col in 0..COLUMN_COUNT {
                 self.set_char(' ', line, col)
@@ -51,7 +53,7 @@ impl<T: TeletextInterface> Teletext<T> {
         }
     }
 
-    pub fn set_char(&self, c: char, line: u8, col: u8) -> Result<()> {
+    pub fn set_char(&mut self, c: char, line: u8, col: u8) -> Result<()> {
         if line >= LINE_COUNT {
             return Err(TeletextError::OutOfBounds {
                 param: stringify!(line),
@@ -76,7 +78,7 @@ impl<T: TeletextInterface> Teletext<T> {
     ///
     /// In the case of the input being too long, the input gets printed until the end of the line and a [`TeletextError::OutOfBounds`] is returned
     pub fn set_line(
-        &self,
+        &mut self,
         line: impl Iterator<Item = char>,
         line_num: u8,
         col_offset: u8,

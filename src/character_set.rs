@@ -2,6 +2,7 @@ use crate::error::{Result, TeletextError};
 use crate::teletext::TeletextChar;
 use core::fmt::Debug;
 
+#[allow(dead_code)]
 #[derive(Debug, Default, Copy, Clone)]
 pub enum NationalOptionCharacterSubset {
     #[default]

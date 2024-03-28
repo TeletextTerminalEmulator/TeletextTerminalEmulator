@@ -5,12 +5,13 @@ use core::ptr;
 pub trait TeletextInterface {
     fn page_number(&self) -> u8;
     fn magazine_number(&self) -> u8;
-    fn set_magazine_page_number(&self, new_magazine: u8, new_page: u8);
+    fn set_magazine_page_number(&mut self, new_magazine: u8, new_page: u8);
     fn control_bits(&self) -> ControlBits;
-    fn set_control_bits(&self, new_control_bits: ControlBits);
-    fn write_char(&self, char: TeletextChar, col: u8, line: u8);
+    fn set_control_bits(&mut self, new_control_bits: ControlBits);
+    fn write_char(&mut self, char: TeletextChar, col: u8, line: u8);
 }
 
+#[derive(Debug)]
 pub(crate) struct RawTeletextInterface {
     base_address: *mut u32,
 }
@@ -48,22 +49,22 @@ impl NationalOptionCharacterSubset {
 
 impl RawTeletextInterface {
     pub(crate) unsafe fn new(base_address: usize) -> RawTeletextInterface {
-        return RawTeletextInterface {
+        RawTeletextInterface {
             base_address: base_address as *mut u32,
-        };
+        }
     }
 }
 
 impl TeletextInterface for RawTeletextInterface {
     fn page_number(&self) -> u8 {
-        return unsafe { ptr::read_volatile(self.base_address as *const u8) };
+        unsafe { ptr::read_volatile(self.base_address as *const u8) }
     }
 
     fn magazine_number(&self) -> u8 {
-        return unsafe { ptr::read_volatile(self.base_address as *const u16) >> 8 } as u8;
+        (unsafe { ptr::read_volatile(self.base_address as *const u16) >> 8 }) as u8
     }
 
-    fn set_magazine_page_number(&self, new_magazine: u8, new_page: u8) {
+    fn set_magazine_page_number(&mut self, new_magazine: u8, new_page: u8) {
         let value = ((new_magazine as u16) << 8) | new_page as u16;
         unsafe { ptr::write_volatile(self.base_address as *mut u16, value) }
     }
@@ -72,7 +73,8 @@ impl TeletextInterface for RawTeletextInterface {
         let part1 = unsafe { ptr::read_volatile(self.base_address.offset(4)) };
         let part2 = unsafe { ptr::read_volatile(self.base_address.offset(5)) };
         let part3 = unsafe { ptr::read_volatile(self.base_address.offset(6) as *const u8) };
-        return ControlBits {
+
+        ControlBits {
             erase_page: part1 & 1 != 0,
             newsflash: part1 >> 8 & 1 != 0,
             subtitle: part1 >> 16 & 1 != 0,
@@ -82,10 +84,10 @@ impl TeletextInterface for RawTeletextInterface {
             inhibit_display: part2 >> 16 & 1 != 0,
             magazine_serial: part2 >> 24 & 1 != 0,
             national_option_character_subset: NationalOptionCharacterSubset::from_value(part3),
-        };
+        }
     }
 
-    fn set_control_bits(&self, new_control_bits: ControlBits) {
+    fn set_control_bits(&mut self, new_control_bits: ControlBits) {
         let part1 = ((new_control_bits.suppress_header as u32) << 24)
             | ((new_control_bits.subtitle as u32) << 16)
             | ((new_control_bits.newsflash as u32) << 8)
@@ -102,7 +104,7 @@ impl TeletextInterface for RawTeletextInterface {
         }
     }
 
-    fn write_char(&self, char: TeletextChar, col: u8, line: u8) {
+    fn write_char(&mut self, char: TeletextChar, col: u8, line: u8) {
         let value = ((line as u32) << 24) | ((col as u32) << 16) | char.0 as u32;
         unsafe { ptr::write_volatile(self.base_address.offset(8), value) }
     }
