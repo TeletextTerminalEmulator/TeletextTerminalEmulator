@@ -1,23 +1,28 @@
-use alloc::{format, vec::Vec};
+use pc_keyboard::{DecodedKey, EventDecoder, KeyboardLayout, ScancodeSet, ScancodeSet2};
 
-#[derive(Debug)]
-pub struct PS2(litex_basys3_pac::PS2);
-
-fn map_ps2_to_unicode(scancode: u8) -> Vec<u8> {
-    format!("{scancode:x}").into_bytes()
+pub struct PS2<T: KeyboardLayout> {
+    interface: litex_basys3_pac::PS2,
+    scancode_set: ScancodeSet2,
+    event_decoder: EventDecoder<T>
 }
 
-impl PS2 {
+impl<T: KeyboardLayout> PS2<T> {
 
-    pub fn new(ps2: litex_basys3_pac::PS2) -> Self {
-        Self(ps2)
+    pub fn new(interface: litex_basys3_pac::PS2, layout: T) -> Self {
+        Self { interface, scancode_set: ScancodeSet2::new(), event_decoder: EventDecoder::new(layout, pc_keyboard::HandleControl::Ignore) }
     }
 
-    pub fn try_read(&self) -> Option<Vec<u8>> {
-        if self.0.data_available().read().data_available().bit_is_set() {
-            Some(map_ps2_to_unicode(self.0.scancode().read().scancode().bits()))
-        } else {
-            None
+    pub fn try_read(&mut self) -> Option<DecodedKey> {
+        while self.interface.data_available().read().data_available().bit_is_set() {
+            let scancode = self.interface.scancode().read().scancode().bits();
+
+            if let Some(event) = self.scancode_set.advance_state(scancode).expect("Interface should always output valid scancodes") {
+                if let Some(decoded_key) = self.event_decoder.process_keyevent(event) {
+                    return Some(decoded_key);
+                }
+            }
         }
+
+        None
     }
 }

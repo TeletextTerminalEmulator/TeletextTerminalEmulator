@@ -76,8 +76,8 @@ _io = [
 
     # USB PS/2
     ("usbhost", 0,
-       Subsignal("ps2_clk", Pins("B6")),
-       Subsignal("ps2_data", Pins("A6")),
+       Subsignal("ps2_clk", Pins("C17")),
+       Subsignal("ps2_data", Pins("B17")),
        IOStandard("LVCMOS33")
     ),
 

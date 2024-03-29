@@ -17,7 +17,7 @@ use alacritty_terminal::term::Config;
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
-use alloc::vec::Vec;
+use pc_keyboard::{DecodedKey, KeyboardLayout};
 use ps2::PS2;
 use core::cell::RefCell;
 use core::convert::Infallible;
@@ -74,16 +74,16 @@ pub(crate) use lock_uart;
 
 enum Event {
     UartReceived(u8),
-    KeyPressed(Vec<u8>),
+    KeyboardEvent(DecodedKey),
     Redraw,
 }
 
-fn wait_for_event(ps2: &PS2) -> nb::Result<Event, Infallible> {
+fn wait_for_event<T: KeyboardLayout>(ps2: &mut PS2<T>) -> nb::Result<Event, Infallible> {
     match lock_uart!().read() {
         Ok(byte) => Ok(Event::UartReceived(byte)),
         Err(nb::Error::WouldBlock) => {
             match ps2.try_read() {
-                Some(data) => Ok(Event::KeyPressed(data)),
+                Some(data) => Ok(Event::KeyboardEvent(data)),
                 None => {
                     if !TELETEXT_VALID.load(Ordering::Relaxed) {
                         Ok(Event::Redraw)
@@ -109,7 +109,7 @@ fn main() -> ! {
     let peripherals = Peripherals::take().unwrap();
 
     let uart = Uart::new(peripherals.UART);
-    let ps2 = ps2::PS2::new(peripherals.PS2);
+    let mut ps2 = ps2::PS2::new(peripherals.PS2, pc_keyboard::layouts::De105Key);
 
     *DEBUG_UART.lock_unfair() = Some(uart);
 
@@ -144,14 +144,21 @@ fn main() -> ! {
     writeln!(lock_debug_uart!(), "Starting event loop").unwrap();
 
     loop {
-        match block!(wait_for_event(&ps2)).expect("Infallible") {
+        match block!(wait_for_event(&mut ps2)).expect("Infallible") {
             Event::UartReceived(byte) => {
                 lock_uart!().write(byte).unwrap();
                 parser.advance(&mut term, byte);
                 TELETEXT_VALID.store(false, Ordering::Relaxed);
             }
-            Event::KeyPressed(key) => {
-                lock_uart!().bwrite_all(&key).unwrap();
+            Event::KeyboardEvent(key) => {
+                // TODO check term modes for different reporting modes
+
+                match key {
+                    DecodedKey::RawKey(_keycode) => {
+                        // TODO
+                    },
+                    DecodedKey::Unicode(c) => lock_uart!().write_char(c).unwrap(),
+                }
             }
             Event::Redraw => {
                 let mut teletext = teletext.borrow_mut();
