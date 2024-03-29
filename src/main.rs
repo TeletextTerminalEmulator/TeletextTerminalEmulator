@@ -8,6 +8,7 @@ mod error;
 mod teletext;
 mod teletext_interface;
 mod teletext_terminal;
+mod ps2;
 
 use crate::teletext::{Teletext, TeletextDimensions};
 use crate::teletext_terminal::TeletextTerminalListener;
@@ -16,6 +17,8 @@ use alacritty_terminal::term::Config;
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
+use alloc::vec::Vec;
+use ps2::PS2;
 use core::cell::RefCell;
 use core::convert::Infallible;
 use core::fmt::Write;
@@ -71,17 +74,23 @@ pub(crate) use lock_uart;
 
 enum Event {
     UartReceived(u8),
+    KeyPressed(Vec<u8>),
     Redraw,
 }
 
-fn wait_for_event() -> nb::Result<Event, Infallible> {
+fn wait_for_event(ps2: &PS2) -> nb::Result<Event, Infallible> {
     match lock_uart!().read() {
         Ok(byte) => Ok(Event::UartReceived(byte)),
         Err(nb::Error::WouldBlock) => {
-            if TELETEXT_VALID.load(Ordering::Relaxed) {
-                Err(nb::Error::WouldBlock)
-            } else {
-                Ok(Event::Redraw)
+            match ps2.try_read() {
+                Some(data) => Ok(Event::KeyPressed(data)),
+                None => {
+                    if !TELETEXT_VALID.load(Ordering::Relaxed) {
+                        Ok(Event::Redraw)
+                    } else {
+                        Err(nb::Error::WouldBlock)
+                    }
+                },
             }
         }
         Err(err) => Err(err),
@@ -98,7 +107,9 @@ fn main() -> ! {
     }
 
     let peripherals = Peripherals::take().unwrap();
+
     let uart = Uart::new(peripherals.UART);
+    let ps2 = ps2::PS2::new(peripherals.PS2);
 
     *DEBUG_UART.lock_unfair() = Some(uart);
 
@@ -133,11 +144,14 @@ fn main() -> ! {
     writeln!(lock_debug_uart!(), "Starting event loop").unwrap();
 
     loop {
-        match block!(wait_for_event()).expect("Infallible") {
+        match block!(wait_for_event(&ps2)).expect("Infallible") {
             Event::UartReceived(byte) => {
-                lock_debug_uart!().write(byte).unwrap();
+                lock_uart!().write(byte).unwrap();
                 parser.advance(&mut term, byte);
                 TELETEXT_VALID.store(false, Ordering::Relaxed);
+            }
+            Event::KeyPressed(key) => {
+                lock_uart!().bwrite_all(&key).unwrap();
             }
             Event::Redraw => {
                 let mut teletext = teletext.borrow_mut();

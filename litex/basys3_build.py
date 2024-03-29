@@ -11,6 +11,7 @@ from migen import *
 from litex.gen import *
 
 import basys3_constraints
+from ps2_interface import PS2Interface
 
 from litex.soc.cores.clock import *
 from litex.soc.integration.soc import SoCRegion
@@ -86,6 +87,8 @@ class BaseSoC(SoCCore):
 
         teletext_region = SoCRegion(origin=0x80000000, size=2**6, cached=False)
         self.bus.add_slave(name="teletext", slave=bus, region=teletext_region)
+
+        self.ps2 = PS2Interface(pads = platform.request("usbhost"))
 
         # Leds -------------------------------------------------------------------------------------
         if with_led_chaser:
