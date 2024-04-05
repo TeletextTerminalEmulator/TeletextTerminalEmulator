@@ -112,7 +112,13 @@ signal teletext_page_header_data    : std_logic_vector (319 downto 0);
 signal teletext_enhancement_data    : std_logic_vector (319 downto 0);
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
-signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (others => "111111111111110000");
+signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
+    others => (
+        ADDRESS => (others => '0'),
+        MODE => (others => '0'),
+        DATA => (others => '0')
+    )
+);
 
 begin
     --                              |----||---||-----|
@@ -121,10 +127,26 @@ begin
     --enhancement_triplets(10)    <= "000000110001000000";
     --enhancement_triplets(9)     <= "111111111111110000";
     
-    enhancement_triplets(0)     <= "011101001000000000";
-    enhancement_triplets(1)     <= "000000010000011110";
-    enhancement_triplets(2)     <= "000000110001000000";
-    enhancement_triplets(3)     <= "111111111111110000";
+    enhancement_triplets(0)     <= (
+        ADDRESS => to_unsigned(41, TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(4, TRIPLET.MODE'length),
+        DATA => (others => '0')
+    );
+    enhancement_triplets(1)     <= (
+        ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(2, TRIPLET.MODE'length),
+        DATA => "0011110"
+    );
+    enhancement_triplets(2)     <= (
+        ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(3, TRIPLET.MODE'length),
+        DATA => "0100000"
+    );
+    enhancement_triplets(3)     <= (
+        ADDRESS => (others => '1'),
+        MODE => (others => '1'),
+        DATA => "1110000"
+    );
 
     LINE_INDEX <= current_line;
 

@@ -41,7 +41,7 @@ fn main() -> Result<()> {
 
     cmd!(
         sh,
-        "python3 {build_script} --build --integrated-rom-init={bin_path} --output-dir={out_dir} --no-compile-software"
+        "python {build_script} --build --integrated-rom-init={bin_path} --output-dir={out_dir} --no-compile-software"
     ).run()?;
 
     Ok(())

@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -48,6 +48,12 @@ package types_pkg is
     type TELETEXT_ARRAY is array (natural range <>) of TELETEXT_CHAR;
     subtype TELETEXT_LINE is TELETEXT_ARRAY(39 downto 0);
     type TELETEXT_FRAME is array (24 downto 0) of TELETEXT_LINE;
-    subtype TRIPLET is std_logic_vector(17 downto 0);
+    
+    
+    type TRIPLET is record
+        ADDRESS: unsigned(5 downto 0);
+        MODE: unsigned(4 downto 0);
+        DATA: std_logic_vector(6 downto 0);
+    end record TRIPLET;
     type TRIPLET_ARRAY is array (natural range <>) of TRIPLET;
 end package types_pkg;
