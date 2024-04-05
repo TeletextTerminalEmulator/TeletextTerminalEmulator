@@ -71,6 +71,7 @@ macro_rules! lock_uart {
 }
 
 pub(crate) use lock_uart;
+pub(crate) use lock_debug_uart;
 
 enum Event {
     UartReceived(u8),
