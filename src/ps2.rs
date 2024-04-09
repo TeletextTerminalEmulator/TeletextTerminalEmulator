@@ -19,7 +19,10 @@ impl<T: KeyboardLayout> PS2<T> {
         while self.interface.data_available().read().data_available().bit_is_set() {
             let scancode = self.interface.scancode().read().scancode().bits();
 
-            writeln!(lock_debug_uart!(), "FIFO Level: {}", self.interface.fifo_level().read().fifo_level().bits()).unwrap();
+            if let Some(mut uart) = crate::DEBUG_UART.try_lock_unfair() {
+                // No debug output == lock already held?
+                writeln!(uart.as_mut().unwrap(), "FIFO Level: {}", self.interface.fifo_level().read().fifo_level().bits()).unwrap();
+            }
 
             if let Some(event) = self.scancode_set.advance_state(scancode).expect("Interface should always output valid scancodes") {
                 if let Some(decoded_key) = self.event_decoder.process_keyevent(event) {

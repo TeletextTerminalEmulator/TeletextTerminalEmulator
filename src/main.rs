@@ -80,7 +80,10 @@ enum Event {
 }
 
 fn wait_for_event<T: KeyboardLayout>(ps2: &mut PS2<T>) -> nb::Result<Event, Infallible> {
-    match lock_uart!().read() {
+    // TODO: Does this drop the lock?
+    let read_byte = lock_uart!().read();
+
+    match read_byte {
         Ok(byte) => Ok(Event::UartReceived(byte)),
         Err(nb::Error::WouldBlock) => {
             match ps2.try_read() {
