@@ -53,7 +53,24 @@ package types_pkg is
     type TRIPLET is record
         ADDRESS: unsigned(5 downto 0);
         MODE: unsigned(4 downto 0);
-        DATA: std_logic_vector(6 downto 0);
+        DATA: unsigned(6 downto 0);
     end record TRIPLET;
     type TRIPLET_ARRAY is array (natural range <>) of TRIPLET;
+
+    -- https://stackoverflow.com/questions/13584307/reverse-bit-order-on-vhdl
+    function reverse_any_vector (a: std_logic_vector) return std_logic_vector;
 end package types_pkg;
+
+package body types_pkg is
+-- https://stackoverflow.com/questions/13584307/reverse-bit-order-on-vhdl
+    function reverse_any_vector (a: std_logic_vector)
+    return std_logic_vector is
+        variable result: std_logic_vector(a'RANGE);
+        alias aa: std_logic_vector(a'REVERSE_RANGE) is a;
+    begin
+        for i in aa'RANGE loop
+            result(i) := aa(i);
+        end loop;
+        return result;
+    end reverse_any_vector;
+end package body types_pkg;

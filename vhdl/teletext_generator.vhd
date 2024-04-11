@@ -130,22 +130,22 @@ begin
     enhancement_triplets(0)     <= (
         ADDRESS => to_unsigned(41, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(4, TRIPLET.MODE'length),
-        DATA => (others => '0')
+        DATA => to_unsigned(0, TRIPLET.DATA'length)
     );
     enhancement_triplets(1)     <= (
         ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(2, TRIPLET.MODE'length),
-        DATA => "0011110"
+        DATA => to_unsigned(60, TRIPLET.DATA'length)
     );
     enhancement_triplets(2)     <= (
         ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(3, TRIPLET.MODE'length),
-        DATA => "0100000"
+        DATA => to_unsigned(2, TRIPLET.DATA'length)
     );
     enhancement_triplets(3)     <= (
-        ADDRESS => (others => '1'),
-        MODE => (others => '1'),
-        DATA => "1110000"
+        ADDRESS => to_unsigned(63, TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(31, TRIPLET.MODE'length),
+        DATA => to_unsigned(7, TRIPLET.DATA'length)
     );
 
     LINE_INDEX <= current_line;

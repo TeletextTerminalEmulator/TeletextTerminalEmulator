@@ -62,9 +62,9 @@ begin
     for I in 0 to 12 generate
         triplets_hamx : hamming_24_18 port map (
             DATA_IN =>
-                std_logic_vector(TRIPLETS_IN(I).ADDRESS(0 to 5)) &
-                std_logic_vector(TRIPLETS_IN(I).MODE(0 to 4)) &
-                TRIPLETS_IN(I).DATA(0 to 6),
+                reverse_any_vector(std_logic_vector(TRIPLETS_IN(I).ADDRESS)) &
+                reverse_any_vector(std_logic_vector(TRIPLETS_IN(I).MODE)) &
+                reverse_any_vector(std_logic_vector(TRIPLETS_IN(I).DATA)),
             DATA_OUT => PACKET_DATA((I * 24) + 23 + 8 downto I * 24 + 8)
         );
     end generate;
