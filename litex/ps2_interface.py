@@ -15,7 +15,6 @@ class PS2Interface(LiteXModule, AutoCSR):
 
         self.data_available = CSRStatus(1, description="Whether a key has been pressed or not")
         self.scancode = CSRStatus(8, description="Scancode of the pressed key")
-        self.fifo_level = CSRStatus(4, description="Level of FIFO")
 
         self.submodules.scancode_fifo = SyncFIFO(8, 8)
 
@@ -38,10 +37,9 @@ class PS2Interface(LiteXModule, AutoCSR):
         # FIFO to CSR
         self.comb += self.data_available.status.eq(self.scancode_fifo.readable)
         self.comb += self.scancode.status.eq(self.scancode_fifo.dout)
-        self.comb += self.scancode_fifo.re.eq(self.scancode.re)
+        self.comb += self.scancode_fifo.re.eq(self.scancode.we)
 
         self.comb += self.scancode_fifo.replace.eq(False)
-        self.comb += self.fifo_level.status.eq(self.scancode_fifo.level)
 
         # Read PS/2
 
@@ -54,7 +52,7 @@ class PS2Interface(LiteXModule, AutoCSR):
         self.sync += If(
             scancode_shift_pos == 11,
             scancode_shift_pos.eq(0),
-            self.scancode_fifo.din.eq(scancode_shift[2:10]),
+            self.scancode_fifo.din.eq(scancode_shift[9:1:-1]),
             self.scancode_fifo.we.eq(scancode_valid)
         ).Else(
             self.scancode_fifo.we.eq(False),
