@@ -62,7 +62,7 @@ package types_pkg is
 end package types_pkg;
 
 package body types_pkg is
--- https://stackoverflow.com/questions/13584307/reverse-bit-order-on-vhdl
+    -- https://stackoverflow.com/questions/13584307/reverse-bit-order-on-vhdl
     function reverse_any_vector (a: std_logic_vector)
     return std_logic_vector is
         variable result: std_logic_vector(a'RANGE);

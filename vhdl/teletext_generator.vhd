@@ -108,44 +108,35 @@ signal frame_trigger                : std_logic;
 signal packet_designator            : unsigned (3 downto 0) := (others => '0');
 signal teletext_packet              : std_logic_vector (359 downto 0) := (others => '1');
 signal teletext_normal_data         : std_logic_vector (319 downto 0);
+signal teletext_normal_data_const   : std_logic_vector (319 downto 0);
 signal teletext_page_header_data    : std_logic_vector (319 downto 0); 
 signal teletext_enhancement_data    : std_logic_vector (319 downto 0);
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
 signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
     others => (
-        ADDRESS => (others => '0'),
-        MODE => (others => '0'),
-        DATA => (others => '0')
+        ADDRESS => to_unsigned(63, TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(31, TRIPLET.MODE'length),
+        DATA => to_unsigned(7, TRIPLET.DATA'length)
     )
 );
 
 begin
-    --                              |----||---||-----|
-    --enhancement_triplets(12)    <= "011101001000000000";
-    --enhancement_triplets(11)    <= "000000010000011110";
-    --enhancement_triplets(10)    <= "000000110001000000";
-    --enhancement_triplets(9)     <= "111111111111110000";
     
-    enhancement_triplets(0)     <= (
+    enhancement_triplets(12)     <= (
         ADDRESS => to_unsigned(41, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(4, TRIPLET.MODE'length),
         DATA => to_unsigned(0, TRIPLET.DATA'length)
     );
-    enhancement_triplets(1)     <= (
+    enhancement_triplets(11)     <= (
         ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(2, TRIPLET.MODE'length),
         DATA => to_unsigned(60, TRIPLET.DATA'length)
     );
-    enhancement_triplets(2)     <= (
+    enhancement_triplets(10)     <= (
         ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(3, TRIPLET.MODE'length),
         DATA => to_unsigned(2, TRIPLET.DATA'length)
-    );
-    enhancement_triplets(3)     <= (
-        ADDRESS => to_unsigned(63, TRIPLET.ADDRESS'length),
-        MODE => to_unsigned(31, TRIPLET.MODE'length),
-        DATA => to_unsigned(7, TRIPLET.DATA'length)
     );
 
     LINE_INDEX <= current_line;
@@ -179,6 +170,12 @@ begin
     port map(
         DATA_BYTES => LINE_IN,
         PACKET_DATA => teletext_normal_data
+    );
+    
+    packet_normal_gen_const : packet_normal_generator
+    port map(
+        DATA_BYTES => (others => "0100000"),
+        PACKET_DATA => teletext_normal_data_const
     );
     
     packet_enhancement_gen : packet_enhancement_generator
@@ -229,6 +226,8 @@ begin
             teletext_packet(359 downto 40) <= teletext_page_header_data;
         elsif current_line <= 24 then
             teletext_packet(359 downto 40) <= teletext_normal_data;
+        elsif current_line = 25 then
+            teletext_packet(359 downto 40) <= teletext_normal_data_const;
         elsif current_line = 26 then
             -- TODO: set Designation
             teletext_packet(359 downto 40) <= teletext_enhancement_data;
@@ -236,7 +235,7 @@ begin
             teletext_packet(359 downto 40) <= (others => '0');
         end if;
         
-        if current_line <= 24 or current_line = 26 then
+        if current_line <= 26 then
             load_trigger <= packet_trigger;
         else
             load_trigger <= '0';
