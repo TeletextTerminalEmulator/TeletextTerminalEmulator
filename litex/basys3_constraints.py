@@ -97,6 +97,12 @@ _io = [
        Subsignal("data", Pins("J1")),
        Subsignal("sync", Pins("L2")),
        IOStandard("LVCMOS33")
+    ),
+
+    ("terminal_uart", 0,
+       Subsignal("tx", Pins("A14")),
+       Subsignal("rx", Pins("A16")),
+       IOStandard("LVCMOS33")
     )
 ]
 

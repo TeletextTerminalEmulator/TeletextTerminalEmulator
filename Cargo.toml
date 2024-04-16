@@ -17,6 +17,7 @@ pc-keyboard = "0.7.0"
 
 [features]
 backtrace = ["dep:mini-backtrace"]
+terminal_uart = []
 
 [profile.release]
 opt-level = "z"

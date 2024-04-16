@@ -35,6 +35,7 @@ use mini_backtrace::Backtrace;
 
 litex_hal::uart! {
     Uart: litex_basys3_pac::UART,
+    TerminalUart: litex_basys3_pac::TERMINAL_UART,
 }
 
 litex_hal::timer! {
@@ -51,6 +52,8 @@ pub static TELETEXT_VALID: AtomicBool = AtomicBool::new(false);
 
 pub static DEBUG_UART: FairMutex<Option<Uart>> = FairMutex::new(None);
 
+pub static TERMINAL_UART: FairMutex<Option<TerminalUart>> = FairMutex::new(None);
+
 macro_rules! lock_debug_uart {
     () => {
         $crate::DEBUG_UART
@@ -60,10 +63,17 @@ macro_rules! lock_debug_uart {
     };
 }
 
+
+
+#[cfg(feature = "terminal_uart")]
+use TERMINAL_UART as UART;
+
+#[cfg(not(feature = "terminal_uart"))]
+use DEBUG_UART as UART;
+
 macro_rules! lock_uart {
     () => {
-        // TODO: Replace with seperate interface?
-        $crate::DEBUG_UART
+        $crate::UART
             .lock()
             .as_mut()
             .expect("The UART interface should have been initialized!")
@@ -112,10 +122,12 @@ fn main() -> ! {
 
     let peripherals = Peripherals::take().unwrap();
 
-    let uart = Uart::new(peripherals.UART);
+    let debug_uart = Uart::new(peripherals.UART);
+    let terminal_uart = TerminalUart::new(peripherals.TERMINAL_UART);
     let mut ps2 = ps2::PS2::new(peripherals.PS2, pc_keyboard::layouts::De105Key);
 
-    *DEBUG_UART.lock_unfair() = Some(uart);
+    *DEBUG_UART.lock_unfair() = Some(debug_uart);
+    *TERMINAL_UART.lock_unfair() = Some(terminal_uart);
 
     let teletext = Rc::new(RefCell::new(unsafe { Teletext::new_raw() }));
     writeln!(lock_debug_uart!(), "Peripherals initialized").unwrap();

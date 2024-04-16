@@ -18,6 +18,10 @@ struct BuildArgs {
     /// Add backtrace functionality to the panic handler
     #[arg(long, short)]
     backtrace: bool,
+
+    /// Split debug and terminal output
+    #[arg(long, short)]
+    terminal_uart: bool,
 }
 
 /// Returns the path to the binary file
@@ -44,17 +48,27 @@ fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<Strin
     )});
 
     let release_flag = release.then_some("--release");
-    let backtrace_flag = if args.backtrace { ["--features", "backtrace"].as_slice() } else { &[] }; //args.backtrace.then_some(["--features", "backtrace"]);
+
+    let features: String = [args.backtrace.then_some("backtrace"), args.terminal_uart.then_some("terminal_uart")].into_iter().flatten().collect::<Vec<&str>>().join(" ");
+
+    let feature_flag_vec = if !features.is_empty() {
+        vec!["--features", &features]
+    } else {
+        vec![]
+    };
+
+    let feature_flag = &feature_flag_vec;
+
     const TARGET: &str = "riscv32i-unknown-none-elf";
 
-    cmd!(sh, "cargo build {release_flag...} {backtrace_flag...} --target {TARGET}").run()?;
+    cmd!(sh, "cargo build {release_flag...} {feature_flag...} --target {TARGET}").run()?;
 
     let profile_dir = if release { "release" } else { "debug" };
     let bin_path = format!("{project_dir}/target/{TARGET}/{profile_dir}/teletext.bin");
 
     cmd!(
         sh,
-        "cargo objcopy {release_flag...} {backtrace_flag...} --quiet --target {TARGET} -- -O binary {bin_path}"
+        "cargo objcopy {release_flag...} {feature_flag...} --quiet --target {TARGET} -- -O binary {bin_path}"
     )
     .run()?;
 
