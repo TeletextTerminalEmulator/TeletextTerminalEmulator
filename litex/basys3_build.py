@@ -90,7 +90,7 @@ class BaseSoC(SoCCore):
 
         self.ps2 = PS2Interface(pads = platform.request("usbhost"))
 
-        self.add_uart("terminal_uart", uart_name="terminal_uart", baudrate=115200, fifo_depth=16)
+        self.add_uart("terminal_uart", uart_name="terminal_uart", baudrate=115200, fifo_depth=1024)
 
         # Leds -------------------------------------------------------------------------------------
         if with_led_chaser:

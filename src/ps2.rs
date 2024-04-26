@@ -19,7 +19,7 @@ impl<T: KeyboardLayout> PS2<T> {
         while self.interface.data_available().read().data_available().bit_is_set() {
             let scancode = self.interface.scancode().read().scancode().bits();
 
-            writeln!(lock_debug_uart!(), "Scancode receive: {scancode}, 0x{scancode:X}").unwrap();
+            //writeln!(lock_debug_uart!(), "Scancode receive: {scancode}, 0x{scancode:X}").unwrap();
 
             if let Some(event) = self.scancode_set.advance_state(scancode).expect("Interface should always output valid scancodes") {
                 if let Some(decoded_key) = self.event_decoder.process_keyevent(event) {
