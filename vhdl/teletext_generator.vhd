@@ -102,6 +102,11 @@ signal teletext_normal_data         : std_logic_vector (319 downto 0);
 signal teletext_page_header_data    : std_logic_vector (319 downto 0); 
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
+constant MAX_LINE_COUNT             : unsigned (current_line'length - 1 downto 0) := (others => '1');
+
+signal current_last_packet_sent     : unsigned (7 downto 0) := (others => '0');
+signal next_last_packet_sent        : unsigned (7 downto 0);
+constant FRAMES_PER_PACKET          : natural := 1;
 
 begin
 
@@ -152,24 +157,32 @@ begin
         if rising_edge(CLK_IN) then
             if RESET_N = '0' then
                 current_line <= (others => '0');
+                current_last_packet_sent <= (others => '0');                
             else
                 current_line <= next_line;
+                current_last_packet_sent <= next_last_packet_sent;
             end if;
         end if;
     end process;
     
-    advance_line: process (packet_trigger, frame_trigger, current_line)
+    advance_line: process (packet_trigger, frame_trigger, current_line, current_last_packet_sent)
     begin
+        next_last_packet_sent <= current_last_packet_sent;
+        next_line <= current_line;
+            
         if packet_trigger = '1' then
---            if current_line >= 24 then
---                next_line <= (others => '0');
---            else
+            if current_line = MAX_LINE_COUNT then
+                next_line <= current_line;
+            else
                 next_line <= current_line + 1;
---            end if;
+            end if;
         elsif frame_trigger = '1' then
-            next_line <= (others => '0');
-        else
-            next_line <= current_line;
+            if current_last_packet_sent >= FRAMES_PER_PACKET then
+                next_last_packet_sent <= (others => '0');
+                next_line <= (others => '0');
+            else
+                next_last_packet_sent <= current_last_packet_sent + 1;
+            end if;
         end if;
     end process;
     
