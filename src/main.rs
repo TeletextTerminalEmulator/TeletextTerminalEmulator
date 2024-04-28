@@ -179,6 +179,8 @@ fn main() -> ! {
             Event::Redraw => {
                 let mut teletext = teletext.borrow_mut();
 
+                let before = litex_basys3_pac::riscv::register::cycle::read();
+
                 for cell in term.grid().display_iter() {
                     teletext
                         .set_char(
@@ -195,6 +197,10 @@ fn main() -> ! {
                         })
                         .unwrap();
                 }
+
+                let duration = litex_basys3_pac::riscv::register::cycle::read() - before;
+
+                writeln!(lock_debug_uart!(), "Redraw took {duration} cycles").unwrap();
 
                 TELETEXT_VALID.store(true, Ordering::Relaxed);
                 term.reset_damage();
