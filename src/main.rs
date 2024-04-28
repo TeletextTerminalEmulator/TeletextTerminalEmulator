@@ -170,8 +170,8 @@ fn main() -> ! {
                 // TODO check term modes for different reporting modes
 
                 match key {
-                    DecodedKey::RawKey(_keycode) => {
-                        // TODO
+                    DecodedKey::RawKey(keycode) => {
+                        writeln!(lock_debug_uart!(), "Could not convert {keycode:?} to unicode").unwrap();
                     },
                     DecodedKey::Unicode(c) => lock_uart!().write_char(c).unwrap(),
                 }
