@@ -12,7 +12,7 @@ pub struct PS2<T: KeyboardLayout> {
 impl<T: KeyboardLayout> PS2<T> {
 
     pub fn new(interface: litex_basys3_pac::PS2, layout: T) -> Self {
-        Self { interface, scancode_set: ScancodeSet2::new(), event_decoder: EventDecoder::new(layout, pc_keyboard::HandleControl::Ignore) }
+        Self { interface, scancode_set: ScancodeSet2::new(), event_decoder: EventDecoder::new(layout, pc_keyboard::HandleControl::MapLettersToUnicode) }
     }
 
     pub fn try_read(&mut self) -> Option<DecodedKey> {
