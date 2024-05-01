@@ -111,8 +111,15 @@ signal teletext_normal_data         : std_logic_vector (319 downto 0);
 signal teletext_normal_data_const   : std_logic_vector (319 downto 0);
 signal teletext_page_header_data    : std_logic_vector (319 downto 0); 
 signal teletext_enhancement_data    : std_logic_vector (319 downto 0);
+
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
+
+-- 0 => header + enhancement data
+-- 1 => display data
+signal current_frame                : std_logic := '0';
+signal next_frame                   : std_logic;
+
 signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
     others => (
         ADDRESS => unsigned("111111"),
@@ -184,12 +191,6 @@ begin
         PACKET_DATA => teletext_normal_data
     );
     
-    packet_normal_gen_const : packet_normal_generator
-    port map(
-        DATA_BYTES => (others => "0100000"),
-        PACKET_DATA => teletext_normal_data_const
-    );
-    
     packet_enhancement_gen : packet_enhancement_generator
     port map(
         DESIGNATION_IN => packet_designator,
@@ -211,22 +212,23 @@ begin
         if rising_edge(CLK_IN) then
             if RESET_N = '0' then
                 current_line <= (others => '0');
+                current_frame <= '0';
             else
                 current_line <= next_line;
+                current_frame <= next_frame;
             end if;
         end if;
     end process;
     
     advance_line: process (packet_trigger, frame_trigger, current_line)
     begin
+        next_frame <= current_frame;
+
         if packet_trigger = '1' then
---            if current_line >= 24 then
---                next_line <= (others => '0');
---            else
-                next_line <= current_line + 1;
---            end if;
+            next_line <= current_line + 1;
         elsif frame_trigger = '1' then
             next_line <= (others => '0');
+            next_frame <= not current_frame;
         else
             next_line <= current_line;
         end if;
@@ -234,23 +236,24 @@ begin
     
     switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, teletext_enhancement_data, packet_trigger)
     begin
-        if current_line = 0 then
-            teletext_packet(359 downto 40) <= teletext_page_header_data;
-        elsif current_line <= 24 then
-            teletext_packet(359 downto 40) <= teletext_normal_data;
-        elsif current_line = 25 then
-            teletext_packet(359 downto 40) <= teletext_normal_data_const;
-        elsif current_line = 26 then
-            -- TODO: set Designation
-            teletext_packet(359 downto 40) <= teletext_enhancement_data;
+        load_trigger <= '1';
+        teletext_packet(359 downto 40) <= (others => '0');
+
+        if current_frame = '0' then
+            if current_line = 0 then
+                teletext_packet(359 downto 40) <= teletext_page_header_data;
+            elsif current_line = 1 then
+                -- TODO: Packet designations
+                teletext_packet(359 downto 40) <= teletext_enhancement_data;
+            else
+                load_trigger <= '0';
+            end if;
         else
-            teletext_packet(359 downto 40) <= (others => '0');
-        end if;
-        
-        if current_line <= 26 then
-            load_trigger <= packet_trigger;
-        else
-            load_trigger <= '0';
+            if current_line > 0 and current_line <= 24 then
+                teletext_packet(359 downto 40) <= teletext_normal_data;
+            else
+                load_trigger <= '0';
+            end if;
         end if;
     end process;
 end Behavioral;
