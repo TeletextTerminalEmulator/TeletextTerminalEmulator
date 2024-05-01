@@ -115,25 +115,37 @@ signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
 signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
     others => (
-        ADDRESS => to_unsigned(63, TRIPLET.ADDRESS'length),
-        MODE => to_unsigned(31, TRIPLET.MODE'length),
-        DATA => to_unsigned(7, TRIPLET.DATA'length)
+        ADDRESS => unsigned("111111"),
+        MODE => unsigned("11111"),
+        DATA => unsigned("1111111")
     )
 );
 
 begin
     
-    enhancement_triplets(12)     <= (
+    -- Set active position to row 1, column 0
+    enhancement_triplets(0)     <= (
         ADDRESS => to_unsigned(41, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(4, TRIPLET.MODE'length),
         DATA => to_unsigned(0, TRIPLET.DATA'length)
     );
-    enhancement_triplets(11)     <= (
-        ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
+    
+    -- G2 character (music note)
+    enhancement_triplets(1)     <= (
+        ADDRESS => to_unsigned(2, TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(15, TRIPLET.MODE'length),
+        DATA => to_unsigned(85, TRIPLET.DATA'length)
+    );
+    
+    -- G3 character (Inverted right triangle)
+    enhancement_triplets(2)     <= (
+        ADDRESS => to_unsigned(5, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(2, TRIPLET.MODE'length),
         DATA => to_unsigned(60, TRIPLET.DATA'length)
     );
-    enhancement_triplets(10)     <= (
+    
+    -- Set background color to green at the start of row 1
+    enhancement_triplets(3)     <= (
         ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(3, TRIPLET.MODE'length),
         DATA => to_unsigned(2, TRIPLET.DATA'length)
