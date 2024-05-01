@@ -134,14 +134,14 @@ begin
     enhancement_triplets(1)     <= (
         ADDRESS => to_unsigned(2, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(15, TRIPLET.MODE'length),
-        DATA => to_unsigned(85, TRIPLET.DATA'length)
+        DATA => to_unsigned(16#55#, TRIPLET.DATA'length)
     );
     
-    -- G3 character (Inverted right triangle)
+    -- G3 character (Arrow pointing right)
     enhancement_triplets(2)     <= (
         ADDRESS => to_unsigned(5, TRIPLET.ADDRESS'length),
         MODE => to_unsigned(2, TRIPLET.MODE'length),
-        DATA => to_unsigned(60, TRIPLET.DATA'length)
+        DATA => to_unsigned(16#5B#, TRIPLET.DATA'length)
     );
     
     -- Set background color to green at the start of row 1
