@@ -97,6 +97,9 @@ pub fn char_to_teletext(ch: char, subset: NationalOptionCharacterSubset) -> Resu
         'a'..='z' => (ch as u8) - b'a' + 0x61,
         '█' => 0x7f,
 
+        // Used for spacing attributes
+        '\u{E000}'..='\u{E01F}' => (ch as u32 - 0xE000) as u8,
+
         _ => subset.has_char(ch)?,
     }))
 }
