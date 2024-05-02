@@ -115,6 +115,8 @@ signal teletext_enhancement_data    : std_logic_vector (319 downto 0);
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
 
+signal current_packet               : unsigned (4 downto 0);
+
 -- 0 => header + enhancement data
 -- 1 => display data
 signal current_frame                : std_logic := '0';
@@ -181,7 +183,7 @@ begin
     packet_header_gen : packet_header_generator
     port map(
         MAGAZINE => MAGAZINE_NUMBER,
-        PACKET => current_line,
+        PACKET => current_packet,
         PACKET_HEADER_DATA => teletext_packet(39 downto 0)
     );
     
@@ -236,21 +238,25 @@ begin
     
     switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, teletext_enhancement_data, packet_trigger)
     begin
-        load_trigger <= '1';
+        load_trigger <= packet_trigger;
         teletext_packet(359 downto 40) <= (others => '0');
+        current_packet <= (others => '1');
 
         if current_frame = '0' then
             if current_line = 0 then
                 teletext_packet(359 downto 40) <= teletext_page_header_data;
+                current_packet <= to_unsigned(0, current_packet'length);
             elsif current_line = 1 then
                 -- TODO: Packet designations
                 teletext_packet(359 downto 40) <= teletext_enhancement_data;
+                current_packet <= to_unsigned(26, current_packet'length);
             else
                 load_trigger <= '0';
             end if;
         else
             if current_line > 0 and current_line <= 24 then
                 teletext_packet(359 downto 40) <= teletext_normal_data;
+                current_packet <= current_line;
             else
                 load_trigger <= '0';
             end if;
