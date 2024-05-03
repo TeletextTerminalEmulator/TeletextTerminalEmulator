@@ -14,12 +14,17 @@ architecture tb of teletext_generator_tb is
 
     component teletext_generator
         port (CLK_IN              : in    std_logic;
-              RESET_N             : in    std_logic;
-              TELETEXT_FRAME      : in    TELETEXT_FRAME;
-              PAGE_CONTROL_BITS   : in    CONTROL_BITS;
-              PAGE_NUMBER         : in    unsigned (7 downto 0);
-              DATA_OUT : out std_logic;
-              SYNC_OUT : out std_logic);
+            RESET_N             : in    std_logic;
+            LINE_IN             : in    TELETEXT_LINE;
+            PAGE_CONTROL_BITS   : in    CONTROL_BITS;
+            PAGE_NUMBER         : in    unsigned (7 downto 0);
+            MAGAZINE_NUMBER     : in    unsigned (2 downto 0);
+            
+            LINE_INDEX          : out   unsigned (4 downto 0);
+            
+            DATA_OUT            : out   std_logic;
+            SYNC_OUT            : out   std_logic
+        );
     end component;
 
     signal CLK_IN   : std_logic;
@@ -27,8 +32,9 @@ architecture tb of teletext_generator_tb is
     
     signal DATA_OUT : std_logic;
     signal SYNC_OUT : std_logic;
+    
+    signal LINE_INDEX   : unsigned(4 downto 0);
 
-    constant TELETEXT_FRAME : TELETEXT_FRAME := (others => (others => "1100111"));
     constant PAGE_CONTROL_BITS : CONTROL_BITS := (
         ERASE_PAGE => '0',
         NEWSFLASH => '0',
@@ -41,17 +47,25 @@ architecture tb of teletext_generator_tb is
         NATIONAL_OPTION_CHARACTER_SUBSET => "000"
     );
     constant PAGE_NUMBER : unsigned (7 downto 0) := "00010001";
+    
+    constant EMPTY_LINE : TELETEXT_LINE := (others => "0100000");
 
     constant TbPeriod : time := (1000 ns) / 7;
     signal TbClock : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 
+    signal packet : std_logic_vector (359 downto 0);
 begin
 
     dut : teletext_generator
     port map (CLK_IN            => CLK_IN,
               RESET_N           => RESET_N,
-              TELETEXT_FRAME    => TELETEXT_FRAME,
+              
+              LINE_IN           => EMPTY_LINE,
+              LINE_INDEX        => LINE_INDEX,
+              
+              MAGAZINE_NUMBER   => "001",
+              
               PAGE_CONTROL_BITS => PAGE_CONTROL_BITS,
               PAGE_NUMBER       => PAGE_NUMBER,
               DATA_OUT          => DATA_OUT,
@@ -74,8 +88,16 @@ begin
         RESET_N <= '1';
         wait for 100 ns;
 
-        -- EDIT Add stimuli here
-        wait for (1000 ms) / 25;
+        
+        while true loop
+            wait until rising_edge(DATA_OUT);
+            for i in 359 downto 0 loop
+                wait until rising_edge(CLK_IN);
+                packet(i) <= DATA_OUT;
+            end loop;
+            
+            --report to_string(packet);
+        end loop;
 
         -- Stop the clock and hence terminate the simulation
         TbSimEnded <= '1';
