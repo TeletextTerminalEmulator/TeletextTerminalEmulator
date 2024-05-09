@@ -55,6 +55,8 @@ architecture tb of teletext_generator_tb is
     signal TbSimEnded : std_logic := '0';
 
     signal packet : std_logic_vector (359 downto 0);
+    
+    signal packet_num: unsigned(4 downto 0);
 
 begin
 
@@ -77,6 +79,8 @@ begin
 
     -- EDIT: Check that CLK_IN is really your main clock signal
     CLK_IN <= TbClock;
+    
+    packet_num <= unsigned(packet(320 downto 320) & packet(322) & packet(324) & packet(326) & packet(328));
 
     stimuli : process
     begin
@@ -99,6 +103,10 @@ begin
                 --report std_logic'image(DATA_OUT);
             end loop;
             
+            report to_hstring(packet_num);
+            if packet_num = 26 then
+                report "Enhancement received!";
+            end if;
 
             --report std_logic_vector'image(packet);
         end loop;

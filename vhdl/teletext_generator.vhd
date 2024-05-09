@@ -222,7 +222,7 @@ begin
     begin
         next_frame <= current_frame;
 
-        if packet_trigger = '1' then
+        if packet_trigger = '1' and current_line /= "11111" then
             next_line <= current_line + 1;
         elsif frame_trigger = '1' then
             next_line <= (others => '0');
