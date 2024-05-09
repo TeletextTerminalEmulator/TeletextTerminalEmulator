@@ -50,6 +50,10 @@ architecture Behavioral of packet_enhancement_generator is
                DATA_OUT : out STD_LOGIC_VECTOR (23 downto 0));
     end component;
 
+    type LOGIC_VECTOR_VECTOR is array(12 downto 0) of std_logic_vector(17 downto 0);
+
+    signal TRIPLET_SIGNALS: LOGIC_VECTOR_VECTOR;
+
 begin
 
     designation_ham : hamming_8_4
@@ -60,11 +64,12 @@ begin
     
     triplets_ham :
     for I in 0 to 12 generate
+        TRIPLET_SIGNALS(I) <= std_logic_vector(TRIPLETS_IN(I).ADDRESS) &
+            std_logic_vector(TRIPLETS_IN(I).MODE) &
+            std_logic_vector(TRIPLETS_IN(I).DATA);
+
         triplets_hamx : hamming_24_18 port map (
-            DATA_IN =>
-                std_logic_vector(TRIPLETS_IN(I).ADDRESS) &
-                std_logic_vector(TRIPLETS_IN(I).MODE) &
-                std_logic_vector(TRIPLETS_IN(I).DATA),
+            DATA_IN => TRIPLET_SIGNALS(I),
             DATA_OUT => PACKET_DATA((I * 24) + 23 + 8 downto I * 24 + 8)
         );
     end generate;

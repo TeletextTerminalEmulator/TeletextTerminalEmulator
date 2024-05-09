@@ -57,6 +57,12 @@ package types_pkg is
     end record TRIPLET;
     type TRIPLET_ARRAY is array (natural range <>) of TRIPLET;
 
+    constant TERMINATION_MARKER_TRIPLET : TRIPLET := (
+        ADDRESS => "111111",
+        MODE => "11111",
+        DATA => "1111111"
+    );
+
     -- https://stackoverflow.com/questions/13584307/reverse-bit-order-on-vhdl
     function reverse_any_vector (a: std_logic_vector) return std_logic_vector;
 end package types_pkg;

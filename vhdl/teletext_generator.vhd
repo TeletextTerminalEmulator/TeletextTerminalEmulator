@@ -123,41 +123,37 @@ signal current_frame                : std_logic := '0';
 signal next_frame                   : std_logic;
 
 signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
-    others => (
-        ADDRESS => unsigned("111111"),
-        MODE => unsigned("11111"),
-        DATA => unsigned("1111111")
-    )
+    others => TERMINATION_MARKER_TRIPLET
 );
 
 begin
     
     -- Set active position to row 1, column 0
     enhancement_triplets(0)     <= (
-        ADDRESS => to_unsigned(41, TRIPLET.ADDRESS'length),
-        MODE => to_unsigned(4, TRIPLET.MODE'length),
-        DATA => to_unsigned(0, TRIPLET.DATA'length)
+        ADDRESS => to_unsigned(41, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(4, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(0, TERMINATION_MARKER_TRIPLET.DATA'length)
     );
     
     -- G2 character (music note)
     enhancement_triplets(1)     <= (
-        ADDRESS => to_unsigned(2, TRIPLET.ADDRESS'length),
-        MODE => to_unsigned(15, TRIPLET.MODE'length),
-        DATA => to_unsigned(16#55#, TRIPLET.DATA'length)
+        ADDRESS => to_unsigned(2, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(15, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(16#55#, TERMINATION_MARKER_TRIPLET.DATA'length)
     );
     
     -- G3 character (Arrow pointing right)
     enhancement_triplets(2)     <= (
-        ADDRESS => to_unsigned(5, TRIPLET.ADDRESS'length),
-        MODE => to_unsigned(2, TRIPLET.MODE'length),
-        DATA => to_unsigned(16#5B#, TRIPLET.DATA'length)
+        ADDRESS => to_unsigned(5, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(2, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(16#5B#, TERMINATION_MARKER_TRIPLET.DATA'length)
     );
     
     -- Set background color to green at the start of row 1
     enhancement_triplets(3)     <= (
-        ADDRESS => to_unsigned(0, TRIPLET.ADDRESS'length),
-        MODE => to_unsigned(3, TRIPLET.MODE'length),
-        DATA => to_unsigned(2, TRIPLET.DATA'length)
+        ADDRESS => to_unsigned(0, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(3, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(2, TERMINATION_MARKER_TRIPLET.DATA'length)
     );
 
     LINE_INDEX <= current_line;

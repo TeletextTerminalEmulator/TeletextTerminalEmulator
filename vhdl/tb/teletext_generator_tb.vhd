@@ -55,6 +55,7 @@ architecture tb of teletext_generator_tb is
     signal TbSimEnded : std_logic := '0';
 
     signal packet : std_logic_vector (359 downto 0);
+
 begin
 
     dut : teletext_generator
@@ -89,18 +90,23 @@ begin
         wait for 100 ns;
 
         
-        while true loop
+        for k in 0 to 50 loop
+
             wait until rising_edge(DATA_OUT);
             for i in 359 downto 0 loop
                 wait until rising_edge(CLK_IN);
                 packet(i) <= DATA_OUT;
+                --report std_logic'image(DATA_OUT);
             end loop;
             
-            --report to_string(packet);
+
+            --report std_logic_vector'image(packet);
         end loop;
 
         -- Stop the clock and hence terminate the simulation
         TbSimEnded <= '1';
+        assert false report "end of simulation" severity note;
+        
         wait;
     end process;
 
