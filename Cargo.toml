@@ -13,7 +13,8 @@ embedded-alloc = "0.5.1"
 alacritty_terminal = { path = "./alacritty_terminal" }
 portable-atomic = { version = "1.4.0", features = ["critical-section"] }
 mini-backtrace = { version = "0.1.4", optional = true }
-pc-keyboard = "0.7.0"
+pc-keyboard = { git = "https://github.com/rust-embedded-community/pc-keyboard.git" }
+vte-input = { git = "https://github.com/jorolf/vte-input.git" }
 
 [features]
 backtrace = ["dep:mini-backtrace"]
