@@ -10,6 +10,7 @@ mod teletext_interface;
 mod teletext_terminal;
 mod ps2;
 
+use crate::ps2::convert_term_mode;
 use crate::teletext::{Teletext, TeletextDimensions};
 use crate::teletext_terminal::TeletextTerminalListener;
 use alacritty_terminal::sync::FairMutex;
@@ -17,8 +18,9 @@ use alacritty_terminal::term::Config;
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
-use pc_keyboard::{DecodedKey, KeyboardLayout};
+use pc_keyboard::KeyboardLayout;
 use ps2::PS2;
+use vte_input::generate_sequence;
 use core::cell::RefCell;
 use core::convert::Infallible;
 use core::fmt::Write;
@@ -85,19 +87,18 @@ pub(crate) use lock_debug_uart;
 
 enum Event {
     UartReceived(u8),
-    KeyboardEvent(DecodedKey),
+    Keyboard(ps2::KeyEventContext),
     Redraw,
 }
 
 fn wait_for_event<T: KeyboardLayout>(ps2: &mut PS2<T>) -> nb::Result<Event, Infallible> {
-    // TODO: Does this drop the lock?
     let read_byte = lock_uart!().read();
 
     match read_byte {
         Ok(byte) => Ok(Event::UartReceived(byte)),
         Err(nb::Error::WouldBlock) => {
             match ps2.try_read() {
-                Some(data) => Ok(Event::KeyboardEvent(data)),
+                Some(context) => Ok(Event::Keyboard(context)),
                 None => {
                     if !TELETEXT_VALID.load(Ordering::Relaxed) {
                         Ok(Event::Redraw)
@@ -166,15 +167,8 @@ fn main() -> ! {
                 parser.advance(&mut term, byte);
                 TELETEXT_VALID.store(false, Ordering::Relaxed);
             }
-            Event::KeyboardEvent(key) => {
-                // TODO check term modes for different reporting modes
-
-                match key {
-                    DecodedKey::RawKey(keycode) => {
-                        writeln!(lock_debug_uart!(), "Could not convert {keycode:?} to unicode").unwrap();
-                    },
-                    DecodedKey::Unicode(c) => lock_uart!().write_char(c).unwrap(),
-                }
+            Event::Keyboard(context) => {
+                write!(lock_uart!(), "{}", generate_sequence(convert_term_mode(term.mode()), &context)).unwrap();
             }
             Event::Redraw => {
                 let mut teletext = teletext.borrow_mut();
