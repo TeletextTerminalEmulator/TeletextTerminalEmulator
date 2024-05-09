@@ -2003,7 +2003,7 @@ impl<T: EventListener> Handler for Term<T> {
     fn set_title(&mut self, title: Option<String>) {
         trace!("Setting title to '{:?}'", title);
 
-        self.title = title.clone();
+        self.title.clone_from(&title);
 
         let title_event = match title {
             Some(title) => Event::Title(title),
