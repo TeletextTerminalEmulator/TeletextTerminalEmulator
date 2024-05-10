@@ -57,6 +57,7 @@ architecture tb of teletext_generator_tb is
     signal packet : std_logic_vector (359 downto 0);
     
     signal packet_num: unsigned(4 downto 0);
+    signal first_triplet: std_logic_vector(23 downto 0);
 
 begin
 
@@ -81,6 +82,8 @@ begin
     CLK_IN <= TbClock;
     
     packet_num <= unsigned(packet(320 downto 320) & packet(322) & packet(324) & packet(326) & packet(328));
+    
+    first_triplet <= packet(319 downto 296);
 
     stimuli : process
     begin
@@ -103,9 +106,9 @@ begin
                 --report std_logic'image(DATA_OUT);
             end loop;
             
-            report to_hstring(packet_num);
             if packet_num = 26 then
                 report "Enhancement received!";
+                report "First triplet:" & to_hstring(first_triplet);
             end if;
 
             --report std_logic_vector'image(packet);

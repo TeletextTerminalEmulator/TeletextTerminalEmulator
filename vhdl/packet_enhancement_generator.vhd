@@ -64,9 +64,9 @@ begin
     
     triplets_ham :
     for I in 0 to 12 generate
-        TRIPLET_SIGNALS(I) <= std_logic_vector(TRIPLETS_IN(I).ADDRESS) &
+        TRIPLET_SIGNALS(I) <= std_logic_vector(TRIPLETS_IN(I).DATA) &
             std_logic_vector(TRIPLETS_IN(I).MODE) &
-            std_logic_vector(TRIPLETS_IN(I).DATA);
+            std_logic_vector(TRIPLETS_IN(I).ADDRESS);
 
         triplets_hamx : hamming_24_18 port map (
             DATA_IN => TRIPLET_SIGNALS(I),
