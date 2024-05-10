@@ -57,7 +57,11 @@ architecture tb of teletext_generator_tb is
     signal packet : std_logic_vector (359 downto 0);
     
     signal packet_num: unsigned(4 downto 0);
-    signal first_triplet: std_logic_vector(23 downto 0);
+    signal first_triplet_hamming: std_logic_vector(23 downto 0);
+    signal first_hamming_parity: std_logic_vector(5 downto 0);
+    signal first_triplet: std_logic_vector(17 downto 0);
+    
+    signal first_triplet_decoded: TRIPLET;
 
 begin
 
@@ -83,7 +87,27 @@ begin
     
     packet_num <= unsigned(packet(320 downto 320) & packet(322) & packet(324) & packet(326) & packet(328));
     
-    first_triplet <= packet(319 downto 296);
+    first_triplet_hamming <= reverse_any_vector(packet(311 downto 288));
+    
+    first_triplet <= first_triplet_hamming(22 downto 16) & first_triplet_hamming(14 downto 8) & first_triplet_hamming(6 downto 4) & first_triplet_hamming(2);
+    
+    first_triplet_decoded.ADDRESS <= unsigned(first_triplet(5 downto 0));
+    first_triplet_decoded.MODE <= unsigned(first_triplet(10 downto 6));
+    first_triplet_decoded.DATA <= unsigned(first_triplet(17 downto 11));
+
+    first_hamming_parity(0) <= xor (first_triplet_hamming(0 downto 0) & first_triplet_hamming(2) & first_triplet_hamming(4) & first_triplet_hamming(6)
+        & first_triplet_hamming(8) & first_triplet_hamming(10) & first_triplet_hamming(12) & first_triplet_hamming(14) 
+        & first_triplet_hamming(16) & first_triplet_hamming(18) & first_triplet_hamming(20) & first_triplet_hamming(22));
+        
+    first_hamming_parity(1) <= xor (first_triplet_hamming(2 downto 1) & first_triplet_hamming(6 downto 5) & first_triplet_hamming(10 downto 9) & first_triplet_hamming(14 downto 13) & first_triplet_hamming(18 downto 17) & first_triplet_hamming(22 downto 21));
+
+    first_hamming_parity(2) <= xor (first_triplet_hamming(6 downto 3) & first_triplet_hamming(14 downto 11) & first_triplet_hamming(22 downto 19));
+    
+    first_hamming_parity(3) <= xor first_triplet_hamming(14 downto 7);
+    
+    first_hamming_parity(4) <= xor first_triplet_hamming(22 downto 15);
+    
+    first_hamming_parity(5) <= xor first_triplet_hamming;
 
     stimuli : process
     begin
@@ -109,6 +133,9 @@ begin
             if packet_num = 26 then
                 report "Enhancement received!";
                 report "First triplet:" & to_hstring(first_triplet);
+                report "Address: " & to_string(first_triplet_decoded.ADDRESS) &
+                        ", Mode: " & to_string(first_triplet_decoded.MODE) &
+                        ", Data: " & to_string(first_triplet_decoded.DATA);
             end if;
 
             --report std_logic_vector'image(packet);

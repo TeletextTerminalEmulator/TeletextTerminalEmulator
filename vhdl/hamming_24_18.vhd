@@ -53,7 +53,7 @@ p2                      <= '1' xor DATA_IN(0)   xor DATA_IN(2)  xor DATA_IN(3)  
                                xor DATA_IN(12)  xor DATA_IN(13) xor DATA_IN(16) xor DATA_IN(17);
 p3                      <= '1' xor DATA_IN(1)   xor DATA_IN(2)  xor DATA_IN(3)  xor DATA_IN(7)  xor DATA_IN(8)  xor DATA_IN(9)  xor DATA_IN(10)
                                xor DATA_IN(14)  xor DATA_IN(15) xor DATA_IN(16) xor DATA_IN(17);
-p4                      <= '1' xor DATA_IN(4)   xor DATA_IN(5)  xor DATA_IN(5)  xor DATA_IN(7)  xor DATA_IN(8)  xor DATA_IN(9)  xor DATA_IN(10);
+p4                      <= '1' xor DATA_IN(4)   xor DATA_IN(5)  xor DATA_IN(6)  xor DATA_IN(7)  xor DATA_IN(8)  xor DATA_IN(9)  xor DATA_IN(10);
 p5                      <= '1' xor DATA_IN(11)  xor DATA_IN(12) xor DATA_IN(13) xor DATA_IN(14) xor DATA_IN(15) xor DATA_IN(16) xor DATA_IN(17);
 p6                      <= '1' xor p1           xor p2          xor DATA_IN(0)  xor p3          xor DATA_IN(1)  xor DATA_IN(2)  xor DATA_IN(3)
                                xor p4           xor DATA_IN(4)  xor DATA_IN(5)  xor DATA_IN(6)  xor DATA_IN(7)  xor DATA_IN(8)  xor DATA_IN(9)
