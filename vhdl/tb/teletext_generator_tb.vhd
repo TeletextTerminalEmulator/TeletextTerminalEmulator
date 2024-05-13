@@ -57,11 +57,16 @@ architecture tb of teletext_generator_tb is
     signal packet : std_logic_vector (359 downto 0);
     
     signal packet_num: unsigned(4 downto 0);
-    signal first_triplet_hamming: std_logic_vector(23 downto 0);
-    signal first_hamming_parity: std_logic_vector(5 downto 0);
-    signal first_triplet: std_logic_vector(17 downto 0);
     
-    signal first_triplet_decoded: TRIPLET;
+    type logic_triplet is array(12 downto 0) of std_logic_vector(17 downto 0);
+    type logic_triplet_hamming is array(12 downto 0) of std_logic_vector(23 downto 0);
+    type logic_triplet_parity is array(12 downto 0) of std_logic_vector(5 downto 0);
+    
+    signal triplet_hamming: logic_triplet_hamming;
+    signal hamming_parity: logic_triplet_parity;
+    signal triplet: logic_triplet;
+    
+    signal triplet_decoded: TRIPLET_ARRAY(12 downto 0);
 
 begin
 
@@ -87,27 +92,31 @@ begin
     
     packet_num <= unsigned(packet(320 downto 320) & packet(322) & packet(324) & packet(326) & packet(328));
     
-    first_triplet_hamming <= reverse_any_vector(packet(311 downto 288));
-    
-    first_triplet <= first_triplet_hamming(22 downto 16) & first_triplet_hamming(14 downto 8) & first_triplet_hamming(6 downto 4) & first_triplet_hamming(2);
-    
-    first_triplet_decoded.ADDRESS <= unsigned(first_triplet(5 downto 0));
-    first_triplet_decoded.MODE <= unsigned(first_triplet(10 downto 6));
-    first_triplet_decoded.DATA <= unsigned(first_triplet(17 downto 11));
-
-    first_hamming_parity(0) <= xor (first_triplet_hamming(0 downto 0) & first_triplet_hamming(2) & first_triplet_hamming(4) & first_triplet_hamming(6)
-        & first_triplet_hamming(8) & first_triplet_hamming(10) & first_triplet_hamming(12) & first_triplet_hamming(14) 
-        & first_triplet_hamming(16) & first_triplet_hamming(18) & first_triplet_hamming(20) & first_triplet_hamming(22));
+    triplets: for I in 0 to 12 generate
         
-    first_hamming_parity(1) <= xor (first_triplet_hamming(2 downto 1) & first_triplet_hamming(6 downto 5) & first_triplet_hamming(10 downto 9) & first_triplet_hamming(14 downto 13) & first_triplet_hamming(18 downto 17) & first_triplet_hamming(22 downto 21));
-
-    first_hamming_parity(2) <= xor (first_triplet_hamming(6 downto 3) & first_triplet_hamming(14 downto 11) & first_triplet_hamming(22 downto 19));
+        triplet_hamming(I) <= reverse_any_vector(packet((311 - I * 24) downto (288 - I * 24)));
+        
+        triplet(I) <= triplet_hamming(I)(22 downto 16) & triplet_hamming(I)(14 downto 8) & triplet_hamming(I)(6 downto 4) & triplet_hamming(I)(2);
+        
+        triplet_decoded(I).ADDRESS <= unsigned(triplet(I)(5 downto 0));
+        triplet_decoded(I).MODE <= unsigned(triplet(I)(10 downto 6));
+        triplet_decoded(I).DATA <= unsigned(triplet(I)(17 downto 11));
     
-    first_hamming_parity(3) <= xor first_triplet_hamming(14 downto 7);
+        hamming_parity(I)(0) <= xor (triplet_hamming(I)(0 downto 0) & triplet_hamming(I)(2) & triplet_hamming(I)(4) & triplet_hamming(I)(6)
+            & triplet_hamming(I)(8) & triplet_hamming(I)(10) & triplet_hamming(I)(12) & triplet_hamming(I)(14) 
+            & triplet_hamming(I)(16) & triplet_hamming(I)(18) & triplet_hamming(I)(20) & triplet_hamming(I)(22));
+            
+        hamming_parity(I)(1) <= xor (triplet_hamming(I)(2 downto 1) & triplet_hamming(I)(6 downto 5) & triplet_hamming(I)(10 downto 9) & triplet_hamming(I)(14 downto 13) & triplet_hamming(I)(18 downto 17) & triplet_hamming(I)(22 downto 21));
     
-    first_hamming_parity(4) <= xor first_triplet_hamming(22 downto 15);
+        hamming_parity(I)(2) <= xor (triplet_hamming(I)(6 downto 3) & triplet_hamming(I)(14 downto 11) & triplet_hamming(I)(22 downto 19));
+        
+        hamming_parity(I)(3) <= xor triplet_hamming(I)(14 downto 7);
+        
+        hamming_parity(I)(4) <= xor triplet_hamming(I)(22 downto 15);
+        
+        hamming_parity(I)(5) <= xor triplet_hamming(I);
     
-    first_hamming_parity(5) <= xor first_triplet_hamming;
+    end generate;
 
     stimuli : process
     begin
@@ -132,10 +141,12 @@ begin
             
             if packet_num = 26 then
                 report "Enhancement received!";
-                report "First triplet:" & to_hstring(first_triplet);
-                report "Address: " & to_string(first_triplet_decoded.ADDRESS) &
-                        ", Mode: " & to_string(first_triplet_decoded.MODE) &
-                        ", Data: " & to_string(first_triplet_decoded.DATA);
+                for i in 0 to 12 loop
+                report "Triplet " & to_string(i) & ": Address=" & to_string(triplet_decoded(i).ADDRESS) &
+                        ", Mode=" & to_string(triplet_decoded(i).MODE) &
+                        ", Data=" & to_string(triplet_decoded(i).DATA);
+                end loop;
+                
             end if;
 
             --report std_logic_vector'image(packet);
