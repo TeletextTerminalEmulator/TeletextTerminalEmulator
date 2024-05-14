@@ -119,7 +119,7 @@ dependencies = [
  "regex",
  "rustc-hash",
  "shlex",
- "syn 2.0.61",
+ "syn 2.0.63",
  "which",
 ]
 
@@ -204,7 +204,7 @@ dependencies = [
  "heck",
  "proc-macro2",
  "quote",
- "syn 2.0.61",
+ "syn 2.0.63",
 ]
 
 [[package]]
@@ -516,7 +516,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5f12335488a2f3b0a83b14edad48dca9879ce89b2edd10e80237e4e852dd645e"
 dependencies = [
  "proc-macro2",
- "syn 2.0.61",
+ "syn 2.0.63",
 ]
 
 [[package]]
@@ -679,7 +679,7 @@ checksum = "c5e405930b9796f1c00bee880d03fc7e0bb4b9a11afc776885ffe84320da2865"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.61",
+ "syn 2.0.63",
 ]
 
 [[package]]
@@ -753,7 +753,7 @@ dependencies = [
  "regex",
  "svd-parser",
  "svd-rs",
- "syn 2.0.61",
+ "syn 2.0.63",
  "thiserror",
 ]
 
@@ -770,9 +770,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.61"
+version = "2.0.63"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c993ed8ccba56ae856363b1845da7266a7cb78e1d146c8a32d54b45a8b831fc9"
+checksum = "bf5be731623ca1a1fb7d8be6f261a3be6d3e2337b8a1f97be944d020c8fcb704"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -810,7 +810,7 @@ checksum = "e2470041c06ec3ac1ab38d0356a6119054dedaea53e12fbefc0de730a1c08524"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.61",
+ "syn 2.0.63",
 ]
 
 [[package]]
@@ -870,7 +870,7 @@ dependencies = [
 [[package]]
 name = "vte-input"
 version = "0.1.0"
-source = "git+https://github.com/jorolf/vte-input.git#44694083e5b524506c32b22e7c5b259e5e53cc10"
+source = "git+https://github.com/jorolf/vte-input.git#af6d36b0d4bbe1276cf66eb901e1cbec0b49bcd0"
 dependencies = [
  "bitflags 2.5.0",
 ]
