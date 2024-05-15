@@ -128,9 +128,9 @@ signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
 
 begin
     
-    -- Set active position to row 1, column 0
+    -- Set active position to row 2, column 0
     enhancement_triplets(0)     <= (
-        ADDRESS => to_unsigned(41, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        ADDRESS => to_unsigned(42, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
         MODE => to_unsigned(4, TERMINATION_MARKER_TRIPLET.MODE'length),
         DATA => to_unsigned(0, TERMINATION_MARKER_TRIPLET.DATA'length)
     );
@@ -149,8 +149,15 @@ begin
         DATA => to_unsigned(16#5B#, TERMINATION_MARKER_TRIPLET.DATA'length)
     );
     
-    -- Set background color to green at the start of row 1
+    -- G0 character with diacriticals (a with macron)
     enhancement_triplets(3)     <= (
+        ADDRESS => to_unsigned(10, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(2#10101#, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(16#61#, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+    
+    -- Set background color to green at the start of row 1
+    enhancement_triplets(4)     <= (
         ADDRESS => to_unsigned(0, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
         MODE => to_unsigned(3, TERMINATION_MARKER_TRIPLET.MODE'length),
         DATA => to_unsigned(2, TERMINATION_MARKER_TRIPLET.DATA'length)
