@@ -136,8 +136,12 @@ begin
             for i in 359 downto 0 loop
                 wait until rising_edge(CLK_IN);
                 packet(i) <= DATA_OUT;
-                --report std_logic'image(DATA_OUT);
             end loop;
+            wait until rising_edge(CLK_IN);
+            report to_hstring(packet);
+            report to_hstring(reverse_any_vector(packet));
+            
+            assert packet_num /= 24 report "last packet" severity failure;
             
             if packet_num = 26 then
                 report "Enhancement received!";
@@ -146,10 +150,7 @@ begin
                         ", Mode=" & to_string(triplet_decoded(i).MODE) &
                         ", Data=" & to_string(triplet_decoded(i).DATA);
                 end loop;
-                
             end if;
-
-            --report std_logic_vector'image(packet);
         end loop;
 
         -- Stop the clock and hence terminate the simulation
