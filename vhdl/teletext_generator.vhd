@@ -155,13 +155,34 @@ begin
         MODE => to_unsigned(2#10101#, TERMINATION_MARKER_TRIPLET.MODE'length),
         DATA => to_unsigned(16#61#, TERMINATION_MARKER_TRIPLET.DATA'length)
     );
+   
+    -- Set active position to row 3, column 0
+    enhancement_triplets(4)     <= (
+        ADDRESS => to_unsigned(43, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(4, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(0, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
     
-    -- Set background color to green at the start of row 1
---    enhancement_triplets(4)     <= (
---        ADDRESS => to_unsigned(0, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
---        MODE => to_unsigned(3, TERMINATION_MARKER_TRIPLET.MODE'length),
---        DATA => to_unsigned(2, TERMINATION_MARKER_TRIPLET.DATA'length)
---    );
+    -- Set background color to green at the start of row
+    enhancement_triplets(5)     <= (
+        ADDRESS => to_unsigned(0, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(3, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(2, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+   
+    -- Set active position to row 8, column 0
+    enhancement_triplets(6)     <= (
+        ADDRESS => to_unsigned(47, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(4, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(0, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+    
+    -- Set background color to green at the start of row
+    enhancement_triplets(7)     <= (
+        ADDRESS => to_unsigned(0, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(0, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(2, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
 
     LINE_INDEX <= current_line;
 
