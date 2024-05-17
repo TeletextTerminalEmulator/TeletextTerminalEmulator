@@ -75,8 +75,10 @@ signal write_enable_vec     : std_logic_vector(0 downto 0);
 
 begin
 
-read_address <= std_logic_vector(current_out_index) & std_logic_vector((current_column + 1) mod TELETEXT_LINE'length);
-write_address <= std_logic_vector(INPUT_LINE) & std_logic_vector(INPUT_COLUMN);
+-- read_address <= std_logic_vector(current_out_index) & std_logic_vector((current_column + 1) mod TELETEXT_LINE'length);
+-- write_address <= std_logic_vector(INPUT_LINE) & std_logic_vector(INPUT_COLUMN);
+read_address <= std_logic_vector(current_out_index * to_unsigned(40, 6) + ((current_column + 1) mod TELETEXT_LINE'length));
+write_address <= std_logic_vector(INPUT_LINE * to_unsigned(40, 6) + INPUT_COLUMN);
 LINE_OUT <= current_line_out;
 write_enable_vec(0) <= WRITE_ENABLE;
 

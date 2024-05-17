@@ -31,7 +31,7 @@ fn main() -> ! {
     let teletext = unsafe { Teletext::new_raw() };
     writeln!(uart, "Peripherals initialized").unwrap();
     
-    for (col, ch) in "Hallo Welt!".chars().enumerate() {
+    for (col, ch) in "Hallo Welt!12345678901234567890123456789".chars().enumerate() {
         teletext.set_char(ch, 7, col as u8).expect("Values should be fine");
     }
     loop {

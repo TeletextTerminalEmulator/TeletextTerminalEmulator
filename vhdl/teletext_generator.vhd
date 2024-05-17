@@ -105,7 +105,6 @@ end component;
 signal packet_trigger               : std_logic;
 signal load_trigger                 : std_logic;
 signal frame_trigger                : std_logic;
-signal packet_designator            : unsigned (3 downto 0) := (others => '0');
 signal teletext_packet              : std_logic_vector (359 downto 0) := (others => '1');
 signal teletext_normal_data         : std_logic_vector (319 downto 0);
 signal teletext_normal_data_const   : std_logic_vector (319 downto 0);
@@ -122,6 +121,8 @@ signal current_packet               : unsigned (4 downto 0);
 signal current_frame                : std_logic := '0';
 signal next_frame                   : std_logic;
 
+
+signal packet_designator            : unsigned (3 downto 0) := current_line(3 downto 0) - 1;
 signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
     others => TERMINATION_MARKER_TRIPLET
 );
@@ -246,7 +247,7 @@ begin
         end if;
     end process;
     
-    advance_line: process (packet_trigger, frame_trigger, current_line)
+    advance_line: process (packet_trigger, frame_trigger, current_line, current_frame)
     begin
         next_frame <= current_frame;
 
@@ -260,7 +261,7 @@ begin
         end if;
     end process;
     
-    switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, teletext_enhancement_data, packet_trigger)
+    switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, teletext_enhancement_data, packet_trigger, current_frame)
     begin
         load_trigger <= packet_trigger;
         teletext_packet(359 downto 40) <= (others => '0');
@@ -270,7 +271,7 @@ begin
             if current_line = 0 then
                 teletext_packet(359 downto 40) <= teletext_page_header_data;
                 current_packet <= to_unsigned(0, current_packet'length);
-            elsif current_line = 1 then
+            elsif current_line > 0 and current_line <= 16 then
                 -- TODO: Packet designations
                 teletext_packet(359 downto 40) <= teletext_enhancement_data;
                 current_packet <= to_unsigned(26, current_packet'length);
