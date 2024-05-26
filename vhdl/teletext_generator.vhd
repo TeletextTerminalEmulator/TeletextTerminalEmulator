@@ -94,21 +94,96 @@ component packet_page_header_generator
     );
 end component;
 
+component packet_enhancement_generator is
+    port(
+        DESIGNATION_IN : in unsigned(3 downto 0);
+        TRIPLETS_IN : in TRIPLET_ARRAY(12 downto 0);
+        PACKET_DATA : out STD_LOGIC_VECTOR (319 downto 0)
+    );
+end component;
+
 signal packet_trigger               : std_logic;
 signal load_trigger                 : std_logic;
 signal frame_trigger                : std_logic;
 signal teletext_packet              : std_logic_vector (359 downto 0) := (others => '1');
 signal teletext_normal_data         : std_logic_vector (319 downto 0);
+signal teletext_normal_data_const   : std_logic_vector (319 downto 0);
 signal teletext_page_header_data    : std_logic_vector (319 downto 0); 
+signal teletext_enhancement_data    : std_logic_vector (319 downto 0);
+
 signal current_line                 : unsigned (4 downto 0) := (others => '0');
 signal next_line                    : unsigned (4 downto 0) := (others => '0');
-constant MAX_LINE_COUNT             : unsigned (current_line'length - 1 downto 0) := (others => '1');
 
-signal current_last_packet_sent     : unsigned (7 downto 0) := (others => '0');
-signal next_last_packet_sent        : unsigned (7 downto 0);
-constant FRAMES_PER_PACKET          : natural := 1;
+signal current_packet               : unsigned (4 downto 0);
+
+-- 0 => header + enhancement data
+-- 1 => display data
+signal current_frame                : std_logic := '0';
+signal next_frame                   : std_logic;
+
+
+signal packet_designator            : unsigned (3 downto 0) := current_line(3 downto 0) - 1;
+signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
+    others => TERMINATION_MARKER_TRIPLET
+);
 
 begin
+    
+    -- Set active position to row 2, column 0
+    enhancement_triplets(0)     <= (
+        ADDRESS => to_unsigned(42, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(4, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(0, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+    
+    -- G2 character (music note)
+    enhancement_triplets(1)     <= (
+        ADDRESS => to_unsigned(2, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(15, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(16#55#, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+    
+    -- G3 character (Arrow pointing right)
+    enhancement_triplets(2)     <= (
+        ADDRESS => to_unsigned(5, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(2, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(16#5B#, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+    
+    -- G0 character with diacriticals (a with macron)
+    enhancement_triplets(3)     <= (
+        ADDRESS => to_unsigned(10, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(2#10101#, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(16#61#, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+   
+    -- Set active position to row 3, column 0
+    enhancement_triplets(4)     <= (
+        ADDRESS => to_unsigned(43, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(4, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(0, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+    
+    -- Set background color to green at the start of row
+    enhancement_triplets(5)     <= (
+        ADDRESS => to_unsigned(0, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(3, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(2, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+   
+    -- Set active position to row 8, column 0
+    enhancement_triplets(6)     <= (
+        ADDRESS => to_unsigned(47, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(4, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(0, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
+    
+    -- Set background color to green at the start of row
+    enhancement_triplets(7)     <= (
+        ADDRESS => to_unsigned(0, TERMINATION_MARKER_TRIPLET.ADDRESS'length),
+        MODE => to_unsigned(0, TERMINATION_MARKER_TRIPLET.MODE'length),
+        DATA => to_unsigned(2, TERMINATION_MARKER_TRIPLET.DATA'length)
+    );
 
     LINE_INDEX <= current_line;
 
@@ -133,7 +208,7 @@ begin
     packet_header_gen : packet_header_generator
     port map(
         MAGAZINE => MAGAZINE_NUMBER,
-        PACKET => current_line,
+        PACKET => current_packet,
         PACKET_HEADER_DATA => teletext_packet(39 downto 0)
     );
     
@@ -141,6 +216,13 @@ begin
     port map(
         DATA_BYTES => LINE_IN,
         PACKET_DATA => teletext_normal_data
+    );
+    
+    packet_enhancement_gen : packet_enhancement_generator
+    port map(
+        DESIGNATION_IN => packet_designator,
+        TRIPLETS_IN => enhancement_triplets,
+        PACKET_DATA => teletext_enhancement_data
     );
     
     packet_page_header_gen : packet_page_header_generator
@@ -157,47 +239,52 @@ begin
         if rising_edge(CLK_IN) then
             if RESET_N = '0' then
                 current_line <= (others => '0');
-                current_last_packet_sent <= (others => '0');                
+                current_frame <= '0';
             else
                 current_line <= next_line;
-                current_last_packet_sent <= next_last_packet_sent;
+                current_frame <= next_frame;
             end if;
         end if;
     end process;
     
-    advance_line: process (packet_trigger, frame_trigger, current_line, current_last_packet_sent)
+    advance_line: process (packet_trigger, frame_trigger, current_line, current_frame)
     begin
-        next_last_packet_sent <= current_last_packet_sent;
-        next_line <= current_line;
-            
-        if packet_trigger = '1' then
-            if current_line = MAX_LINE_COUNT then
-                next_line <= current_line;
-            else
-                next_line <= current_line + 1;
-            end if;
+        next_frame <= current_frame;
+
+        if packet_trigger = '1' and current_line /= "11111" then
+            next_line <= current_line + 1;
         elsif frame_trigger = '1' then
-            if current_last_packet_sent >= FRAMES_PER_PACKET then
-                next_last_packet_sent <= (others => '0');
-                next_line <= (others => '0');
-            else
-                next_last_packet_sent <= current_last_packet_sent + 1;
-            end if;
+            next_line <= (others => '0');
+            next_frame <= not current_frame;
+        else
+            next_line <= current_line;
         end if;
     end process;
     
-    switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, packet_trigger)
+    switch_generator: process (current_line, teletext_page_header_data, teletext_normal_data, teletext_enhancement_data, packet_trigger, current_frame)
     begin
-        if current_line = 0 then
-            teletext_packet(359 downto 40) <= teletext_page_header_data;
+        load_trigger <= packet_trigger;
+        teletext_packet(359 downto 40) <= (others => '0');
+        current_packet <= (others => '1');
+
+        if current_frame = '0' then
+            if current_line = 0 then
+                teletext_packet(359 downto 40) <= teletext_page_header_data;
+                current_packet <= to_unsigned(0, current_packet'length);
+            elsif current_line > 0 and current_line <= 16 then
+                -- TODO: Packet designations
+                teletext_packet(359 downto 40) <= teletext_enhancement_data;
+                current_packet <= to_unsigned(26, current_packet'length);
+            else
+                load_trigger <= '0';
+            end if;
         else
-            teletext_packet(359 downto 40) <= teletext_normal_data;
-        end if;
-        
-        if current_line <= 24 then
-            load_trigger <= packet_trigger;
-        else
-            load_trigger <= '0';
+            if current_line > 0 and current_line <= 24 then
+                teletext_packet(359 downto 40) <= teletext_normal_data;
+                current_packet <= current_line;
+            else
+                load_trigger <= '0';
+            end if;
         end if;
     end process;
 end Behavioral;

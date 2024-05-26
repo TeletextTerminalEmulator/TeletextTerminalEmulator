@@ -196,7 +196,7 @@ signal current_page_control_bits : CONTROL_BITS := (
     UPDATE_INDICATOR => '0',
     INTERRUPTED_SEQUENCE => '0',
     INHIBIT_DISPLAY => '0',
-    MAGAZINE_SERIAL => '0',
+    MAGAZINE_SERIAL => '1',
     NATIONAL_OPTION_CHARACTER_SUBSET => "000"
 );
 signal current_page_number : unsigned (7 downto 0) := (others => '0');
