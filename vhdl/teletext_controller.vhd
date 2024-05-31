@@ -118,6 +118,7 @@ component teletext_generator is
         MAGAZINE_NUMBER     : in    unsigned (2 downto 0);
         
         LINE_INDEX          : out   unsigned (4 downto 0);
+        FRAME_FLAG          : out   std_logic;
         
         DATA_OUT            : out   std_logic;
         SYNC_OUT            : out   std_logic
@@ -138,6 +139,7 @@ component framebuffer is
         -- Teletextgenerator side
         LINE_OUT_CLOCK  : in    std_logic;
         LINE_OUT_INDEX  : in    unsigned(4 downto 0);
+        FRAME           : in    std_logic;
         LINE_OUT        : out   TELETEXT_LINE
     );
 end component;
@@ -145,6 +147,7 @@ end component;
 signal reset : std_logic;
 signal teletext_line : TELETEXT_LINE;
 signal line_index : unsigned (4 downto 0);
+signal frame : std_logic;
 
 -- BRAM interface signals
 signal current_write_enable     : std_logic := '0';
@@ -227,6 +230,7 @@ begin
         PAGE_NUMBER => current_page_number,
         MAGAZINE_NUMBER => current_magazine_number,
         LINE_INDEX => line_index,
+        FRAME_FLAG => frame,
         DATA_OUT => DATA_OUT,
         SYNC_OUT => SYNC_OUT
     );
@@ -243,6 +247,7 @@ begin
         
         LINE_OUT_CLOCK => TELETEXT_CLK,
         LINE_OUT_INDEX => line_index,
+        FRAME => frame,
         LINE_OUT => teletext_line 
     );
 

@@ -56,6 +56,7 @@ package types_pkg is
         DATA: unsigned(6 downto 0);
     end record TRIPLET;
     type TRIPLET_ARRAY is array (natural range <>) of TRIPLET;
+    subtype TRIPLET_LINE is TRIPLET_ARRAY(12 downto 0);
 
     constant TERMINATION_MARKER_TRIPLET : TRIPLET := (
         ADDRESS => "111111",
@@ -65,6 +66,7 @@ package types_pkg is
 
     -- https://stackoverflow.com/questions/13584307/reverse-bit-order-on-vhdl
     function reverse_any_vector (a: std_logic_vector) return std_logic_vector;
+    function convert_teletext_line_to_enhancements (a: TELETEXT_LINE) return TRIPLET_LINE;
 end package types_pkg;
 
 package body types_pkg is
@@ -79,4 +81,16 @@ package body types_pkg is
         end loop;
         return result;
     end reverse_any_vector;
+    
+    function convert_teletext_line_to_enhancements (a: TELETEXT_LINE)
+    return TRIPLET_LINE is
+        variable result: TRIPLET_LINE;
+    begin
+        for i in result'RANGE loop
+            result(i).ADDRESS := unsigned(a(i * 3)(6 downto 1));
+            result(i).MODE := unsigned(a(i * 3)(0) & a((i * 3) + 1)(6 downto 3));
+            result(i).DATA := unsigned(a((i * 3) + 1)(2 downto 0) & a((i * 3) + 2)(6 downto 3));
+        end loop;
+        return result;
+    end convert_teletext_line_to_enhancements;
 end package body types_pkg;

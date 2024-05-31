@@ -1,24 +1,26 @@
 use alacritty_terminal::term::TermMode;
 use pc_keyboard::layouts::Us104Key;
-use pc_keyboard::{DecodedKey, KeyCode, KeyEvent, KeyState, KeyboardLayout, ScancodeSet, ScancodeSet2};
 use pc_keyboard::Modifiers as PcModifiers;
+use pc_keyboard::{
+    DecodedKey, KeyCode, KeyEvent, KeyState, KeyboardLayout, ScancodeSet, ScancodeSet2,
+};
 use vte_input::key::{FunctionalKey, KeyType as VteKeyType};
-use vte_input::{KeyEvent as VteKeyEvent, ReportingMode};
 use vte_input::sequence::{EventType, KeyboardModifiers as VteModifiers};
+use vte_input::{KeyEvent as VteKeyEvent, ReportingMode};
 
 #[derive(Debug, Clone, Default)]
 struct Modifiers {
     lshift: bool,
     rshift: bool,
-    lalt:   bool,
-    ralt:   bool,
-    lctrl:  bool,
-    rctrl:  bool,
-    lwin:   bool,
-    rwin:   bool,
+    lalt: bool,
+    ralt: bool,
+    lctrl: bool,
+    rctrl: bool,
+    lwin: bool,
+    rwin: bool,
     rctrl2: bool,
-    caps_lock:  bool,
-    num_lock:   bool,
+    caps_lock: bool,
+    num_lock: bool,
 }
 
 impl Modifiers {
@@ -97,7 +99,7 @@ impl Modifiers {
                     self.num_lock = !self.num_lock;
                 }
             }
-            _ => {},
+            _ => {}
         }
     }
 }
@@ -105,15 +107,14 @@ impl Modifiers {
 impl From<&Modifiers> for VteModifiers {
     fn from(value: &Modifiers) -> Self {
         let mut vte_mods = Self::empty();
-        
+
         vte_mods.set(VteModifiers::SHIFT, value.lshift || value.rshift);
         vte_mods.set(VteModifiers::ALT, value.lalt || value.ralt);
         vte_mods.set(VteModifiers::CTRL, value.lctrl || value.rctrl);
         vte_mods.set(VteModifiers::SUPER, value.lwin || value.rwin);
         vte_mods.set(VteModifiers::CAPS_LOCK, value.caps_lock);
         vte_mods.set(VteModifiers::NUM_LOCK, value.num_lock);
-        
-        
+
         vte_mods
     }
 }
@@ -138,7 +139,7 @@ pub struct KeyEventContext {
     key_with_modifiers: VteKeyType,
     key_without_modifiers: VteKeyType,
     key_base_layout: VteKeyType,
-    
+
     modifiers: VteModifiers,
     event_type: KeyState,
 }
@@ -147,19 +148,19 @@ impl VteKeyEvent for KeyEventContext {
     fn key_with_modifiers(&self) -> VteKeyType {
         self.key_with_modifiers
     }
-    
+
     fn key_without_modifiers(&self) -> VteKeyType {
         self.key_without_modifiers
     }
-    
+
     fn key_base_layout(&self) -> VteKeyType {
         self.key_base_layout
     }
-    
+
     fn modifiers(&self) -> VteModifiers {
         self.modifiers
     }
-    
+
     fn event_type(&self) -> vte_input::sequence::EventType {
         match self.event_type {
             KeyState::Up => EventType::Release,
@@ -167,7 +168,7 @@ impl VteKeyEvent for KeyEventContext {
             KeyState::SingleShot => EventType::Press,
         }
     }
-    
+
     fn associated_text(&self) -> Option<vte_input::sequence::AssociatedText> {
         None
     }
@@ -182,34 +183,61 @@ pub struct PS2<T: KeyboardLayout> {
 }
 
 impl<T: KeyboardLayout> PS2<T> {
-    
     pub fn new(interface: litex_basys3_pac::PS2, layout: T) -> Self {
-        Self { interface, scancode_set: ScancodeSet2::new(), modifiers: Modifiers::default(), layout, base_layout: Us104Key }
+        Self {
+            interface,
+            scancode_set: ScancodeSet2::new(),
+            modifiers: Modifiers::default(),
+            layout,
+            base_layout: Us104Key,
+        }
     }
-    
+
     pub fn try_read(&mut self) -> Option<KeyEventContext> {
-        while self.interface.data_available().read().data_available().bit_is_set() {
+        while self
+            .interface
+            .data_available()
+            .read()
+            .data_available()
+            .bit_is_set()
+        {
             let scancode = self.interface.scancode().read().scancode().bits();
-            
-            if let Some(mut event) = self.scancode_set.advance_state(scancode).expect("Interface should always output valid scancodes") {
+
+            if let Some(mut event) = self
+                .scancode_set
+                .advance_state(scancode)
+                .expect("Interface should always output valid scancodes")
+            {
                 self.modifiers.apply_key_event(&mut event);
-                
+
                 let keycode = event.code;
-                
-                let key_with_modifiers = self.layout.map_keycode(keycode, &(&self.modifiers).into(), pc_keyboard::HandleControl::MapLettersToUnicode);
-                let key_without_modifiers = self.layout.map_keycode(keycode, &PcModifiers::default(), pc_keyboard::HandleControl::MapLettersToUnicode);
-                let key_base_layout = self.base_layout.map_keycode(keycode, &PcModifiers::default(), pc_keyboard::HandleControl::MapLettersToUnicode);
-                
+
+                let key_with_modifiers = self.layout.map_keycode(
+                    keycode,
+                    &(&self.modifiers).into(),
+                    pc_keyboard::HandleControl::MapLettersToUnicode,
+                );
+                let key_without_modifiers = self.layout.map_keycode(
+                    keycode,
+                    &PcModifiers::default(),
+                    pc_keyboard::HandleControl::MapLettersToUnicode,
+                );
+                let key_base_layout = self.base_layout.map_keycode(
+                    keycode,
+                    &PcModifiers::default(),
+                    pc_keyboard::HandleControl::MapLettersToUnicode,
+                );
+
                 return Some(KeyEventContext {
                     key_with_modifiers: convert_key_code(&key_with_modifiers),
                     key_without_modifiers: convert_key_code(&key_without_modifiers),
                     key_base_layout: convert_key_code(&key_base_layout),
                     modifiers: (&self.modifiers).into(),
                     event_type: event.state,
-                })
+                });
             }
         }
-        
+
         None
     }
 }

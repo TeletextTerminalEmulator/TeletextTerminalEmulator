@@ -5,10 +5,10 @@ extern crate alloc;
 
 mod character_set;
 mod error;
+mod ps2;
 mod teletext;
 mod teletext_interface;
 mod teletext_terminal;
-mod ps2;
 
 use crate::ps2::convert_term_mode;
 use crate::teletext::{Teletext, TeletextDimensions};
@@ -18,9 +18,6 @@ use alacritty_terminal::term::Config;
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
-use pc_keyboard::KeyboardLayout;
-use ps2::PS2;
-use vte_input::generate_sequence;
 use core::cell::RefCell;
 use core::convert::Infallible;
 use core::fmt::Write;
@@ -29,8 +26,11 @@ use embedded_alloc::Heap;
 use litex_basys3_pac::{riscv_rt::entry, Peripherals};
 use litex_hal::nb::{self, block};
 use litex_hal::prelude::*;
+use pc_keyboard::KeyboardLayout;
 use portable_atomic::{AtomicBool, Ordering};
+use ps2::PS2;
 use teletext_terminal::LitexTimeout;
+use vte_input::generate_sequence;
 
 #[cfg(feature = "backtrace")]
 use mini_backtrace::Backtrace;
@@ -65,8 +65,6 @@ macro_rules! lock_debug_uart {
     };
 }
 
-
-
 #[cfg(feature = "terminal_uart")]
 use TERMINAL_UART as UART;
 
@@ -82,8 +80,8 @@ macro_rules! lock_uart {
     };
 }
 
-pub(crate) use lock_uart;
 pub(crate) use lock_debug_uart;
+pub(crate) use lock_uart;
 
 enum Event {
     UartReceived(u8),
@@ -96,18 +94,16 @@ fn wait_for_event<T: KeyboardLayout>(ps2: &mut PS2<T>) -> nb::Result<Event, Infa
 
     match read_byte {
         Ok(byte) => Ok(Event::UartReceived(byte)),
-        Err(nb::Error::WouldBlock) => {
-            match ps2.try_read() {
-                Some(context) => Ok(Event::Keyboard(context)),
-                None => {
-                    if !TELETEXT_VALID.load(Ordering::Relaxed) {
-                        Ok(Event::Redraw)
-                    } else {
-                        Err(nb::Error::WouldBlock)
-                    }
-                },
+        Err(nb::Error::WouldBlock) => match ps2.try_read() {
+            Some(context) => Ok(Event::Keyboard(context)),
+            None => {
+                if !TELETEXT_VALID.load(Ordering::Relaxed) {
+                    Ok(Event::Redraw)
+                } else {
+                    Err(nb::Error::WouldBlock)
+                }
             }
-        }
+        },
         Err(err) => Err(err),
     }
 }
@@ -168,7 +164,12 @@ fn main() -> ! {
                 TELETEXT_VALID.store(false, Ordering::Relaxed);
             }
             Event::Keyboard(context) => {
-                write!(lock_uart!(), "{}", generate_sequence(convert_term_mode(term.mode()), &context)).unwrap();
+                write!(
+                    lock_uart!(),
+                    "{}",
+                    generate_sequence(convert_term_mode(term.mode()), &context)
+                )
+                .unwrap();
             }
             Event::Redraw => {
                 let mut teletext = teletext.borrow_mut();

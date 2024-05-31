@@ -42,6 +42,7 @@ entity teletext_generator is
         MAGAZINE_NUMBER     : in    unsigned (2 downto 0);
         
         LINE_INDEX          : out   unsigned (4 downto 0);
+        FRAME_FLAG          : out   std_logic;
         
         DATA_OUT            : out   std_logic;
         SYNC_OUT            : out   std_logic
@@ -186,6 +187,7 @@ begin
     );
 
     LINE_INDEX <= current_line;
+    FRAME_FLAG <= current_frame;
 
     sync_gen : sync_generator
     port map (CLK_IN   => CLK_IN,
@@ -221,7 +223,8 @@ begin
     packet_enhancement_gen : packet_enhancement_generator
     port map(
         DESIGNATION_IN => packet_designator,
-        TRIPLETS_IN => enhancement_triplets,
+        --TRIPLETS_IN => enhancement_triplets,
+        TRIPLETS_IN => convert_teletext_line_to_enhancements(LINE_IN),
         PACKET_DATA => teletext_enhancement_data
     );
     

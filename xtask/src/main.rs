@@ -28,28 +28,36 @@ struct BuildArgs {
 fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<String> {
     let release = args.release;
 
-    
-    let env = args.backtrace.then(|| {(
-        sh.push_env("CXX_riscv32i_unknown_none_elf", "clang++"),
-        sh.push_env(
-            "BINDGEN_EXTRA_CLANG_ARGS_riscv32i_unknown_none_elf",
-            "--target=riscv32-unknown-none-elf",
-        ),
-        match cmd!(sh, "llvm-ar")
-            .quiet()
-            .ignore_stdout()
-            .ignore_status()
-            .ignore_stderr()
-            .run()
-        {
-            Ok(_) => Some(sh.push_env("AR_riscv32i_unknown_none_elf", "llvm-ar")),
-            Err(_) => None,
-        }
-    )});
+    let env = args.backtrace.then(|| {
+        (
+            sh.push_env("CXX_riscv32i_unknown_none_elf", "clang++"),
+            sh.push_env(
+                "BINDGEN_EXTRA_CLANG_ARGS_riscv32i_unknown_none_elf",
+                "--target=riscv32-unknown-none-elf",
+            ),
+            match cmd!(sh, "llvm-ar")
+                .quiet()
+                .ignore_stdout()
+                .ignore_status()
+                .ignore_stderr()
+                .run()
+            {
+                Ok(_) => Some(sh.push_env("AR_riscv32i_unknown_none_elf", "llvm-ar")),
+                Err(_) => None,
+            },
+        )
+    });
 
     let release_flag = release.then_some("--release");
 
-    let features: String = [args.backtrace.then_some("backtrace"), args.terminal_uart.then_some("terminal_uart")].into_iter().flatten().collect::<Vec<&str>>().join(" ");
+    let features: String = [
+        args.backtrace.then_some("backtrace"),
+        args.terminal_uart.then_some("terminal_uart"),
+    ]
+    .into_iter()
+    .flatten()
+    .collect::<Vec<&str>>()
+    .join(" ");
 
     let feature_flag_vec = if !features.is_empty() {
         vec!["--features", &features]
@@ -61,7 +69,11 @@ fn build_binary(sh: &Shell, project_dir: &str, args: &BuildArgs) -> Result<Strin
 
     const TARGET: &str = "riscv32i-unknown-none-elf";
 
-    cmd!(sh, "cargo build {release_flag...} {feature_flag...} --target {TARGET}").run()?;
+    cmd!(
+        sh,
+        "cargo build {release_flag...} {feature_flag...} --target {TARGET}"
+    )
+    .run()?;
 
     let profile_dir = if release { "release" } else { "debug" };
     let bin_path = format!("{project_dir}/target/{TARGET}/{profile_dir}/teletext.bin");

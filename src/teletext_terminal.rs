@@ -7,7 +7,7 @@ use alacritty_terminal::{
 use alloc::rc::Rc;
 
 use crate::{
-    teletext::{self, Teletext},
+    teletext::{self, Teletext, HEADER_LINE_ADDRESS},
     teletext_interface::TeletextInterface,
 };
 
@@ -28,7 +28,7 @@ impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
 
                 self.0
                     .borrow_mut()
-                    .set_line(title_line, 0, HEADER_OFFSET, Some('?'))
+                    .set_line(title_line, HEADER_LINE_ADDRESS, HEADER_OFFSET, Some('?'))
                     .expect("Title line should never exceed bounds");
             }
             Event::ResetTitle => {
@@ -36,7 +36,7 @@ impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
 
                 self.0
                     .borrow_mut()
-                    .set_line(reset_title, 0, HEADER_OFFSET, Some('?'))
+                    .set_line(reset_title, HEADER_LINE_ADDRESS, HEADER_OFFSET, Some('?'))
                     .expect("Resetting the title should never fail");
             }
             Event::ClipboardStore(_, _) => unimplemented!(),
