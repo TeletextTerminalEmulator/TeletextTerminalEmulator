@@ -47,7 +47,7 @@ impl<T: TeletextInterface> Teletext<T> {
     }
 
     fn init_page(&mut self) {
-        for line in 0..LINE_COUNT {
+        for line in 1..LINE_COUNT {
             for col in 0..COLUMN_COUNT {
                 self.set_char(' ', line, col)
                     .expect("The space character should always be convertable");
@@ -61,7 +61,7 @@ impl<T: TeletextInterface> Teletext<T> {
     }
 
     pub fn set_char(&mut self, c: char, line: u8, col: u8) -> Result<()> {
-        if line >= LINE_COUNT {
+        if line != HEADER_LINE_ADDRESS && !(1..LINE_COUNT).contains(&line) {
             return Err(TeletextError::OutOfBounds {
                 param: stringify!(line),
                 value: line as usize,

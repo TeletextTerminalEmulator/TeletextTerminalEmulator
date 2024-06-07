@@ -56,7 +56,7 @@ end framebuffer;
 architecture Behavioral of framebuffer is
 
 signal data_out             : TELETEXT_CHAR                 := (others => '0');
-signal read_address         : std_logic_vector(10 downto 0);
+signal read_address         : std_logic_vector(11 downto 0);
 signal write_address        : std_logic_vector(10 downto 0);
 signal current_column       : unsigned(5 downto 0)          := (others => '0');
 signal next_column          : unsigned(5 downto 0);
@@ -81,7 +81,7 @@ begin
 -- read_address <= std_logic_vector(current_out_index) & std_logic_vector((current_column + 1) mod TELETEXT_LINE'length);
 -- write_address <= std_logic_vector(INPUT_LINE) & std_logic_vector(INPUT_COLUMN);
 frame_offset <=
-    0 when current_frame else 24;
+    to_unsigned(0, 6) when current_frame else to_unsigned(24, 6);
 read_address <= 
     std_logic_vector((current_out_index + frame_offset) * to_unsigned(40, 6) + ((current_column + 1) mod TELETEXT_LINE'length));
 write_address <= std_logic_vector(INPUT_LINE * to_unsigned(40, 6) + INPUT_COLUMN);
@@ -180,7 +180,7 @@ BRAM_SDP_MACRO_inst : BRAM_SDP_MACRO
    port map (
       DO => data_out,         -- Output read data port, width defined by READ_WIDTH parameter
       DI => DATA_IN,         -- Input write data port, width defined by WRITE_WIDTH parameter
-      RDADDR => read_address, -- Input read address, width defined by read port depth
+      RDADDR => read_address(10 downto 0), -- Input read address, width defined by read port depth
       RDCLK => LINE_OUT_CLOCK,   -- 1-bit input read clock
       RDEN => '1',     -- 1-bit input read port enable
       REGCE => '1',     -- 1-bit input read output register enable
