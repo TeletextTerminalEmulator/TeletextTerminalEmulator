@@ -87,9 +87,9 @@ package body types_pkg is
         variable result: TRIPLET_LINE;
     begin
         for i in result'RANGE loop
-            result(i).ADDRESS := unsigned(a(i * 3)(6 downto 1));
-            result(i).MODE := unsigned(a(i * 3)(0) & a((i * 3) + 1)(6 downto 3));
-            result(i).DATA := unsigned(a((i * 3) + 1)(2 downto 0) & a((i * 3) + 2)(6 downto 3));
+            result(i).ADDRESS := unsigned(a(i * 3)(5 downto 0));
+            result(i).MODE := unsigned(a((i * 3) + 1)(4 downto 0));
+            result(i).DATA := unsigned(a((i * 3) + 2)(6 downto 0));
         end loop;
         return result;
     end convert_teletext_line_to_enhancements;

@@ -61,7 +61,8 @@ signal write_address        : std_logic_vector(10 downto 0);
 signal current_column       : unsigned(5 downto 0)          := (others => '0');
 signal next_column          : unsigned(5 downto 0);
 signal current_out_index    : unsigned(4 downto 0)          := (others => '0');
-signal current_frame        : std_logic; -- TODO: muss das registiert sein?
+signal current_frame        : std_logic;
+signal frame_offset         : unsigned(5 downto 0);
 signal next_line_out        : TELETEXT_LINE;
 signal current_line_out     : TELETEXT_LINE                 := (others => (others => '0'));
 signal write_enable_vec     : std_logic_vector(0 downto 0);
@@ -79,10 +80,10 @@ begin
 
 -- read_address <= std_logic_vector(current_out_index) & std_logic_vector((current_column + 1) mod TELETEXT_LINE'length);
 -- write_address <= std_logic_vector(INPUT_LINE) & std_logic_vector(INPUT_COLUMN);
+frame_offset <=
+    0 when current_frame else 24;
 read_address <= 
-    std_logic_vector(current_out_index * to_unsigned(40, 6) + ((current_column + 1) mod TELETEXT_LINE'length))
-    when current_frame
-    else std_logic_vector((current_out_index + 24) * to_unsigned(40, 6) + ((current_column + 1) mod TELETEXT_LINE'length));
+    std_logic_vector((current_out_index + frame_offset) * to_unsigned(40, 6) + ((current_column + 1) mod TELETEXT_LINE'length));
 write_address <= std_logic_vector(INPUT_LINE * to_unsigned(40, 6) + INPUT_COLUMN);
 LINE_OUT <= current_line_out;
 write_enable_vec(0) <= WRITE_ENABLE;
