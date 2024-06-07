@@ -82,13 +82,10 @@ impl<T: TeletextInterface> Teletext<T> {
     }
 
     fn write_enhancement(&mut self, address: u8, mode: u8, data: u8, designation: u8, number: u8) {
-        let part1 = (address << 1) | (mode >> 4);
-        let part2 = (mode << 3) | (data >> 4);
-        let part3 = data << 3;
         let enhancement_start = number * 3;
-        self.interface.write_char(TeletextChar(part1), enhancement_start, designation + HEADER_LINE_ADDRESS);
-        self.interface.write_char(TeletextChar(part2), enhancement_start + 1, designation + HEADER_LINE_ADDRESS);
-        self.interface.write_char(TeletextChar(part3), enhancement_start + 2, designation + HEADER_LINE_ADDRESS);
+        self.interface.write_char(TeletextChar(address), enhancement_start, designation + HEADER_LINE_ADDRESS);
+        self.interface.write_char(TeletextChar(mode), enhancement_start + 1, designation + HEADER_LINE_ADDRESS);
+        self.interface.write_char(TeletextChar(data), enhancement_start + 2, designation + HEADER_LINE_ADDRESS);
     }
 
     /// Prints a line of characters. The `fallback` can be used to replace characters for which no matching teletext representation could be found.
