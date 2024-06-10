@@ -1,8 +1,12 @@
 use crate::character_set::{char_to_teletext, NationalOptionCharacterSubset};
 use crate::error::{Result, TeletextError};
-use crate::teletext_interface::{RawTeletextInterface, TeletextInterface};
+use crate::teletext::interface::{RawTeletextInterface, TeletextInterface};
 use alacritty_terminal::grid::Dimensions;
 use litex_basys3_pac::mem_map;
+
+pub mod interface;
+pub mod terminal;
+pub mod enhancements;
 
 pub const LINE_COUNT: u8 = 24;
 pub const COLUMN_COUNT: u8 = 40;
@@ -83,9 +87,21 @@ impl<T: TeletextInterface> Teletext<T> {
 
     fn write_enhancement(&mut self, address: u8, mode: u8, data: u8, designation: u8, number: u8) {
         let enhancement_start = number * 3;
-        self.interface.write_char(TeletextChar(address), enhancement_start, designation + HEADER_LINE_ADDRESS);
-        self.interface.write_char(TeletextChar(mode), enhancement_start + 1, designation + HEADER_LINE_ADDRESS);
-        self.interface.write_char(TeletextChar(data), enhancement_start + 2, designation + HEADER_LINE_ADDRESS);
+        self.interface.write_char(
+            TeletextChar(address),
+            enhancement_start,
+            designation + HEADER_LINE_ADDRESS,
+        );
+        self.interface.write_char(
+            TeletextChar(mode),
+            enhancement_start + 1,
+            designation + HEADER_LINE_ADDRESS,
+        );
+        self.interface.write_char(
+            TeletextChar(data),
+            enhancement_start + 2,
+            designation + HEADER_LINE_ADDRESS,
+        );
     }
 
     /// Prints a line of characters. The `fallback` can be used to replace characters for which no matching teletext representation could be found.

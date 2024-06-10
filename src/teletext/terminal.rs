@@ -6,10 +6,7 @@ use alacritty_terminal::{
 };
 use alloc::rc::Rc;
 
-use crate::{
-    teletext::{self, Teletext, HEADER_LINE_ADDRESS},
-    teletext_interface::TeletextInterface,
-};
+use crate::teletext::{self, interface::TeletextInterface, Teletext, HEADER_LINE_ADDRESS};
 
 const HEADER_OFFSET: u8 = 8;
 const HEADER_LENGTH: u8 = teletext::COLUMN_COUNT - HEADER_OFFSET;

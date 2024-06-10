@@ -7,12 +7,10 @@ mod character_set;
 mod error;
 mod ps2;
 mod teletext;
-mod teletext_interface;
-mod teletext_terminal;
 
 use crate::ps2::convert_term_mode;
+use crate::teletext::terminal::TeletextTerminalListener;
 use crate::teletext::{Teletext, TeletextDimensions};
-use crate::teletext_terminal::TeletextTerminalListener;
 use alacritty_terminal::sync::FairMutex;
 use alacritty_terminal::term::Config;
 use alacritty_terminal::vte::ansi;
@@ -29,7 +27,7 @@ use litex_hal::prelude::*;
 use pc_keyboard::KeyboardLayout;
 use portable_atomic::{AtomicBool, Ordering};
 use ps2::PS2;
-use teletext_terminal::LitexTimeout;
+use teletext::terminal::LitexTimeout;
 use vte_input::generate_sequence;
 
 #[cfg(feature = "backtrace")]
