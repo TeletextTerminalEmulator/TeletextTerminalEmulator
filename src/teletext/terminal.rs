@@ -1,4 +1,4 @@
-use core::{cell::RefCell, fmt::Write, iter::repeat};
+use core::{cell::RefCell, fmt::Write};
 
 use alacritty_terminal::{
     event::{Event, EventListener, WindowSize},
@@ -6,10 +6,7 @@ use alacritty_terminal::{
 };
 use alloc::rc::Rc;
 
-use crate::teletext::{self, interface::TeletextInterface, Teletext, HEADER_LINE_ADDRESS};
-
-const HEADER_OFFSET: u8 = 8;
-const HEADER_LENGTH: u8 = teletext::COLUMN_COUNT - HEADER_OFFSET;
+use crate::teletext::{interface::TeletextInterface, Teletext};
 
 pub struct TeletextTerminalListener<T: TeletextInterface>(pub Rc<RefCell<Teletext<T>>>);
 
@@ -18,23 +15,10 @@ impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
         match event {
             Event::MouseCursorDirty => {}
             Event::Title(title) => {
-                let title_line = title
-                    .chars()
-                    .chain(repeat(' '))
-                    .take(HEADER_LENGTH as usize);
-
-                self.0
-                    .borrow_mut()
-                    .set_line(title_line, HEADER_LINE_ADDRESS, HEADER_OFFSET, Some('?'))
-                    .expect("Title line should never exceed bounds");
+                self.0.borrow_mut().set_title(title);
             }
             Event::ResetTitle => {
-                let reset_title = repeat(' ').take(HEADER_LENGTH as usize);
-
-                self.0
-                    .borrow_mut()
-                    .set_line(reset_title, HEADER_LINE_ADDRESS, HEADER_OFFSET, Some('?'))
-                    .expect("Resetting the title should never fail");
+                self.0.borrow_mut().set_title("");
             }
             Event::ClipboardStore(_, _) => unimplemented!(),
             Event::ClipboardLoad(_, _) => unimplemented!(),

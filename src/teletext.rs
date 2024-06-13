@@ -1,17 +1,25 @@
-use crate::character_set::{char_to_teletext, NationalOptionCharacterSubset};
+use crate::character_set::NationalOptionCharacterSubset;
 use crate::error::{Result, TeletextError};
+use crate::teletext::enhancements::EnhancementBuffer;
 use crate::teletext::interface::{RawTeletextInterface, TeletextInterface};
 use alacritty_terminal::grid::Dimensions;
+use alacritty_terminal::term::cell::Cell;
+use alacritty_terminal::Grid;
+use alloc::string::String;
+use core::iter::repeat;
+use enhancements::{EnhancementError, EnhancementTriplet, ENHANCEMENTS_PER_LINE};
 use litex_basys3_pac::mem_map;
 
+pub mod enhancements;
 pub mod interface;
 pub mod terminal;
-pub mod enhancements;
 
-pub const LINE_COUNT: u8 = 24;
+pub const LINE_COUNT: u8 = 23; // Header not included
 pub const COLUMN_COUNT: u8 = 40;
-pub const ENHANCEMENT_LINE_COUNT: u8 = 16;
 pub const HEADER_LINE_ADDRESS: u8 = 24;
+
+const HEADER_OFFSET: u8 = 8;
+const HEADER_LENGTH: u8 = COLUMN_COUNT - HEADER_OFFSET;
 
 #[derive(Debug, Default, Clone, Copy)]
 pub struct ControlBits {
@@ -35,6 +43,7 @@ pub struct Teletext<T: TeletextInterface> {
     configuration: ControlBits,
     page_number: u8,
     magazine_number: u8,
+    title: String,
 }
 
 #[allow(dead_code)]
@@ -45,6 +54,7 @@ impl<T: TeletextInterface> Teletext<T> {
             magazine_number: interface.magazine_number(),
             configuration: interface.control_bits(),
             interface,
+            title: String::new(),
         };
         teletext.init_page();
         teletext
@@ -53,18 +63,22 @@ impl<T: TeletextInterface> Teletext<T> {
     fn init_page(&mut self) {
         for line in 1..LINE_COUNT {
             for col in 0..COLUMN_COUNT {
-                self.set_char(' ', line, col)
+                self.set_char(TeletextChar(0x20), line, col)
                     .expect("The space character should always be convertable");
             }
         }
         // init header
         for col in 0..COLUMN_COUNT {
-            self.set_char(' ', HEADER_LINE_ADDRESS, col)
+            self.set_char(TeletextChar(0x20), HEADER_LINE_ADDRESS, col)
                 .expect("The space character should always be convertable");
         }
     }
 
-    pub fn set_char(&mut self, c: char, line: u8, col: u8) -> Result<()> {
+    pub fn set_title<S: Into<String>>(&mut self, title: S) {
+        self.title = title.into();
+    }
+
+    fn set_char(&mut self, char: TeletextChar, line: u8, col: u8) -> Result<()> {
         if line != HEADER_LINE_ADDRESS && !(1..LINE_COUNT).contains(&line) {
             return Err(TeletextError::OutOfBounds {
                 param: stringify!(line),
@@ -77,15 +91,13 @@ impl<T: TeletextInterface> Teletext<T> {
                 value: col as usize,
             });
         }
-        self.interface.write_char(
-            char_to_teletext(c, self.configuration.national_option_character_subset)?,
-            col,
-            line,
-        );
+        self.interface.write_char(char, col, line);
         Ok(())
     }
 
-    fn write_enhancement(&mut self, address: u8, mode: u8, data: u8, designation: u8, number: u8) {
+    fn write_enhancement(&mut self, enhancement: EnhancementTriplet, designation: u8, number: u8) {
+        let (address, mode, data) = enhancement.into_triplet();
+
         let enhancement_start = number * 3;
         self.interface.write_char(
             TeletextChar(address),
@@ -104,45 +116,93 @@ impl<T: TeletextInterface> Teletext<T> {
         );
     }
 
-    /// Prints a line of characters. The `fallback` can be used to replace characters for which no matching teletext representation could be found.
-    ///
-    /// In the case of the input being too long, the input gets printed until the end of the line and a [`TeletextError::OutOfBounds`] is returned
-    pub fn set_line(
-        &mut self,
-        line: impl Iterator<Item = char>,
-        line_num: u8,
-        col_offset: u8,
-        fallback: Option<char>,
-    ) -> Result<()> {
-        if line_num >= LINE_COUNT {
+    pub fn write_page(&mut self, grid: &Grid<Cell>) -> Result<()> {
+        let mut enhancements = EnhancementBuffer::new();
+
+        if grid.screen_lines() != LINE_COUNT as usize {
             return Err(TeletextError::OutOfBounds {
-                param: stringify!(line_num),
-                value: line_num as usize,
+                param: "grid.screen_lines()",
+                value: grid.screen_lines(),
+            });
+        }
+        if grid.columns() != COLUMN_COUNT as usize {
+            return Err(TeletextError::OutOfBounds {
+                param: "grid.columns()",
+                value: grid.columns(),
             });
         }
 
-        let fallback = match fallback {
-            Some(ch) => Some(char_to_teletext(
-                ch,
+        for (index, header_ch) in self
+            .title
+            .chars()
+            .chain(repeat(' '))
+            .take(HEADER_LENGTH as usize)
+            .enumerate()
+        {
+            let column = index as u8 + HEADER_OFFSET;
+            match enhancements.add_char(
+                0,
+                column,
+                header_ch,
                 self.configuration.national_option_character_subset,
-            )?),
-            None => None,
-        };
-
-        for (col, ch) in line.enumerate() {
-            if col as u8 + col_offset >= COLUMN_COUNT {
-                return Err(TeletextError::OutOfBounds {
-                    param: stringify!(col + col_offset),
-                    value: col + col_offset as usize,
-                });
+            ) {
+                Ok(()) => {
+                    self.interface
+                        .write_char(TeletextChar(0x7F), column, HEADER_LINE_ADDRESS)
+                }
+                Err(EnhancementError::PlainChar(ch)) => {
+                    self.interface.write_char(ch, column, HEADER_LINE_ADDRESS)
+                }
+                Err(EnhancementError::NoEnhancementSpace) => {
+                    self.interface
+                        .write_char(TeletextChar(0x21), column, HEADER_LINE_ADDRESS)
+                }
+                Err(EnhancementError::Unrepresentable(_)) => {
+                    self.interface
+                        .write_char(TeletextChar(0x3F), column, HEADER_LINE_ADDRESS)
+                }
+                Err(EnhancementError::CellOutOfOrder) => {
+                    panic!("Enhancement buffer has been filled out of order")
+                }
             }
-
-            let teletext_char =
-                char_to_teletext(ch, self.configuration.national_option_character_subset)
-                    .or_else(|err| fallback.ok_or(err))?;
-            self.interface
-                .write_char(teletext_char, col as u8 + col_offset, line_num);
         }
+
+        for cell in grid.display_iter() {
+            let alacritty_terminal::index::Point {
+                line: alacritty_terminal::index::Line(line),
+                column: alacritty_terminal::index::Column(column),
+            } = cell.point;
+            let line = line as u8 + 1;
+            let column = column as u8;
+
+            match enhancements.add_char(
+                line,
+                column,
+                cell.c,
+                self.configuration.national_option_character_subset,
+            ) {
+                Ok(()) => self.interface.write_char(TeletextChar(0x7F), column, line),
+                Err(EnhancementError::PlainChar(ch)) => self.interface.write_char(ch, column, line),
+                Err(EnhancementError::NoEnhancementSpace) => {
+                    self.interface.write_char(TeletextChar(0x21), column, line)
+                }
+                Err(EnhancementError::Unrepresentable(_)) => {
+                    self.interface.write_char(TeletextChar(0x3F), column, line)
+                }
+                Err(EnhancementError::CellOutOfOrder) => {
+                    panic!("Enhancement buffer has been filled out of order")
+                }
+            }
+        }
+
+        for (index, triplet) in enhancements.triplets().iter().enumerate() {
+            self.write_enhancement(
+                *triplet,
+                (index % ENHANCEMENTS_PER_LINE) as u8,
+                (index / ENHANCEMENTS_PER_LINE) as u8,
+            );
+        }
+
         Ok(())
     }
 
@@ -191,11 +251,11 @@ impl Dimensions for TeletextDimensions {
     }
 
     fn screen_lines(&self) -> usize {
-        23
+        LINE_COUNT.into()
     }
 
     fn columns(&self) -> usize {
-        40
+        COLUMN_COUNT.into()
     }
 }
 

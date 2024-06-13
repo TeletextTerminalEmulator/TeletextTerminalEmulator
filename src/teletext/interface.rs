@@ -30,6 +30,9 @@ impl NationalOptionCharacterSubset {
                 0b101
             }
             NationalOptionCharacterSubset::Czech | NationalOptionCharacterSubset::Slovak => 0b110,
+            NationalOptionCharacterSubset::None => {
+                panic!("The \"None\" subset does not actually exist and does not have a code.")
+            }
         }
     }
 

@@ -174,22 +174,9 @@ fn main() -> ! {
 
                 let before = litex_basys3_pac::riscv::register::cycle::read();
 
-                for cell in term.grid().display_iter() {
-                    teletext
-                        .set_char(
-                            cell.c,
-                            cell.point.line.0 as u8 + 1,
-                            cell.point.column.0 as u8,
-                        )
-                        .or_else(|_| {
-                            teletext.set_char(
-                                '?',
-                                cell.point.line.0 as u8 + 1,
-                                cell.point.column.0 as u8,
-                            )
-                        })
-                        .unwrap();
-                }
+                teletext
+                    .write_page(term.grid())
+                    .expect("Wrong parameters for the grid");
 
                 let duration = litex_basys3_pac::riscv::register::cycle::read() - before;
 
