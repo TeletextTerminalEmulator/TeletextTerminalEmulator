@@ -237,12 +237,14 @@ fn g3_set(ch: char) -> Option<TeletextChar> {
 }
 
 fn g0_set_with_diacriticals(ch: char) -> Option<(TeletextChar, u8)> {
-    let mut chars = ch.nfd();
+    /*let mut chars = ch.nfd();
 
     let base = chars.next()?;
     let diacritic = chars.next();
 
-    let base_g0 = g0_set(base, NationalOptionCharacterSubset::None)?;
+    let base_g0 = g0_set(base, NationalOptionCharacterSubset::None)?;*/
+    let base_g0 = g0_set(ch, NationalOptionCharacterSubset::None)?;
+    let diacritic = None;
 
     Some((
         base_g0,

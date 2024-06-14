@@ -47,7 +47,7 @@ pub enum EnhancementTriplet {
 impl EnhancementTriplet {
     pub fn into_triplet(self) -> (u8, u8, u8) {
         match self {
-            EnhancementTriplet::SetActivePosition { line } => (line + 1, 0b00100, 0),
+            EnhancementTriplet::SetActivePosition { line } => (line + 40, 0b00100, 0),
             EnhancementTriplet::AddressDisplayLine0 {
                 color,
                 affect_all_lines,

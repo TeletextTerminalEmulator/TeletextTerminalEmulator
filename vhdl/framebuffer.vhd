@@ -42,7 +42,7 @@ Port (
     
     WRITE_ENABLE    : in    std_logic;
     DATA_IN         : in    TELETEXT_CHAR;
-    INPUT_LINE      : in    unsigned(4 downto 0);
+    INPUT_LINE      : in    unsigned(5 downto 0);
     INPUT_COLUMN    : in    unsigned(5 downto 0);
     
     -- Teletextgenerator side
@@ -57,7 +57,7 @@ architecture Behavioral of framebuffer is
 
 signal data_out             : TELETEXT_CHAR                 := (others => '0');
 signal read_address         : std_logic_vector(11 downto 0);
-signal write_address        : std_logic_vector(10 downto 0);
+signal write_address        : std_logic_vector(11 downto 0);
 signal current_column       : unsigned(5 downto 0)          := (others => '0');
 signal next_column          : unsigned(5 downto 0);
 signal current_out_index    : unsigned(4 downto 0)          := (others => '0');
@@ -186,7 +186,7 @@ BRAM_SDP_MACRO_inst : BRAM_SDP_MACRO
       REGCE => '1',     -- 1-bit input read output register enable
       RST => RESET,       -- 1-bit input reset 
       WE => write_enable_vec,         -- Input write enable, width defined by write port depth
-      WRADDR => write_address, -- Input write address, width defined by write port depth
+      WRADDR => write_address(10 downto 0), -- Input write address, width defined by write port depth
       WRCLK => CLK_IN,   -- 1-bit input write clock
       WREN => '1'      -- 1-bit input write port enable
    );

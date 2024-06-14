@@ -95,24 +95,25 @@ impl<T: TeletextInterface> Teletext<T> {
         Ok(())
     }
 
-    fn write_enhancement(&mut self, enhancement: EnhancementTriplet, designation: u8, number: u8) {
+    fn write_enhancement(&mut self, enhancement: EnhancementTriplet, packet_designation: u8, index: u8) {
         let (address, mode, data) = enhancement.into_triplet();
 
-        let enhancement_start = number * 3;
+        let enhancement_start = index * 3;
+        let line_number = packet_designation + HEADER_LINE_ADDRESS + 1;
         self.interface.write_char(
             TeletextChar(address),
             enhancement_start,
-            designation + HEADER_LINE_ADDRESS,
+            line_number,
         );
         self.interface.write_char(
             TeletextChar(mode),
             enhancement_start + 1,
-            designation + HEADER_LINE_ADDRESS,
+            line_number,
         );
         self.interface.write_char(
             TeletextChar(data),
             enhancement_start + 2,
-            designation + HEADER_LINE_ADDRESS,
+            line_number,
         );
     }
 
@@ -198,8 +199,8 @@ impl<T: TeletextInterface> Teletext<T> {
         for (index, triplet) in enhancements.triplets().iter().enumerate() {
             self.write_enhancement(
                 *triplet,
-                (index % ENHANCEMENTS_PER_LINE) as u8,
                 (index / ENHANCEMENTS_PER_LINE) as u8,
+                (index % ENHANCEMENTS_PER_LINE) as u8,
             );
         }
 

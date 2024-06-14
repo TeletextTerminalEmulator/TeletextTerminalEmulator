@@ -133,7 +133,7 @@ component framebuffer is
         
         WRITE_ENABLE    : in    std_logic;
         DATA_IN         : in    TELETEXT_CHAR;
-        INPUT_LINE      : in    unsigned(4 downto 0);
+        INPUT_LINE      : in    unsigned(5 downto 0);
         INPUT_COLUMN    : in    unsigned(5 downto 0);
     
         -- Teletextgenerator side
@@ -154,8 +154,8 @@ signal current_write_enable     : std_logic := '0';
 signal next_write_enable        : std_logic;
 signal current_data_in          : TELETEXT_CHAR;
 signal next_data_in             : TELETEXT_CHAR;
-signal current_input_line       : unsigned(4 downto 0);
-signal next_input_line          : unsigned(4 downto 0);
+signal current_input_line       : unsigned(5 downto 0);
+signal next_input_line          : unsigned(5 downto 0);
 signal current_input_column     : unsigned(5 downto 0);
 signal next_input_column        : unsigned(5 downto 0);
 
@@ -374,7 +374,7 @@ begin
                     end if;
                 when "1000" =>
                     if S_AXI_WSTRB = "1111" then
-                        next_input_line <= unsigned(S_AXI_WDATA(28 downto 24));
+                        next_input_line <= unsigned(S_AXI_WDATA(29 downto 24));
                         next_input_column <= unsigned(S_AXI_WDATA(21 downto 16));
                         next_data_in <= S_AXI_WDATA(6 downto 0);
                         next_write_enable <= '1';
@@ -434,7 +434,7 @@ begin
                 when "0110" =>
                     next_axi_read_data(2 downto 0) <= current_page_control_bits.NATIONAL_OPTION_CHARACTER_SUBSET;
 				when "1000" =>
-					next_axi_read_data(28 downto 24) <= std_logic_vector(current_input_line);
+					next_axi_read_data(29 downto 24) <= std_logic_vector(current_input_line);
 					next_axi_read_data(21 downto 16) <= std_logic_vector(current_input_column);
 					next_axi_read_data(6 downto 0) <= current_data_in;
                 when others =>
