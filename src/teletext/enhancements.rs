@@ -1,4 +1,4 @@
-use crate::character_set::{char_to_teletext, CharacterSet, NationalOptionCharacterSubset};
+use crate::character_set::{char_to_teletext, CharacterSet, Diacritical, NationalOptionCharacterSubset};
 use crate::teletext::TeletextChar;
 
 pub const ENHANCEMENT_LINE_COUNT: usize = 16;
@@ -39,7 +39,7 @@ pub enum EnhancementTriplet {
     },
     DrawG0WithDiacritical {
         column: u8,
-        diacritical: u8, // TODO: diacritical representation
+        diacritical: Diacritical,
         character: TeletextChar,
     },
 }
@@ -63,7 +63,7 @@ impl EnhancementTriplet {
                 column,
                 diacritical,
                 character,
-            } => (column, 0b10000 | diacritical, character.0),
+            } => (column, 0b10000 | diacritical.code(), character.0),
         }
     }
 }
