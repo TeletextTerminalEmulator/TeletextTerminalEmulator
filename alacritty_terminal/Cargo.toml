@@ -10,14 +10,12 @@ edition = "2021"
 rust-version = "1.70.0"
 
 [dependencies]
-base64 = { version = "0.21.3", default-features = false, features = ["alloc"] }
+base64 = { version = "0.22.1", default-features = false, features = ["alloc"] }
 bitflags = "2.4.1"
 log = "0.4"
 spin = { version = "0.9.8", default-features = false, features = ["mutex", "spin_mutex", "rwlock", "once", "lazy", "barrier", "portable_atomic"] }
-portable-atomic = { version = "1.4.0", features = ["critical-section"] }
-portable-atomic_git = { package = "portable-atomic", git = "https://github.com/taiki-e/portable-atomic.git", features = ["critical-section"] }
-portable-atomic-util = { git = "https://github.com/taiki-e/portable-atomic.git", features = ["alloc"]}
-#regex-automata = { version = "0.4.3", default-features = false, features = ["syntax", "nfa", "hybrid"] }
+portable-atomic = { version = "1.6.0", features = ["critical-section"] }
+portable-atomic-util = { version = "0.2.1", features = ["alloc"] }
 unicode-width = "0.1"
 vte = { git = "https://github.com/jorolf/vte.git", default-features = false, features = ["ansi", "no_std"] }
 

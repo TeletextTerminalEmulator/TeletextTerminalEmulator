@@ -175,7 +175,7 @@ impl VteKeyEvent for KeyEventContext {
 }
 
 pub struct PS2<T: KeyboardLayout> {
-    interface: litex_basys3_pac::PS2,
+    interface: litex_basys3_pac::Ps2,
     scancode_set: ScancodeSet2,
     modifiers: Modifiers,
     layout: T,
@@ -183,7 +183,7 @@ pub struct PS2<T: KeyboardLayout> {
 }
 
 impl<T: KeyboardLayout> PS2<T> {
-    pub fn new(interface: litex_basys3_pac::PS2, layout: T) -> Self {
+    pub fn new(interface: litex_basys3_pac::Ps2, layout: T) -> Self {
         Self {
             interface,
             scancode_set: ScancodeSet2::new(),

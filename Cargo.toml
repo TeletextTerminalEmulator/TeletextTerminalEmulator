@@ -7,11 +7,10 @@ edition = "2021"
 
 [dependencies]
 litex-hal = { git = "https://github.com/PercyJW-2/rust-litex-hal.git" }
-# litex-hal = { path = "../rust-litex-hal" }
 litex-basys3-pac = { path = "./litex-basys3-pac", features = ["rt", "critical-section"] }
 embedded-alloc = "0.5.1"
 alacritty_terminal = { path = "./alacritty_terminal" }
-portable-atomic = { version = "1.4.0", features = ["critical-section"] }
+portable-atomic = { version = "1.6.0", features = ["critical-section"] }
 mini-backtrace = { version = "0.1.4", optional = true }
 pc-keyboard = { git = "https://github.com/rust-embedded-community/pc-keyboard.git" }
 vte-input = { git = "https://github.com/jorolf/vte-input.git" }

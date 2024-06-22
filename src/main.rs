@@ -34,12 +34,12 @@ use vte_input::generate_sequence;
 use mini_backtrace::Backtrace;
 
 litex_hal::uart! {
-    Uart: litex_basys3_pac::UART,
-    TerminalUart: litex_basys3_pac::TERMINAL_UART,
+    Uart: litex_basys3_pac::Uart,
+    TerminalUart: litex_basys3_pac::TerminalUart,
 }
 
 litex_hal::timer! {
-    Timer: litex_basys3_pac::TIMER0,
+    Timer: litex_basys3_pac::Timer0,
 }
 
 #[allow(dead_code)]
@@ -117,9 +117,9 @@ fn main() -> ! {
 
     let peripherals = Peripherals::take().unwrap();
 
-    let debug_uart = Uart::new(peripherals.UART);
-    let terminal_uart = TerminalUart::new(peripherals.TERMINAL_UART);
-    let mut ps2 = ps2::PS2::new(peripherals.PS2, pc_keyboard::layouts::De105Key);
+    let debug_uart = Uart::new(peripherals.uart);
+    let terminal_uart = TerminalUart::new(peripherals.terminal_uart);
+    let mut ps2 = ps2::PS2::new(peripherals.ps2, pc_keyboard::layouts::De105Key);
 
     *DEBUG_UART.lock_unfair() = Some(debug_uart);
     *TERMINAL_UART.lock_unfair() = Some(terminal_uart);
