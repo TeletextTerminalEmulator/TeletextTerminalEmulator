@@ -110,6 +110,7 @@ def main():
     args = parser.parse_args()
     argdict = parser.soc_argdict
     argdict['bus_standard'] = "axi-lite"
+    argdict['cpu_variant'] = "full"
 
     soc = BaseSoC(
         sys_clk_freq        = args.sys_clk_freq,
