@@ -10,7 +10,7 @@ pub enum EnhancementError {
     NoEnhancementSpace,
     CellOutOfOrder,
     PlainChar(TeletextChar),
-    Unrepresentable(char),
+    Unrepresentable,
 }
 
 type Result<T> = core::result::Result<T, EnhancementError>;
@@ -102,9 +102,10 @@ impl EnhancementBuffer {
         column: u8,
         ch: char,
         subset: NationalOptionCharacterSubset,
+        force_diacritical: Option<Diacritical>
     ) -> Result<()> {
-        let enhancement = match char_to_teletext(ch, subset)
-            .ok_or(EnhancementError::Unrepresentable(ch))?
+        let enhancement = match char_to_teletext(ch, subset, force_diacritical)
+            .ok_or(EnhancementError::Unrepresentable)?
         {
             (character, CharacterSet::G2) => EnhancementTriplet::DrawG2Set { column, character },
             (character, CharacterSet::G3) => EnhancementTriplet::DrawG3Set { column, character },

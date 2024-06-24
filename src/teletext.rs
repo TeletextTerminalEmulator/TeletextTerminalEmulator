@@ -1,4 +1,4 @@
-use crate::character_set::NationalOptionCharacterSubset;
+use crate::character_set::{Diacritical, NationalOptionCharacterSubset};
 use crate::error::{Result, TeletextError};
 use crate::teletext::enhancements::EnhancementBuffer;
 use crate::teletext::interface::{RawTeletextInterface, TeletextInterface};
@@ -81,14 +81,14 @@ impl<T: TeletextInterface> Teletext<T> {
     fn set_char(&mut self, char: TeletextChar, line: u8, col: u8) -> Result<()> {
         if line != HEADER_LINE_ADDRESS && !(1..LINE_COUNT).contains(&line) {
             return Err(TeletextError::OutOfBounds {
-                param: stringify!(line),
-                value: line as usize,
+                _param: stringify!(line),
+                _value: line as usize,
             });
         }
         if col >= COLUMN_COUNT {
             return Err(TeletextError::OutOfBounds {
-                param: stringify!(col),
-                value: col as usize,
+                _param: stringify!(col),
+                _value: col as usize,
             });
         }
         self.interface.write_char(char, col, line);
@@ -120,16 +120,20 @@ impl<T: TeletextInterface> Teletext<T> {
     pub fn write_page(&mut self, grid: &Grid<Cell>) -> Result<()> {
         let mut enhancements = EnhancementBuffer::new();
 
+        let alacritty_terminal::index::Point { line: alacritty_terminal::index::Line(cursor_line), column: alacritty_terminal::index::Column(cursor_column) } = grid.cursor.point;
+        let cursor_line = cursor_line as u8;
+        let cursor_column = cursor_column as u8;
+
         if grid.screen_lines() != LINE_COUNT as usize {
             return Err(TeletextError::OutOfBounds {
-                param: "grid.screen_lines()",
-                value: grid.screen_lines(),
+                _param: stringify!(grid.screen_lines()),
+                _value: grid.screen_lines(),
             });
         }
         if grid.columns() != COLUMN_COUNT as usize {
             return Err(TeletextError::OutOfBounds {
-                param: "grid.columns()",
-                value: grid.columns(),
+                _param: stringify!(grid.columns()),
+                _value: grid.columns(),
             });
         }
 
@@ -146,6 +150,7 @@ impl<T: TeletextInterface> Teletext<T> {
                 column,
                 header_ch,
                 self.configuration.national_option_character_subset,
+                None,
             ) {
                 Ok(()) => {
                     self.interface
@@ -158,7 +163,7 @@ impl<T: TeletextInterface> Teletext<T> {
                     self.interface
                         .write_char(TeletextChar(0x21), column, HEADER_LINE_ADDRESS)
                 }
-                Err(EnhancementError::Unrepresentable(_)) => {
+                Err(EnhancementError::Unrepresentable) => {
                     self.interface
                         .write_char(TeletextChar(0x3F), column, HEADER_LINE_ADDRESS)
                 }
@@ -176,18 +181,21 @@ impl<T: TeletextInterface> Teletext<T> {
             let line = line as u8 + 1;
             let column = column as u8;
 
+            let diacritical = ((line, column) == (cursor_line, cursor_column)).then_some(Diacritical::LowLine);
+
             match enhancements.add_char(
                 line,
                 column,
                 cell.c,
                 self.configuration.national_option_character_subset,
+                diacritical
             ) {
                 Ok(()) => self.interface.write_char(TeletextChar(0x7F), column, line),
                 Err(EnhancementError::PlainChar(ch)) => self.interface.write_char(ch, column, line),
                 Err(EnhancementError::NoEnhancementSpace) => {
                     self.interface.write_char(TeletextChar(0x21), column, line)
                 }
-                Err(EnhancementError::Unrepresentable(_)) => {
+                Err(EnhancementError::Unrepresentable) => {
                     self.interface.write_char(TeletextChar(0x3F), column, line)
                 }
                 Err(EnhancementError::CellOutOfOrder) => {
@@ -229,8 +237,8 @@ impl<T: TeletextInterface> Teletext<T> {
     pub fn set_magazine(&mut self, new_magazine: u8) -> Result<()> {
         if new_magazine > 7 {
             return Err(TeletextError::OutOfBounds {
-                param: stringify!(new_magazine),
-                value: new_magazine as usize,
+                _param: stringify!(new_magazine),
+                _value: new_magazine as usize,
             });
         }
         self.magazine_number = new_magazine;
