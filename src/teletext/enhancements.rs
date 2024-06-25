@@ -101,10 +101,9 @@ impl EnhancementBuffer {
         line: u8,
         column: u8,
         ch: char,
-        subset: NationalOptionCharacterSubset,
-        force_diacritical: Option<Diacritical>
+        subset: NationalOptionCharacterSubset
     ) -> Result<()> {
-        let enhancement = match char_to_teletext(ch, subset, force_diacritical)
+        let enhancement = match char_to_teletext(ch, subset)
             .ok_or(EnhancementError::Unrepresentable)?
         {
             (character, CharacterSet::G2) => EnhancementTriplet::DrawG2Set { column, character },

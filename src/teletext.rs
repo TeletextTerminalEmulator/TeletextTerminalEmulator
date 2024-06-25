@@ -1,10 +1,9 @@
-use crate::character_set::{Diacritical, NationalOptionCharacterSubset};
+use crate::character_set::NationalOptionCharacterSubset;
 use crate::error::{Result, TeletextError};
 use crate::teletext::enhancements::EnhancementBuffer;
 use crate::teletext::interface::{RawTeletextInterface, TeletextInterface};
 use alacritty_terminal::grid::Dimensions;
 use alacritty_terminal::term::RenderableContent;
-use alacritty_terminal::vte::ansi::CursorShape;
 use alloc::string::String;
 use core::iter::repeat;
 use enhancements::{EnhancementError, ENHANCEMENTS_PER_LINE};
@@ -48,7 +47,7 @@ pub struct Teletext<T: TeletextInterface> {
 
 macro_rules! check_bounds {
     ($line: expr, $column: expr) => {
-        if $line != HEADER_LINE_ADDRESS && !(1..LINE_COUNT).contains(&($line)) {
+        if $line != HEADER_LINE_ADDRESS && !(1..=LINE_COUNT).contains(&($line)) {
             Err(TeletextError::OutOfBounds {
                 _param: stringify!($line),
                 _value: $line as usize,
@@ -79,7 +78,7 @@ impl<T: TeletextInterface> Teletext<T> {
     }
 
     fn init_page(&mut self) {
-        for line in 1..LINE_COUNT {
+        for line in 1..=LINE_COUNT {
             for col in 0..COLUMN_COUNT {
                 self.interface.write_char(TeletextChar(0x20), line, col);
             }
@@ -97,12 +96,6 @@ impl<T: TeletextInterface> Teletext<T> {
     pub fn write_page(&mut self, content: &mut RenderableContent<'_>) -> Result<()> {
         let mut enhancements = EnhancementBuffer::new();
 
-        let alacritty_terminal::index::Point { line: alacritty_terminal::index::Line(cursor_line), column: alacritty_terminal::index::Column(cursor_column) } = content.cursor.point;
-        let cursor_line = cursor_line as u8;
-        let cursor_column = cursor_column as u8;
-
-        
-
         for (index, header_ch) in self
             .title
             .chars()
@@ -117,8 +110,7 @@ impl<T: TeletextInterface> Teletext<T> {
                 0,
                 column,
                 header_ch,
-                self.configuration.national_option_character_subset,
-                None,
+                self.configuration.national_option_character_subset
             ) {
                 Ok(()) => {
                     self.interface
@@ -146,25 +138,16 @@ impl<T: TeletextInterface> Teletext<T> {
                 line: alacritty_terminal::index::Line(line),
                 column: alacritty_terminal::index::Column(column),
             } = cell.point;
+
             let line = line as u8 + 1;
             let column = column as u8;
             check_bounds!(line, column)?;
-
-            let diacritical = if (line, column) == (cursor_line, cursor_column) {
-                match content.cursor.shape {
-                    CursorShape::Hidden => None,
-                    _ => Some(Diacritical::LowLine),
-                }
-            } else {
-                None
-            };
 
             match enhancements.add_char(
                 line,
                 column,
                 cell.c,
-                self.configuration.national_option_character_subset,
-                diacritical
+                self.configuration.national_option_character_subset
             ) {
                 Ok(()) => self.interface.write_char(TeletextChar(0x7F), column, line),
                 Err(EnhancementError::PlainChar(ch)) => self.interface.write_char(ch, column, line),

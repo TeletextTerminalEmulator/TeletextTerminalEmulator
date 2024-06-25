@@ -691,24 +691,13 @@ fn g0_set_with_diacriticals(ch: char) -> Option<(TeletextChar, Diacritical)> {
 
 pub fn char_to_teletext(
     ch: char,
-    subset: NationalOptionCharacterSubset,
-    force_diacritical: Option<Diacritical>
+    subset: NationalOptionCharacterSubset
 ) -> Option<(TeletextChar, CharacterSet)> {
-    let tpl = g0_set(ch, subset)
+    g0_set(ch, subset)
         .map(|ch| (ch, CharacterSet::G0))
         .or_else(|| g2_set(ch).map(|ch| (ch, CharacterSet::G2)))
         .or_else(|| g3_set(ch).map(|ch| (ch, CharacterSet::G3)))
         .or_else(|| {
             g0_set_with_diacriticals(ch).map(|(ch, dia)| (ch, CharacterSet::G0WithDiacritical(dia)))
-        });
-
-
-    if let Some(diacritical) = force_diacritical {
-        match tpl {
-            Some((ch, CharacterSet::G0 | CharacterSet::G0WithDiacritical(_))) => Some((ch, CharacterSet::G0WithDiacritical(diacritical))),
-            a => a
-        }
-    } else {
-        tpl
-    }
+        })
 }
