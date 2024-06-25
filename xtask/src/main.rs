@@ -32,7 +32,7 @@ struct Environment<'a> {
     env: Option<(PushEnv<'a>, PushEnv<'a>, Option<PushEnv<'a>>)>
 }
 
-const TARGET: &str = "riscv32i-unknown-none-elf";
+const TARGET: &str = "riscv32im-unknown-none-elf";
 
 /// Takes the build args and transforms them into command line arguments and environment variables
 fn prepare_env<'a>(sh: &'a Shell, args: &BuildArgs) -> Environment<'a> {
@@ -55,9 +55,9 @@ fn prepare_env<'a>(sh: &'a Shell, args: &BuildArgs) -> Environment<'a> {
         },
         env: args.backtrace.then(|| {
             (
-                sh.push_env("CXX_riscv32i_unknown_none_elf", "clang++"),
+                sh.push_env("CXX_riscv32im_unknown_none_elf", "clang++"),
                 sh.push_env(
-                    "BINDGEN_EXTRA_CLANG_ARGS_riscv32i_unknown_none_elf",
+                    "BINDGEN_EXTRA_CLANG_ARGS_riscv32im_unknown_none_elf",
                     "--target=riscv32-unknown-none-elf",
                 ),
                 cmd!(sh, "llvm-ar")
@@ -65,7 +65,7 @@ fn prepare_env<'a>(sh: &'a Shell, args: &BuildArgs) -> Environment<'a> {
                     .ignore_stdout()
                     .ignore_status()
                     .ignore_stderr()
-                    .run().ok().map(|_| sh.push_env("AR_riscv32i_unknown_none_elf", "llvm-ar")),
+                    .run().ok().map(|_| sh.push_env("AR_riscv32im_unknown_none_elf", "llvm-ar")),
             )
         }),
     }
