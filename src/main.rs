@@ -175,12 +175,12 @@ fn main() -> ! {
                 let before = litex_basys3_pac::riscv::register::cycle::read();
 
                 teletext
-                    .write_page(term.grid())
+                    .write_page(&mut term.renderable_content())
                     .expect("Wrong parameters for the grid");
 
                 let duration = litex_basys3_pac::riscv::register::cycle::read() - before;
 
-                writeln!(lock_debug_uart!(), "Redraw took {duration} cycles").unwrap();
+                writeln!(lock_debug_uart!(), "\nRedraw took {duration} cycles").unwrap();
 
                 TELETEXT_VALID.store(true, Ordering::Relaxed);
                 term.reset_damage();

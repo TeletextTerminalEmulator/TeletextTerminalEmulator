@@ -3,11 +3,11 @@ use crate::error::{Result, TeletextError};
 use crate::teletext::enhancements::EnhancementBuffer;
 use crate::teletext::interface::{RawTeletextInterface, TeletextInterface};
 use alacritty_terminal::grid::Dimensions;
-use alacritty_terminal::term::cell::Cell;
-use alacritty_terminal::Grid;
+use alacritty_terminal::term::RenderableContent;
+use alacritty_terminal::vte::ansi::CursorShape;
 use alloc::string::String;
 use core::iter::repeat;
-use enhancements::{EnhancementError, EnhancementTriplet, ENHANCEMENTS_PER_LINE};
+use enhancements::{EnhancementError, ENHANCEMENTS_PER_LINE};
 use litex_basys3_pac::mem_map;
 
 pub mod enhancements;
@@ -46,6 +46,24 @@ pub struct Teletext<T: TeletextInterface> {
     title: String,
 }
 
+macro_rules! check_bounds {
+    ($line: expr, $column: expr) => {
+        if $line != HEADER_LINE_ADDRESS && !(1..LINE_COUNT).contains(&($line)) {
+            Err(TeletextError::OutOfBounds {
+                _param: stringify!($line),
+                _value: $line as usize,
+            })
+        } else if $column >= COLUMN_COUNT {
+            Err(TeletextError::OutOfBounds {
+                _param: stringify!($column),
+                _value: $column as usize,
+            })
+        } else {
+            Ok(())
+        }
+    };
+}
+
 #[allow(dead_code)]
 impl<T: TeletextInterface> Teletext<T> {
     pub fn new(interface: T) -> Teletext<T> {
@@ -63,14 +81,12 @@ impl<T: TeletextInterface> Teletext<T> {
     fn init_page(&mut self) {
         for line in 1..LINE_COUNT {
             for col in 0..COLUMN_COUNT {
-                self.set_char(TeletextChar(0x20), line, col)
-                    .expect("The space character should always be convertable");
+                self.interface.write_char(TeletextChar(0x20), line, col);
             }
         }
         // init header
         for col in 0..COLUMN_COUNT {
-            self.set_char(TeletextChar(0x20), HEADER_LINE_ADDRESS, col)
-                .expect("The space character should always be convertable");
+            self.interface.write_char(TeletextChar(0x20), HEADER_LINE_ADDRESS, col);
         }
     }
 
@@ -78,64 +94,14 @@ impl<T: TeletextInterface> Teletext<T> {
         self.title = title.into();
     }
 
-    fn set_char(&mut self, char: TeletextChar, line: u8, col: u8) -> Result<()> {
-        if line != HEADER_LINE_ADDRESS && !(1..LINE_COUNT).contains(&line) {
-            return Err(TeletextError::OutOfBounds {
-                _param: stringify!(line),
-                _value: line as usize,
-            });
-        }
-        if col >= COLUMN_COUNT {
-            return Err(TeletextError::OutOfBounds {
-                _param: stringify!(col),
-                _value: col as usize,
-            });
-        }
-        self.interface.write_char(char, col, line);
-        Ok(())
-    }
-
-    fn write_enhancement(&mut self, enhancement: EnhancementTriplet, packet_designation: u8, index: u8) {
-        let (address, mode, data) = enhancement.into_triplet();
-
-        let enhancement_start = index * 3;
-        let line_number = packet_designation + HEADER_LINE_ADDRESS + 1;
-        self.interface.write_char(
-            TeletextChar(address),
-            enhancement_start,
-            line_number,
-        );
-        self.interface.write_char(
-            TeletextChar(mode),
-            enhancement_start + 1,
-            line_number,
-        );
-        self.interface.write_char(
-            TeletextChar(data),
-            enhancement_start + 2,
-            line_number,
-        );
-    }
-
-    pub fn write_page(&mut self, grid: &Grid<Cell>) -> Result<()> {
+    pub fn write_page(&mut self, content: &mut RenderableContent<'_>) -> Result<()> {
         let mut enhancements = EnhancementBuffer::new();
 
-        let alacritty_terminal::index::Point { line: alacritty_terminal::index::Line(cursor_line), column: alacritty_terminal::index::Column(cursor_column) } = grid.cursor.point;
+        let alacritty_terminal::index::Point { line: alacritty_terminal::index::Line(cursor_line), column: alacritty_terminal::index::Column(cursor_column) } = content.cursor.point;
         let cursor_line = cursor_line as u8;
         let cursor_column = cursor_column as u8;
 
-        if grid.screen_lines() != LINE_COUNT as usize {
-            return Err(TeletextError::OutOfBounds {
-                _param: stringify!(grid.screen_lines()),
-                _value: grid.screen_lines(),
-            });
-        }
-        if grid.columns() != COLUMN_COUNT as usize {
-            return Err(TeletextError::OutOfBounds {
-                _param: stringify!(grid.columns()),
-                _value: grid.columns(),
-            });
-        }
+        
 
         for (index, header_ch) in self
             .title
@@ -145,6 +111,8 @@ impl<T: TeletextInterface> Teletext<T> {
             .enumerate()
         {
             let column = index as u8 + HEADER_OFFSET;
+
+            check_bounds!(HEADER_LINE_ADDRESS, column)?;
             match enhancements.add_char(
                 0,
                 column,
@@ -173,15 +141,23 @@ impl<T: TeletextInterface> Teletext<T> {
             }
         }
 
-        for cell in grid.display_iter() {
+        for cell in content.display_iter.by_ref() {
             let alacritty_terminal::index::Point {
                 line: alacritty_terminal::index::Line(line),
                 column: alacritty_terminal::index::Column(column),
             } = cell.point;
             let line = line as u8 + 1;
             let column = column as u8;
+            check_bounds!(line, column)?;
 
-            let diacritical = ((line, column) == (cursor_line, cursor_column)).then_some(Diacritical::LowLine);
+            let diacritical = if (line, column) == (cursor_line, cursor_column) {
+                match content.cursor.shape {
+                    CursorShape::Hidden => None,
+                    _ => Some(Diacritical::LowLine),
+                }
+            } else {
+                None
+            };
 
             match enhancements.add_char(
                 line,
@@ -205,7 +181,7 @@ impl<T: TeletextInterface> Teletext<T> {
         }
 
         for (index, triplet) in enhancements.triplets().iter().enumerate() {
-            self.write_enhancement(
+            self.interface.write_enhancement(
                 *triplet,
                 (index / ENHANCEMENTS_PER_LINE) as u8,
                 (index % ENHANCEMENTS_PER_LINE) as u8,
