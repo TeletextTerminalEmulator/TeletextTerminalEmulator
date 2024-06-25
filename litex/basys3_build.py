@@ -107,10 +107,10 @@ def main():
     sdopts.add_argument("--with-spi-sdcard",       action="store_true", help="Enable SPI-mode SDCard support.")
     sdopts.add_argument("--with-sdcard",           action="store_true", help="Enable SDCard support.")
     parser.add_target_argument("--sdcard-adapter",                      help="SDCard PMOD adapter (digilent or numato).")
+
+    parser.set_defaults(bus_standard="axi-lite", cpu_variant="imac")
     args = parser.parse_args()
     argdict = parser.soc_argdict
-    argdict['bus_standard'] = "axi-lite"
-    argdict['cpu_variant'] = "full"
 
     soc = BaseSoC(
         sys_clk_freq        = args.sys_clk_freq,

@@ -8,7 +8,8 @@ enum Cli {
     Synthesize(BuildArgs),
     Build(BuildArgs),
     Check(BuildArgs),
-    Clippy(BuildArgs)
+    Clippy(BuildArgs),
+    Doc(BuildArgs),
 }
 
 #[derive(Args)]
@@ -32,7 +33,7 @@ struct Environment<'a> {
     env: Option<(PushEnv<'a>, PushEnv<'a>, Option<PushEnv<'a>>)>
 }
 
-const TARGET: &str = "riscv32im-unknown-none-elf";
+const TARGET: &str = "riscv32imac-unknown-none-elf";
 
 /// Takes the build args and transforms them into command line arguments and environment variables
 fn prepare_env<'a>(sh: &'a Shell, args: &BuildArgs) -> Environment<'a> {
@@ -144,6 +145,9 @@ fn main() -> Result<()> {
         },
         Cli::Clippy(args) => {
             check_code(&sh, &args, "clippy")?;
+        },
+        Cli::Doc(args) => {
+            check_code(&sh, &args, "doc")?;
         }
     }
 
