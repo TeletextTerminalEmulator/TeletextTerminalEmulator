@@ -150,7 +150,6 @@ fn main() -> ! {
     loop {
         match block!(wait_for_event(&mut ps2, frame_finished)).expect("Infallible") {
             Event::UartReceived(byte) => {
-                let _ = lock_debug_uart!().write(byte); // Just try to write, ignore if e.g. buffer is full
                 parser.advance(&mut term, byte);
                 TELETEXT_VALID.store(false, Ordering::Relaxed);
             }
