@@ -16,12 +16,12 @@ use alacritty_terminal::term::Config;
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
-use litex_basys3_pac::teletext::FrameFinished;
 use core::cell::RefCell;
 use core::convert::Infallible;
 use core::fmt::Write;
 use core::panic::PanicInfo;
 use embedded_alloc::Heap;
+use litex_basys3_pac::teletext::FrameFinished;
 use litex_basys3_pac::{riscv_rt::entry, Peripherals};
 use litex_hal::nb::{self, block};
 use litex_hal::prelude::*;
@@ -88,14 +88,24 @@ enum Event {
     Redraw,
 }
 
-fn wait_for_event<T: KeyboardLayout>(ps2: &mut PS2<T>, ff: &FrameFinished) -> nb::Result<Event, Infallible> {
+fn wait_for_event<T: KeyboardLayout>(
+    ps2: &mut PS2<T>,
+    ff: &FrameFinished,
+) -> nb::Result<Event, Infallible> {
     let read_byte = lock_uart!().read();
 
-    read_byte.map(Event::UartReceived)
-        .or_else(|_| ps2.try_read().map(Event::Keyboard).ok_or(nb::Error::<Infallible>::WouldBlock))
-        .or_else(|_| 
+    read_byte
+        .map(Event::UartReceived)
+        .or_else(|_| {
+            ps2.try_read()
+                .map(Event::Keyboard)
+                .ok_or(nb::Error::<Infallible>::WouldBlock)
+        })
+        .or_else(|_| {
             (TELETEXT_VALID.load(Ordering::Relaxed) && ff.read().frame_finished().bit())
-            .then_some(Event::Redraw).ok_or(nb::Error::<Infallible>::WouldBlock))
+                .then_some(Event::Redraw)
+                .ok_or(nb::Error::<Infallible>::WouldBlock)
+        })
 }
 
 #[entry]

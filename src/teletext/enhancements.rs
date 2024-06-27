@@ -1,4 +1,6 @@
-use crate::character_set::{char_to_teletext, CharacterSet, Diacritical, NationalOptionCharacterSubset};
+use crate::character_set::{
+    char_to_teletext, CharacterSet, Diacritical, NationalOptionCharacterSubset,
+};
 use crate::teletext::TeletextChar;
 
 pub const ENHANCEMENT_LINE_COUNT: usize = 16;
@@ -101,7 +103,7 @@ impl EnhancementBuffer {
         line: u8,
         column: u8,
         ch: char,
-        subset: NationalOptionCharacterSubset
+        subset: NationalOptionCharacterSubset,
     ) -> Result<()> {
         let enhancement = match char_to_teletext(ch, subset)
             .ok_or(EnhancementError::Unrepresentable)?

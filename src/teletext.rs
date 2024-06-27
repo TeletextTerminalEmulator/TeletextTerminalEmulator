@@ -85,7 +85,8 @@ impl<T: TeletextInterface> Teletext<T> {
         }
         // init header
         for col in 0..COLUMN_COUNT {
-            self.interface.write_char(TeletextChar(0x20), HEADER_LINE_ADDRESS, col);
+            self.interface
+                .write_char(TeletextChar(0x20), HEADER_LINE_ADDRESS, col);
         }
     }
 
@@ -110,7 +111,7 @@ impl<T: TeletextInterface> Teletext<T> {
                 0,
                 column,
                 header_ch,
-                self.configuration.national_option_character_subset
+                self.configuration.national_option_character_subset,
             ) {
                 Ok(()) => {
                     self.interface
@@ -147,7 +148,7 @@ impl<T: TeletextInterface> Teletext<T> {
                 line,
                 column,
                 cell.c,
-                self.configuration.national_option_character_subset
+                self.configuration.national_option_character_subset,
             ) {
                 Ok(()) => self.interface.write_char(TeletextChar(0x7F), column, line),
                 Err(EnhancementError::PlainChar(ch)) => self.interface.write_char(ch, column, line),
