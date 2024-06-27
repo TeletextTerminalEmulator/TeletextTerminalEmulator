@@ -16,6 +16,7 @@ use alacritty_terminal::term::Config;
 use alacritty_terminal::vte::ansi;
 use alacritty_terminal::Term;
 use alloc::rc::Rc;
+use litex_basys3_pac::teletext::FrameFinished;
 use core::cell::RefCell;
 use core::convert::Infallible;
 use core::fmt::Write;
@@ -87,23 +88,14 @@ enum Event {
     Redraw,
 }
 
-fn wait_for_event<T: KeyboardLayout>(ps2: &mut PS2<T>) -> nb::Result<Event, Infallible> {
+fn wait_for_event<T: KeyboardLayout>(ps2: &mut PS2<T>, ff: &FrameFinished) -> nb::Result<Event, Infallible> {
     let read_byte = lock_uart!().read();
 
-    match read_byte {
-        Ok(byte) => Ok(Event::UartReceived(byte)),
-        Err(nb::Error::WouldBlock) => match ps2.try_read() {
-            Some(context) => Ok(Event::Keyboard(context)),
-            None => {
-                if !TELETEXT_VALID.load(Ordering::Relaxed) {
-                    Ok(Event::Redraw)
-                } else {
-                    Err(nb::Error::WouldBlock)
-                }
-            }
-        },
-        Err(err) => Err(err),
-    }
+    read_byte.map(Event::UartReceived)
+        .or_else(|_| ps2.try_read().map(Event::Keyboard).ok_or(nb::Error::<Infallible>::WouldBlock))
+        .or_else(|_| 
+            (TELETEXT_VALID.load(Ordering::Relaxed) && ff.read().frame_finished().bit())
+            .then_some(Event::Redraw).ok_or(nb::Error::<Infallible>::WouldBlock))
 }
 
 #[entry]
@@ -120,6 +112,7 @@ fn main() -> ! {
     let debug_uart = Uart::new(peripherals.uart);
     let terminal_uart = TerminalUart::new(peripherals.terminal_uart);
     let mut ps2 = ps2::PS2::new(peripherals.ps2, pc_keyboard::layouts::De105Key);
+    let frame_finished = peripherals.teletext.frame_finished();
 
     *DEBUG_UART.lock_unfair() = Some(debug_uart);
     *TERMINAL_UART.lock_unfair() = Some(terminal_uart);
@@ -155,7 +148,7 @@ fn main() -> ! {
     writeln!(lock_debug_uart!(), "Starting event loop").unwrap();
 
     loop {
-        match block!(wait_for_event(&mut ps2)).expect("Infallible") {
+        match block!(wait_for_event(&mut ps2, frame_finished)).expect("Infallible") {
             Event::UartReceived(byte) => {
                 let _ = lock_debug_uart!().write(byte); // Just try to write, ignore if e.g. buffer is full
                 parser.advance(&mut term, byte);
