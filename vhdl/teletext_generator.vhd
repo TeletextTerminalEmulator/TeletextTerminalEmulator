@@ -45,7 +45,8 @@ entity teletext_generator is
         FRAME_FLAG          : out   std_logic;
         
         DATA_OUT            : out   std_logic;
-        SYNC_OUT            : out   std_logic
+        SYNC_OUT            : out   std_logic;
+        FRAME_FINISHED      : out   std_logic
     );
 end teletext_generator;
 
@@ -288,6 +289,15 @@ begin
             else
                 load_trigger <= '0';
             end if;
+        end if;
+    end process;
+    
+    frame_finished_p: process (current_line, current_frame)
+    begin
+        if current_line > 24 then
+            FRAME_FINISHED <= current_frame;
+        else
+            FRAME_FINISHED <= '0';
         end if;
     end process;
 end Behavioral;

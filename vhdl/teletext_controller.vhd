@@ -42,6 +42,7 @@ entity teletext_controller is
         TELETEXT_CLK : in STD_LOGIC;
         DATA_OUT : out STD_LOGIC;
         SYNC_OUT : out STD_LOGIC;
+        FRAME_FINISHED : out STD_LOGIC;
         
         -- Global Clock Signal
         S_AXI_ACLK	: in std_logic;
@@ -121,7 +122,8 @@ component teletext_generator is
         FRAME_FLAG          : out   std_logic;
         
         DATA_OUT            : out   std_logic;
-        SYNC_OUT            : out   std_logic
+        SYNC_OUT            : out   std_logic;
+        FRAME_FINISHED      : out   std_logic
     );
 end component;
 
@@ -232,7 +234,8 @@ begin
         LINE_INDEX => line_index,
         FRAME_FLAG => frame,
         DATA_OUT => DATA_OUT,
-        SYNC_OUT => SYNC_OUT
+        SYNC_OUT => SYNC_OUT,
+        FRAME_FINISHED => FRAME_FINISHED
     );
     
     framebuf: framebuffer
