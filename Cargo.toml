@@ -14,6 +14,7 @@ portable-atomic = { version = "1.6.0", features = ["critical-section"] }
 mini-backtrace = { version = "0.1.4", optional = true }
 pc-keyboard = { git = "https://github.com/rust-embedded-community/pc-keyboard.git" }
 vte-input = { git = "https://github.com/jorolf/vte-input.git" }
+phf = { version = "0.11", default-features = false, features = ["macros"] }
 
 [features]
 backtrace = ["dep:mini-backtrace"]

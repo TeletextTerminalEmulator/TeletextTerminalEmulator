@@ -1,5 +1,5 @@
 use crate::character_set::NationalOptionCharacterSubset;
-use crate::teletext::{ControlBits, TeletextChar, enhancements::EnhancementTriplet};
+use crate::teletext::{enhancements::EnhancementTriplet, ControlBits, TeletextChar};
 use core::ptr;
 
 pub trait TeletextInterface {
@@ -10,28 +10,21 @@ pub trait TeletextInterface {
     fn set_control_bits(&mut self, new_control_bits: ControlBits);
     fn write_char(&mut self, char: TeletextChar, col: u8, line: u8);
 
-    fn write_enhancement(&mut self, enhancement: EnhancementTriplet, packet_designation: u8, index: u8) {
+    fn write_enhancement(
+        &mut self,
+        enhancement: EnhancementTriplet,
+        packet_designation: u8,
+        index: u8,
+    ) {
         const PACKET_START: u8 = 25;
 
         let (address, mode, data) = enhancement.into_triplet();
 
         let enhancement_start = index * 3;
         let line_number = packet_designation + PACKET_START;
-        self.write_char(
-            TeletextChar(address),
-            enhancement_start,
-            line_number,
-        );
-        self.write_char(
-            TeletextChar(mode),
-            enhancement_start + 1,
-            line_number,
-        );
-        self.write_char(
-            TeletextChar(data),
-            enhancement_start + 2,
-            line_number,
-        );
+        self.write_char(TeletextChar(address), enhancement_start, line_number);
+        self.write_char(TeletextChar(mode), enhancement_start + 1, line_number);
+        self.write_char(TeletextChar(data), enhancement_start + 2, line_number);
     }
 }
 
@@ -54,9 +47,6 @@ impl NationalOptionCharacterSubset {
                 0b101
             }
             NationalOptionCharacterSubset::Czech | NationalOptionCharacterSubset::Slovak => 0b110,
-            NationalOptionCharacterSubset::None => {
-                panic!("The \"None\" subset does not actually exist and does not have a code.")
-            }
         }
     }
 
