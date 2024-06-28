@@ -53,8 +53,8 @@ impl NationalOptionCharacterSubset {
         use NationalOptionCharacterSubset::*;
 
         match self {
-            English => ENGLISH_TELETEXT_CHARS.get(&ch).copied(),
-            German => GERMAN_TELETEXT_CHARS.get(&ch).copied(),
+            English => ENGLISH_TELETEXT_CHARS(ch),
+            German => GERMAN_TELETEXT_CHARS(ch),
             _ => todo!("National character subset not implemented!"),
         }
     }
@@ -83,7 +83,7 @@ impl Diacritical {
     }
 }
 
-static ENGLISH_TELETEXT_CHARS: phf::Map<char, u8> = phf_map! {
+static ENGLISH_TELETEXT_CHARS: fn(char) -> Option<u8> = |input_char| Some(match input_char {
     '£' => 0x23,
     '$' => 0x24,
     '@' => 0x40,
@@ -97,9 +97,10 @@ static ENGLISH_TELETEXT_CHARS: phf::Map<char, u8> = phf_map! {
     '‖' => 0x7C,
     '¾' => 0x7D,
     '÷' => 0x7E,
-};
+    _ => return None,
+});
 
-static GERMAN_TELETEXT_CHARS: phf::Map<char, u8> = phf_map! {
+static GERMAN_TELETEXT_CHARS: fn(char) -> Option<u8> = |input_char| Some(match input_char {
     '#' => 0x23,
     '$' => 0x24,
     '§' => 0x40,
@@ -113,9 +114,10 @@ static GERMAN_TELETEXT_CHARS: phf::Map<char, u8> = phf_map! {
     'ö' => 0x7C,
     'ü' => 0x7D,
     'ß' => 0x7E,
-};
+    _ => return None,
+});
 
-static LATIN_TELETEXT_CHARS: phf::Map<char, (u8, CharacterSet)> = phf_map! {
+static LATIN_TELETEXT_CHARS: fn(char) -> Option<(u8, CharacterSet)> = |input_char| Some(match input_char {
     ' ' => (0x20, CharacterSet::G0),
     '!' => (0x21, CharacterSet::G0),
     '"' => (0x22, CharacterSet::G0),
@@ -831,7 +833,8 @@ static LATIN_TELETEXT_CHARS: phf::Map<char, (u8, CharacterSet)> = phf_map! {
     'ǔ' => (0x75, CharacterSet::G0WithDiacritical(Diacritical::Caron)),
     'Ž' => (0x5A, CharacterSet::G0WithDiacritical(Diacritical::Caron)),
     'ž' => (0x7A, CharacterSet::G0WithDiacritical(Diacritical::Caron)),
-};
+    _ => return None,
+});
 
 pub fn char_to_teletext(
     ch: char,
@@ -841,8 +844,8 @@ pub fn char_to_teletext(
         .has_char(ch)
         .map(|code| (TeletextChar(code), CharacterSet::G0))
         .or_else(|| {
-            LATIN_TELETEXT_CHARS
-                .get(&ch)
-                .map(|(b, set)| (TeletextChar(*b), *set))
+            LATIN_TELETEXT_CHARS(ch).map(|res| {
+                (TeletextChar(res.0), res.1)
+            })
         })
 }

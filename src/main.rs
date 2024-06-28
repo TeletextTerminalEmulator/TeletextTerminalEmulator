@@ -102,7 +102,7 @@ fn wait_for_event<T: KeyboardLayout>(
                 .ok_or(nb::Error::<Infallible>::WouldBlock)
         })
         .or_else(|_| {
-            (TELETEXT_VALID.load(Ordering::Relaxed) && ff.read().frame_finished().bit())
+            (!TELETEXT_VALID.load(Ordering::Relaxed) && ff.read().frame_finished().bit())
                 .then_some(Event::Redraw)
                 .ok_or(nb::Error::<Infallible>::WouldBlock)
         })

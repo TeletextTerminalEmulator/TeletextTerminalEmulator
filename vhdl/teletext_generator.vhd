@@ -294,7 +294,7 @@ begin
     
     frame_finished_p: process (current_line, current_frame)
     begin
-        if current_line > 24 then
+        if current_line > 24 and current_line <= 26 then
             FRAME_FINISHED <= current_frame;
         else
             FRAME_FINISHED <= '0';
