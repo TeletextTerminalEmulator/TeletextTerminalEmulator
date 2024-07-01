@@ -54,8 +54,11 @@ class BaseSoC(SoCCore):
         # Teletext ---------------------------------------------------------------------------------
         self.teletext = Teletext(pads=platform.request("teletext"))
 
-        teletext_region = SoCRegion(origin=0x80000000, size=2**6, cached=False)
-        self.bus.add_slave(name="teletext", slave=self.teletext.bus, region=teletext_region)
+        #teletext_region = SoCRegion(origin=0x80000000, size=2**6, cached=False)
+        #self.bus.add_slave(name="teletext", slave=self.teletext.bus, region=teletext_region)
+
+        teletext_region = SoCRegion(origin=0x80000000, size=self.teletext.memory.mem.width * self.teletext.memory.mem.depth, cached=False)
+        self.bus.add_slave(name="teletext_mem", slave=self.teletext.memory.bus, region=teletext_region)
 
         self.ps2 = PS2Interface(pads = platform.request("usbhost"))
 

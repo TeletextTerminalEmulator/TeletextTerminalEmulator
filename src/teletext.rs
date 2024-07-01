@@ -230,7 +230,7 @@ impl Dimensions for TeletextDimensions {
 
 impl Teletext<RawTeletextInterface> {
     pub unsafe fn new_raw() -> Teletext<RawTeletextInterface> {
-        let interface = RawTeletextInterface::new(mem_map::TELETEXT_ORIGIN);
+        let interface = RawTeletextInterface::new(mem_map::TELETEXT_MEM_ORIGIN);
         Teletext::new(interface)
     }
 }
