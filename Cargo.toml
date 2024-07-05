@@ -19,6 +19,8 @@ phf = { version = "0.11", default-features = false, features = ["macros"] }
 [features]
 backtrace = ["dep:mini-backtrace"]
 terminal_uart = []
+teletext_reg = []
+teletext_mem = []
 
 [profile.release]
 opt-level = "z"

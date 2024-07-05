@@ -18,12 +18,12 @@ class Teletext(LiteXModule, AutoCSR):
             CSRField("erase_page"),
             CSRField("newsflash"),
             CSRField("subtitle"),
-            CSRField("supress_header"),
+            CSRField("suppress_header"),
             CSRField("update_indicator"),
             CSRField("interrupted_sequence"),
             CSRField("inhibit_display"),
             CSRField("magazine_serial"),
-            CSRField("national_option_character_subset", size=3)
+            CSRField("national_option_character_subset", size=3, values=[("0bXXX", "subset")])
         ], description="All settings that are transmitted with the teletext header packet.")
         self.buffer = CSRStorage(description="Which of the two buffers should be used.")
 

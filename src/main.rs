@@ -22,7 +22,7 @@ use core::fmt::Write;
 use core::panic::PanicInfo;
 use embedded_alloc::Heap;
 use litex_basys3_pac::teletext::FrameFinished;
-use litex_basys3_pac::{riscv_rt::entry, Peripherals};
+use litex_basys3_pac::{riscv_rt::entry, Peripherals, mem_map};
 use litex_hal::nb::{self, block};
 use litex_hal::prelude::*;
 use pc_keyboard::KeyboardLayout;
@@ -81,6 +81,7 @@ macro_rules! lock_uart {
 
 pub(crate) use lock_debug_uart;
 pub(crate) use lock_uart;
+use crate::teletext::interface::MemTeletextInterface;
 
 enum Event {
     UartReceived(u8),
@@ -90,7 +91,7 @@ enum Event {
 
 fn wait_for_event<T: KeyboardLayout>(
     ps2: &mut PS2<T>,
-    ff: &FrameFinished,
+    tele: &Rc<RefCell<Teletext>>,
 ) -> nb::Result<Event, Infallible> {
     let read_byte = lock_uart!().read();
 
@@ -102,7 +103,7 @@ fn wait_for_event<T: KeyboardLayout>(
                 .ok_or(nb::Error::<Infallible>::WouldBlock)
         })
         .or_else(|_| {
-            (!TELETEXT_VALID.load(Ordering::Relaxed) && ff.read().frame_finished().bit())
+            (!TELETEXT_VALID.load(Ordering::Relaxed) && tele.borrow().get_frame_finished())
                 .then_some(Event::Redraw)
                 .ok_or(nb::Error::<Infallible>::WouldBlock)
         })
@@ -112,7 +113,7 @@ fn wait_for_event<T: KeyboardLayout>(
 fn main() -> ! {
     {
         use core::mem::MaybeUninit;
-        const HEAP_SIZE: usize = litex_basys3_pac::mem_map::SRAM_LENGTH - 4096; // -4 KiB
+        const HEAP_SIZE: usize = mem_map::SRAM_LENGTH - 4096; // -4 KiB
         static mut HEAP_MEM: [MaybeUninit<u8>; HEAP_SIZE] = [MaybeUninit::uninit(); HEAP_SIZE];
         unsafe { HEAP.init(HEAP_MEM.as_ptr() as usize, HEAP_SIZE) }
     }
@@ -122,12 +123,21 @@ fn main() -> ! {
     let debug_uart = Uart::new(peripherals.uart);
     let terminal_uart = TerminalUart::new(peripherals.terminal_uart);
     let mut ps2 = ps2::PS2::new(peripherals.ps2, pc_keyboard::layouts::De105Key);
-    let frame_finished = peripherals.teletext.frame_finished();
 
     *DEBUG_UART.lock_unfair() = Some(debug_uart);
     *TERMINAL_UART.lock_unfair() = Some(terminal_uart);
+    
+    let teletextImpl;
+    #[cfg(feature = "teletext_reg")]
+    unsafe {
+        teletextImpl = RawTeletextInterface::new(mem_map::TELETEXT_MEM_ORIGIN);
+    }
+    #[cfg(feature = "teletext_mem")]
+    {
+        teletextImpl = MemTeletextInterface::new(peripherals.teletext);
+    }
 
-    let teletext = Rc::new(RefCell::new(unsafe { Teletext::new_raw() }));
+    let teletext = Rc::new(RefCell::new(Teletext::new(teletextImpl)));
     writeln!(lock_debug_uart!(), "Peripherals initialized").unwrap();
 
     #[cfg(feature = "backtrace")]
@@ -158,7 +168,7 @@ fn main() -> ! {
     writeln!(lock_debug_uart!(), "Starting event loop").unwrap();
 
     loop {
-        match block!(wait_for_event(&mut ps2, frame_finished)).expect("Infallible") {
+        match block!(wait_for_event(&mut ps2, &teletext)).expect("Infallible") {
             Event::UartReceived(byte) => {
                 parser.advance(&mut term, byte);
                 TELETEXT_VALID.store(false, Ordering::Relaxed);

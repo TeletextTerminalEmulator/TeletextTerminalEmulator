@@ -1,16 +1,16 @@
+use alloc::rc::Rc;
 use core::{cell::RefCell, fmt::Write};
 
 use alacritty_terminal::{
     event::{Event, EventListener, WindowSize},
     vte::ansi::Timeout,
 };
-use alloc::rc::Rc;
 
-use crate::teletext::{interface::TeletextInterface, Teletext};
+use crate::teletext::Teletext;
 
-pub struct TeletextTerminalListener<T: TeletextInterface>(pub Rc<RefCell<Teletext<T>>>);
+pub struct TeletextTerminalListener(pub Rc<RefCell<Teletext>>);
 
-impl<T: TeletextInterface> EventListener for TeletextTerminalListener<T> {
+impl EventListener for TeletextTerminalListener {
     fn send_event(&self, event: Event) {
         match event {
             Event::MouseCursorDirty => {}

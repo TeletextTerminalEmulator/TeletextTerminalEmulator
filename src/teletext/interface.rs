@@ -1,6 +1,9 @@
 use crate::character_set::NationalOptionCharacterSubset;
 use crate::teletext::{enhancements::EnhancementTriplet, ControlBits, TeletextChar};
+use litex_basys3_pac::{mem_map, Teletext};
+#[cfg(feature = "teletext_reg")]
 use core::ptr;
+use core::ptr::slice_from_raw_parts_mut;
 
 pub trait TeletextInterface {
     fn page_number(&self) -> u8;
@@ -9,6 +12,8 @@ pub trait TeletextInterface {
     fn control_bits(&self) -> ControlBits;
     fn set_control_bits(&mut self, new_control_bits: ControlBits);
     fn write_char(&mut self, char: TeletextChar, col: u8, line: u8);
+    
+    fn frame_finished(&self) -> bool;
 
     fn write_enhancement(
         &mut self,
@@ -28,9 +33,17 @@ pub trait TeletextInterface {
     }
 }
 
+#[cfg(feature = "teletext_reg")]
 #[derive(Debug)]
-pub(crate) struct RawTeletextInterface {
+pub struct RawTeletextInterface {
     base_address: *mut u32,
+}
+
+#[cfg(feature = "teletext_mem")]
+#[derive(Debug)]
+pub struct MemTeletextInterface {
+    teletext: Teletext,
+    teletext_mem: &'static mut [TeletextChar],
 }
 
 impl NationalOptionCharacterSubset {
@@ -64,6 +77,7 @@ impl NationalOptionCharacterSubset {
     }
 }
 
+#[cfg(feature = "teletext_reg")]
 impl RawTeletextInterface {
     pub(crate) unsafe fn new(base_address: usize) -> RawTeletextInterface {
         RawTeletextInterface {
@@ -72,6 +86,7 @@ impl RawTeletextInterface {
     }
 }
 
+#[cfg(feature = "teletext_reg")]
 impl TeletextInterface for RawTeletextInterface {
     fn page_number(&self) -> u8 {
         unsafe { ptr::read_volatile(self.base_address as *const u8) }
@@ -124,5 +139,78 @@ impl TeletextInterface for RawTeletextInterface {
     fn write_char(&mut self, char: TeletextChar, col: u8, line: u8) {
         let value = ((line as u32) << 24) | ((col as u32) << 16) | char.0 as u32;
         unsafe { ptr::write_volatile(self.base_address.offset(8), value) }
+    }
+}
+
+impl MemTeletextInterface {
+    pub(crate) fn new(teletext: Teletext) -> MemTeletextInterface {
+        unsafe {
+            MemTeletextInterface {
+                teletext,
+                teletext_mem: &mut *slice_from_raw_parts_mut(mem_map::TELETEXT_MEM_ORIGIN as *mut TeletextChar, mem_map::TELETEXT_MEM_LENGTH),
+            }
+        }
+    }
+}
+
+impl TeletextInterface for MemTeletextInterface {
+    fn page_number(&self) -> u8 {
+        self.teletext.page_number().read().page_number().bits()
+    }
+
+    fn magazine_number(&self) -> u8 {
+        self.teletext.magazine_number().read().magazine_number().bits()
+    }
+
+    fn set_magazine_page_number(&mut self, new_magazine: u8, new_page: u8) {
+        self.teletext.magazine_number().write(|w| {
+            unsafe {
+                w.magazine_number().bits(new_magazine)
+            }
+        });
+        self.teletext.page_number().write(|w| {
+            unsafe {
+                w.page_number().bits(new_page)
+            }
+        })
+    }
+
+    fn control_bits(&self) -> ControlBits {
+        let controls = self.teletext.page_control_bits().read();
+        ControlBits {
+            erase_page: controls.erase_page().bit(),
+            inhibit_display: controls.erase_page().bit(),
+            magazine_serial: controls.magazine_serial().bit(),
+            newsflash: controls.newsflash().bit(),
+            subtitle: controls.subtitle().bit(),
+            interrupted_sequence: controls.interrupted_sequence().bit(),
+            suppress_header: controls.suppress_header().bit(),
+            update_indicator: controls.update_indicator().bit(),
+            national_option_character_subset: NationalOptionCharacterSubset::from_value(controls.national_option_character_subset().bits()),
+        }
+    }
+
+    fn set_control_bits(&mut self, new_control_bits: ControlBits) {
+        self.teletext.page_control_bits().write(|w| {
+            w.erase_page().bit(new_control_bits.erase_page);
+            w.inhibit_display().bit(new_control_bits.inhibit_display);
+            w.magazine_serial().bit(new_control_bits.magazine_serial);
+            w.newsflash().bit(new_control_bits.newsflash);
+            w.subtitle().bit(new_control_bits.subtitle);
+            w.interrupted_sequence().bit(new_control_bits.interrupted_sequence);
+            w.suppress_header().bit(new_control_bits.suppress_header);
+            w.update_indicator().bit(new_control_bits.update_indicator);
+            unsafe {
+                w.national_option_character_subset().bits(new_control_bits.national_option_character_subset.value())
+            }
+        })
+    }
+
+    fn write_char(&mut self, char: TeletextChar, col: u8, line: u8) {
+        self.teletext_mem[line as usize * 40 + col as usize] = char;
+    }
+
+    fn frame_finished(&self) -> bool {
+        self.teletext.frame_finished().read().frame_finished().bit()
     }
 }

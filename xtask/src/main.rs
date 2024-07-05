@@ -25,6 +25,14 @@ struct BuildArgs {
     /// Split debug and terminal output
     #[arg(long, short)]
     terminal_uart: bool,
+    
+    /// Enable Teletext Mem interface
+    #[arg(long)]
+    teletext_mem: bool,
+    
+    /// Enable Teletext Reg interface
+    #[arg(long)]
+    teletext_reg: bool,
 }
 
 struct Environment<'a> {
@@ -41,6 +49,8 @@ fn prepare_env<'a>(sh: &'a Shell, args: &BuildArgs) -> Environment<'a> {
     let features: String = [
         args.backtrace.then_some("backtrace"),
         args.terminal_uart.then_some("terminal_uart"),
+        args.teletext_mem.then_some("teletext_mem"),
+        args.teletext_reg.then_some("teletext_reg"),
     ]
     .into_iter()
     .flatten()
