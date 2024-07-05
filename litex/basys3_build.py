@@ -19,6 +19,7 @@ from litex.soc.integration.soc import SoCRegion
 from litex.soc.integration.soc_core import *
 from litex.soc.integration.builder import *
 from litex.soc.cores.led import LedChaser
+from litex.soc.interconnect import wishbone, axi
 
 # CRG ----------------------------------------------------------------------------------------------
 
@@ -52,14 +53,30 @@ class BaseSoC(SoCCore):
         SoCCore.__init__(self, platform, sys_clk_freq, ident="LiteX SoC on Basys3", **kwargs)
         
         # Teletext ---------------------------------------------------------------------------------
-        self.teletext = Teletext(pads=platform.request("teletext"))
 
-        #teletext_region = SoCRegion(origin=0x80000000, size=2**6, cached=False)
-        #self.bus.add_slave(name="teletext", slave=self.teletext.bus, region=teletext_region)
+        ram_cls = {
+            "wishbone": wishbone.SRAM,  
+            "axi-lite": axi.AXILiteSRAM,
+            "axi"     : axi.AXILiteSRAM,
+        }[self.bus.standard]
+        interface_cls = {
+            "wishbone": wishbone.Interface,
+            "axi-lite": axi.AXILiteInterface,
+            "axi"     : axi.AXILiteInterface,
+        }[self.bus.standard]
+        ram_bus = interface_cls(
+            data_width    = self.bus.data_width,
+            address_width = self.bus.address_width,
+            bursting      = self.bus.bursting
+        )
+        size = 1024 * 4
+        assert size >= 2*2*24*40
+        ram = ram_cls(size, bus=ram_bus, read_only=False, name="teletext_mem_internal")
+        self.bus.add_slave(name="teletext_mem", slave=ram.bus, region=SoCRegion(origin=0x80000000, size=size, mode="rw", cached=False))
+        self.teletext_mem = ram
 
-        teletext_region = SoCRegion(origin=0x80000000, size=self.teletext.memory.mem.width * self.teletext.memory.mem.depth, cached=False)
-        self.bus.add_slave(name="teletext_mem", slave=self.teletext.memory.bus, region=teletext_region)
-
+        self.submodules.teletext = Teletext(pads=platform.request("teletext"), mem=self.teletext_mem.mem)
+        
         self.ps2 = PS2Interface(pads = platform.request("usbhost"))
 
         self.add_uart("terminal_uart", uart_name="terminal_uart", baudrate=115200, fifo_depth=1024)
@@ -76,7 +93,7 @@ def main():
     parser = LiteXArgumentParser(platform=basys3_constraints.Platform, description="LiteX SoC on Basys3.")
     parser.add_target_argument("--sys-clk-freq", default=100e6, type=float, help="System clock frequency.")
 
-    parser.set_defaults(bus_standard="axi-lite", cpu_variant="imac", integrated_sram_size=2**16, integrated_rom_size=2**20)
+    parser.set_defaults(bus_standard="wishbone", cpu_variant="imac", integrated_sram_size=2**15+2**14, integrated_rom_size=2**20)
     args = parser.parse_args()
 
     soc = BaseSoC(

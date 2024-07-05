@@ -36,8 +36,8 @@ entity teletext_generator is
     port(
         CLK_IN              : in    std_logic;
         RESET_N             : in    std_logic;
-        LINE_IN             : in    TELETEXT_LINE;
-        PAGE_CONTROL_BITS   : in    CONTROL_BITS;
+        LINE_IN             : in    std_logic_vector(279 downto 0);
+        PAGE_CONTROL_BITS   : in    std_logic_vector(10 downto 0);
         PAGE_NUMBER         : in    unsigned (7 downto 0);
         MAGAZINE_NUMBER     : in    unsigned (2 downto 0);
         
@@ -123,13 +123,19 @@ signal current_packet               : unsigned (4 downto 0);
 signal current_frame                : std_logic := '0';
 signal next_frame                   : std_logic;
 
+signal line_in_arr                  : TELETEXT_LINE;
+signal page_control_bits_t          : CONTROL_BITS;
 
-signal packet_designator            : unsigned (3 downto 0) := current_line(3 downto 0) - 1;
+signal packet_designator            : unsigned (3 downto 0);
 signal enhancement_triplets         : TRIPLET_ARRAY(12 downto 0) := (
     others => TERMINATION_MARKER_TRIPLET
 );
 
 begin
+
+    line_in_arr <= convert_std_logic_to_teletext_line(LINE_IN);
+    page_control_bits_t <= convert_std_logic_to_control_bits(PAGE_CONTROL_BITS);
+    packet_designator <= current_line(3 downto 0) - 1;
     
     -- Set active position to row 2, column 0
     enhancement_triplets(0)     <= (
@@ -217,7 +223,7 @@ begin
     
     packet_normal_gen : packet_normal_generator
     port map(
-        DATA_BYTES => LINE_IN,
+        DATA_BYTES => line_in_arr,
         PACKET_DATA => teletext_normal_data
     );
     
@@ -225,7 +231,7 @@ begin
     port map(
         DESIGNATION_IN => packet_designator,
         --TRIPLETS_IN => enhancement_triplets,
-        TRIPLETS_IN => convert_teletext_line_to_enhancements(LINE_IN),
+        TRIPLETS_IN => convert_teletext_line_to_enhancements(line_in_arr),
         PACKET_DATA => teletext_enhancement_data
     );
     
@@ -233,8 +239,8 @@ begin
     port map(
         PAGE_NUMBER => PAGE_NUMBER,
         PAGE_SUB_CODE => (others => '0'),
-        CONTROL_BITS => PAGE_CONTROL_BITS,
-        DATA_BYTES => LINE_IN(39 downto 8),
+        CONTROL_BITS => page_control_bits_t,
+        DATA_BYTES => line_in_arr(39 downto 8),
         PACKET_DATA => teletext_page_header_data
     );
     

@@ -6,12 +6,11 @@ from migen.fhdl.structure import _Operator
 
 class Teletext(LiteXModule, AutoCSR):
 
-    def __init__(self, pads):
+    def __init__(self, pads, mem):
 
         self.pads = pads
 
         # CSR
-        self.bus = AXILiteInterface(data_width=32, address_width=6)
         self.frame_finished = CSRStatus(1, description="The frame has been fully transmitted and the next one has not started yet.")
         self.page_number = CSRStorage(8, description="The page number of the displayed page.")
         self.magazine_number = CSRStorage(3, description="The magazine number of the displayed page.")
@@ -29,16 +28,14 @@ class Teletext(LiteXModule, AutoCSR):
         self.buffer = CSRStorage(description="Which of the two buffers should be used.")
 
         # Memory
-        self.memory = AXILiteSRAM(40*(24 * 2)*2, name="teletext_mem")
-        #print(f"Memory width={self.memory.mem.width}, depth={self.memory.mem.depth}")
-        port = self.memory.mem.get_port(clock_domain="tele")
+        port = mem.get_port(clock_domain="tele")
         self.specials += port
-
+        
         # Generator Signals
         line_arr = Array([Signal(8 * 4) for _ in range(10)])
         line = Signal(40*7)
 
-        self.comb += [line[idx:idx+7*4].eq(Cat(dword[0:7], dword[8:15], dword[16:23], dword[23:31])) for (idx, dword) in enumerate(line_arr)]
+        self.sync.tele += [line[idx*7*4:(idx+1)*7*4].eq(Cat(dword[0:7], dword[8:15], dword[16:23], dword[24:31])) for (idx, dword) in enumerate(line_arr)]
 
         line_index = Signal(5)
         frame_flag = Signal()
@@ -70,13 +67,32 @@ class Teletext(LiteXModule, AutoCSR):
         # Char Counter
         # Since the memory works in 32 bit steps we can read 4 chars in a single access
         char_index = Signal(max=10)
-        self.sync.tele += char_index.eq(_Operator("%", [(char_index + 1), 10]))
+        char_index_next = Signal(char_index.nbits)
+
+        self.comb += If(
+            char_index >= 9,
+            char_index_next.eq(0)
+        ).Else(
+            char_index_next.eq(char_index + 1)
+        )
+        self.sync.tele += char_index.eq(char_index_next)
 
         # Read address
-        self.comb += port.adr.eq(((current_buffer * 2 + frame_flag) * 24 + line_index) * 10 + _Operator("%", [(char_index + 1), 10]))
+        self.comb += port.adr.eq(0)
+        self.comb += port.adr.eq(((current_buffer * 2 + frame_flag) * 24 + line_index) * 10 + char_index_next)
+        
         
         # Read
-        self.sync.tele += line_arr[char_index].eq(port.dat_r)
+        self.sync.tele += [
+            If(idx == char_index,
+                line_arr[idx].eq(port.dat_r)
+            ).Else(
+                line_arr[idx].eq(line_arr[idx])
+            )
+            for idx
+            in range(len(line_arr))
+        ]
+        
 
 
 
