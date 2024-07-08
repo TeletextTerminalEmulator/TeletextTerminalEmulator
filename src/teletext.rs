@@ -35,6 +35,7 @@ pub struct ControlBits {
 }
 
 #[derive(Debug, Default, Clone, Copy)]
+#[repr(transparent)]
 pub struct TeletextChar(pub u8);
 
 #[derive(Debug)]

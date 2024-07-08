@@ -1,7 +1,6 @@
 use crate::character_set::NationalOptionCharacterSubset;
 use crate::teletext::{enhancements::EnhancementTriplet, ControlBits, TeletextChar};
 use litex_basys3_pac::{mem_map, Teletext};
-use core::ptr::slice_from_raw_parts_mut;
 
 pub trait TeletextInterface {
     fn page_number(&self) -> u8;
@@ -34,7 +33,7 @@ pub trait TeletextInterface {
 #[derive(Debug)]
 pub struct MemTeletextInterface {
     teletext: Teletext,
-    teletext_mem: &'static mut [TeletextChar],
+    teletext_mem: *mut TeletextChar,
 }
 
 impl NationalOptionCharacterSubset {
@@ -70,11 +69,9 @@ impl NationalOptionCharacterSubset {
 
 impl MemTeletextInterface {
     pub(crate) fn new(teletext: Teletext) -> MemTeletextInterface {
-        unsafe {
-            MemTeletextInterface {
-                teletext,
-                teletext_mem: &mut *slice_from_raw_parts_mut(mem_map::TELETEXT_MEM_ORIGIN as *mut TeletextChar, mem_map::TELETEXT_MEM_LENGTH),
-            }
+        MemTeletextInterface {
+            teletext,
+            teletext_mem: mem_map::TELETEXT_MEM_ORIGIN as *mut TeletextChar,
         }
     }
 }
@@ -133,7 +130,9 @@ impl TeletextInterface for MemTeletextInterface {
     }
 
     fn write_char(&mut self, char: TeletextChar, col: u8, line: u8) {
-        self.teletext_mem[line as usize * 40 + col as usize] = char;
+        unsafe {
+            self.teletext_mem.offset(line as isize * 40 + col as isize).write_volatile(char);
+        }
     }
 
     fn frame_finished(&self) -> bool {

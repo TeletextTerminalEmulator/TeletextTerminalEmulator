@@ -48,10 +48,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                 let region_origin = region.origin;
                 let region_length = region.length;
                 mem_map_rs.push_str(&format!(
-                    "pub const {region_name}_ORIGIN: usize = {region_origin};\n"
+                    "pub const {region_name}_ORIGIN: usize = 0x{region_origin:X};\n"
                 ));
                 mem_map_rs.push_str(&format!(
-                    "pub const {region_name}_LENGTH: usize = {region_length};\n"
+                    "pub const {region_name}_LENGTH: usize = 0x{region_length:X};\n"
                 ))
             }
         }
