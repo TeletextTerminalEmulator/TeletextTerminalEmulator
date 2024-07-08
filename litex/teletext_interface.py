@@ -12,8 +12,8 @@ class Teletext(LiteXModule, AutoCSR):
 
         # CSR
         self.frame_finished = CSRStatus(1, description="The frame has been fully transmitted and the next one has not started yet.")
-        self.page_number = CSRStorage(8, description="The page number of the displayed page.")
-        self.magazine_number = CSRStorage(3, description="The magazine number of the displayed page.")
+        self.page_number = CSRStorage(8, reset=0, description="The page number of the displayed page.")
+        self.magazine_number = CSRStorage(3, reset=1, description="The magazine number of the displayed page.")
         self.page_control_bits = CSRStorage(fields = [
             CSRField("erase_page"),
             CSRField("newsflash"),
