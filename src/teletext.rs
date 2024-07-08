@@ -5,15 +5,10 @@ use crate::teletext::interface::TeletextInterface;
 use alacritty_terminal::grid::Dimensions;
 use alacritty_terminal::term::RenderableContent;
 use alloc::string::String;
+use interface::MemTeletextInterface;
 use core::iter::repeat;
 use enhancements::{EnhancementError, ENHANCEMENTS_PER_LINE};
-use litex_basys3_pac::mem_map;
-
-#[cfg(feature = "teletext_reg")]
-pub use crate::teletext::interface::RawTeletextInterface as TeletextInterfaceImpl;
-
-#[cfg(feature = "teletext_mem")]
-pub use crate::teletext::interface::MemTeletextInterface as TeletextInterfaceImpl;
+use litex_basys3_pac as pac;
 
 pub mod enhancements;
 pub mod interface;
@@ -44,7 +39,7 @@ pub struct TeletextChar(pub u8);
 
 #[derive(Debug)]
 pub struct Teletext {
-    interface: TeletextInterfaceImpl,
+    interface: MemTeletextInterface,
     configuration: ControlBits,
     page_number: u8,
     magazine_number: u8,
@@ -71,7 +66,9 @@ macro_rules! check_bounds {
 
 #[allow(dead_code)]
 impl Teletext {
-    pub fn new(interface: TeletextInterfaceImpl) -> Teletext {
+    pub fn new(teletext_reg: pac::Teletext) -> Teletext {
+        let interface = MemTeletextInterface::new(teletext_reg);
+
         let mut teletext = Teletext {
             page_number: interface.page_number(),
             magazine_number: interface.magazine_number(),

@@ -21,7 +21,6 @@ use core::convert::Infallible;
 use core::fmt::Write;
 use core::panic::PanicInfo;
 use embedded_alloc::Heap;
-use litex_basys3_pac::teletext::FrameFinished;
 use litex_basys3_pac::{riscv_rt::entry, Peripherals, mem_map};
 use litex_hal::nb::{self, block};
 use litex_hal::prelude::*;
@@ -81,7 +80,6 @@ macro_rules! lock_uart {
 
 pub(crate) use lock_debug_uart;
 pub(crate) use lock_uart;
-use crate::teletext::interface::MemTeletextInterface;
 
 enum Event {
     UartReceived(u8),
@@ -126,18 +124,8 @@ fn main() -> ! {
 
     *DEBUG_UART.lock_unfair() = Some(debug_uart);
     *TERMINAL_UART.lock_unfair() = Some(terminal_uart);
-    
-    let teletextImpl;
-    #[cfg(feature = "teletext_reg")]
-    unsafe {
-        teletextImpl = RawTeletextInterface::new(mem_map::TELETEXT_MEM_ORIGIN);
-    }
-    #[cfg(feature = "teletext_mem")]
-    {
-        teletextImpl = MemTeletextInterface::new(peripherals.teletext);
-    }
 
-    let teletext = Rc::new(RefCell::new(Teletext::new(teletextImpl)));
+    let teletext = Rc::new(RefCell::new(Teletext::new(peripherals.teletext)));
     writeln!(lock_debug_uart!(), "Peripherals initialized").unwrap();
 
     #[cfg(feature = "backtrace")]

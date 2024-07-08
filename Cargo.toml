@@ -18,8 +18,6 @@ vte-input = { git = "https://github.com/jorolf/vte-input.git" }
 [features]
 backtrace = ["dep:mini-backtrace"]
 terminal_uart = []
-teletext_reg = []
-teletext_mem = []
 
 [profile.release]
 opt-level = "z"
