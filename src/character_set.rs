@@ -1,5 +1,4 @@
 use crate::teletext::TeletextChar;
-use phf::phf_map;
 
 #[allow(dead_code)]
 #[derive(Debug, Default, Copy, Clone)]
