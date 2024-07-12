@@ -75,7 +75,7 @@ impl Teletext {
             magazine_number: interface.magazine_number(),
             configuration: interface.control_bits(),
             interface,
-            title: String::new(),
+            title: String::from("Teletext Terminal"),
         };
         teletext.init_page();
         teletext

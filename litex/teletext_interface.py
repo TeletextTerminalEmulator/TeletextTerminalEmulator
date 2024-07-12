@@ -39,6 +39,8 @@ class Teletext(LiteXModule, AutoCSR):
 
         line_index = Signal(5)
         frame_flag = Signal()
+        frame_flag_n = Signal()
+        self.comb += frame_flag_n.eq(~frame_flag)
 
         self.specials += Instance(
             "teletext_generator",
@@ -79,7 +81,7 @@ class Teletext(LiteXModule, AutoCSR):
 
         # Read address
         self.comb += port.adr.eq(0)
-        self.comb += port.adr.eq(((current_buffer * 2 + frame_flag) * 24 + line_index) * 10 + char_index_next)
+        self.comb += port.adr.eq(((current_buffer * 2 + frame_flag_n) * 24 + line_index) * 10 + char_index_next)
         
         
         # Read
