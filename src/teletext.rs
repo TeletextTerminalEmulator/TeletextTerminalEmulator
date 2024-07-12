@@ -45,6 +45,8 @@ pub struct Teletext {
     page_number: u8,
     magazine_number: u8,
     title: String,
+    current_buf: bool,
+    next_buf: bool,
 }
 
 macro_rules! check_bounds {
@@ -76,21 +78,23 @@ impl Teletext {
             configuration: interface.control_bits(),
             interface,
             title: String::from("Teletext Terminal"),
+            current_buf: false,
+            next_buf: false,
         };
-        teletext.init_page();
+        teletext.init_page(false);
         teletext
     }
 
-    fn init_page(&mut self) {
+    fn init_page(&mut self, buf: bool) {
         for line in 1..=LINE_COUNT {
             for col in 0..COLUMN_COUNT {
-                self.interface.write_char(TeletextChar(0x20), line, col);
+                self.interface.write_char(TeletextChar(0x20), line, col, buf);
             }
         }
         // init header
         for col in 0..COLUMN_COUNT {
             self.interface
-                .write_char(TeletextChar(0x20), HEADER_LINE_ADDRESS, col);
+                .write_char(TeletextChar(0x20), HEADER_LINE_ADDRESS, col, buf);
         }
     }
 
@@ -100,6 +104,7 @@ impl Teletext {
 
     pub fn write_page(&mut self, content: &mut RenderableContent<'_>) -> Result<()> {
         let mut enhancements = EnhancementBuffer::new();
+        let next_buf = !self.current_buf;
 
         for (index, header_ch) in self
             .title
@@ -119,18 +124,18 @@ impl Teletext {
             ) {
                 Ok(()) => {
                     self.interface
-                        .write_char(TeletextChar(0x7F), column, HEADER_LINE_ADDRESS)
+                        .write_char(TeletextChar(0x7F), column, HEADER_LINE_ADDRESS, next_buf)
                 }
                 Err(EnhancementError::PlainChar(ch)) => {
-                    self.interface.write_char(ch, column, HEADER_LINE_ADDRESS)
+                    self.interface.write_char(ch, column, HEADER_LINE_ADDRESS, next_buf)
                 }
                 Err(EnhancementError::NoEnhancementSpace) => {
                     self.interface
-                        .write_char(TeletextChar(0x21), column, HEADER_LINE_ADDRESS)
+                        .write_char(TeletextChar(0x21), column, HEADER_LINE_ADDRESS, next_buf)
                 }
                 Err(EnhancementError::Unrepresentable) => {
                     self.interface
-                        .write_char(TeletextChar(0x3F), column, HEADER_LINE_ADDRESS)
+                        .write_char(TeletextChar(0x3F), column, HEADER_LINE_ADDRESS, next_buf)
                 }
                 Err(EnhancementError::CellOutOfOrder) => {
                     panic!("Enhancement buffer has been filled out of order")
@@ -154,13 +159,13 @@ impl Teletext {
                 cell.c,
                 self.configuration.national_option_character_subset,
             ) {
-                Ok(()) => self.interface.write_char(TeletextChar(0x7F), column, line),
-                Err(EnhancementError::PlainChar(ch)) => self.interface.write_char(ch, column, line),
+                Ok(()) => self.interface.write_char(TeletextChar(0x7F), column, line, next_buf),
+                Err(EnhancementError::PlainChar(ch)) => self.interface.write_char(ch, column, line, next_buf),
                 Err(EnhancementError::NoEnhancementSpace) => {
-                    self.interface.write_char(TeletextChar(0x21), column, line)
+                    self.interface.write_char(TeletextChar(0x21), column, line, next_buf)
                 }
                 Err(EnhancementError::Unrepresentable) => {
-                    self.interface.write_char(TeletextChar(0x3F), column, line)
+                    self.interface.write_char(TeletextChar(0x3F), column, line, next_buf)
                 }
                 Err(EnhancementError::CellOutOfOrder) => {
                     panic!("Enhancement buffer has been filled out of order")
@@ -173,8 +178,11 @@ impl Teletext {
                 *triplet,
                 (index / ENHANCEMENTS_PER_LINE) as u8,
                 (index % ENHANCEMENTS_PER_LINE) as u8,
+                next_buf,
             );
         }
+
+        self.next_buf = next_buf;
 
         Ok(())
     }
@@ -217,6 +225,13 @@ impl Teletext {
     
     pub fn get_frame_finished(&self) -> bool {
         self.interface.frame_finished()
+    }
+
+    pub fn update_page(&mut self) {
+        if self.current_buf != self.next_buf {
+            self.interface.set_buffer(self.next_buf);
+            self.current_buf = self.next_buf;
+        }
     }
 }
 

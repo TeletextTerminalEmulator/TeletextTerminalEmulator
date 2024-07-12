@@ -84,7 +84,8 @@ pub(crate) use lock_uart;
 enum Event {
     UartReceived(u8),
     Keyboard(ps2::KeyEventContext),
-    Redraw,
+    RedrawPage,
+    UpdatePage,
 }
 
 fn wait_for_event<T: KeyboardLayout>(
@@ -101,8 +102,11 @@ fn wait_for_event<T: KeyboardLayout>(
                 .ok_or(nb::Error::<Infallible>::WouldBlock)
         })
         .or_else(|_| {
-            (!TELETEXT_VALID.load(Ordering::Relaxed) && tele.borrow().get_frame_finished())
-                .then_some(Event::Redraw)
+            tele.borrow().get_frame_finished().then_some(Event::UpdatePage).ok_or(nb::Error::<Infallible>::WouldBlock)
+        })
+        .or_else(|_| {
+            (!TELETEXT_VALID.load(Ordering::Relaxed))
+                .then_some(Event::RedrawPage)
                 .ok_or(nb::Error::<Infallible>::WouldBlock)
         })
 }
@@ -169,12 +173,11 @@ fn main() -> ! {
                 )
                 .unwrap();
             }
-            Event::Redraw => {
-                let mut teletext = teletext.borrow_mut();
-
+            Event::RedrawPage => {
                 let before = litex_basys3_pac::riscv::register::cycle::read();
 
                 teletext
+                    .borrow_mut()
                     .write_page(&mut term.renderable_content())
                     .expect("Wrong parameters for the grid");
 
@@ -184,6 +187,9 @@ fn main() -> ! {
 
                 TELETEXT_VALID.store(true, Ordering::Relaxed);
                 term.reset_damage();
+            }
+            Event::UpdatePage => {
+                teletext.borrow_mut().update_page();
             }
         }
     }

@@ -2,14 +2,17 @@ use crate::character_set::NationalOptionCharacterSubset;
 use crate::teletext::{enhancements::EnhancementTriplet, ControlBits, TeletextChar};
 use litex_basys3_pac::{mem_map, Teletext};
 
+const BUFFER_OFFSET: isize = 2 * 24 * 40;
+
 pub trait TeletextInterface {
     fn page_number(&self) -> u8;
     fn magazine_number(&self) -> u8;
     fn set_magazine_page_number(&mut self, new_magazine: u8, new_page: u8);
     fn control_bits(&self) -> ControlBits;
     fn set_control_bits(&mut self, new_control_bits: ControlBits);
-    fn write_char(&mut self, char: TeletextChar, col: u8, line: u8);
-    
+    fn write_char(&mut self, char: TeletextChar, col: u8, line: u8, buf: bool);
+
+    fn set_buffer(&mut self, buf: bool);
     fn frame_finished(&self) -> bool;
 
     fn write_enhancement(
@@ -17,6 +20,7 @@ pub trait TeletextInterface {
         enhancement: EnhancementTriplet,
         packet_designation: u8,
         index: u8,
+        buf: bool,
     ) {
         const PACKET_START: u8 = 25;
 
@@ -24,9 +28,9 @@ pub trait TeletextInterface {
 
         let enhancement_start = index * 3;
         let line_number = packet_designation + PACKET_START;
-        self.write_char(TeletextChar(address), enhancement_start, line_number);
-        self.write_char(TeletextChar(mode), enhancement_start + 1, line_number);
-        self.write_char(TeletextChar(data), enhancement_start + 2, line_number);
+        self.write_char(TeletextChar(address), enhancement_start, line_number, buf);
+        self.write_char(TeletextChar(mode), enhancement_start + 1, line_number, buf);
+        self.write_char(TeletextChar(data), enhancement_start + 2, line_number, buf);
     }
 }
 
@@ -129,13 +133,17 @@ impl TeletextInterface for MemTeletextInterface {
         })
     }
 
-    fn write_char(&mut self, char: TeletextChar, col: u8, line: u8) {
+    fn write_char(&mut self, char: TeletextChar, col: u8, line: u8, buf: bool) {
         unsafe {
-            self.teletext_mem.offset(line as isize * 40 + col as isize).write_volatile(char);
+            self.teletext_mem.offset(line as isize * 40 + col as isize + buf as isize * BUFFER_OFFSET).write_volatile(char);
         }
     }
 
     fn frame_finished(&self) -> bool {
         self.teletext.frame_finished().read().frame_finished().bit()
+    }
+
+    fn set_buffer(&mut self, buf: bool) {
+        self.teletext.buffer().write(|w| w.buffer().bit(buf))
     }
 }
