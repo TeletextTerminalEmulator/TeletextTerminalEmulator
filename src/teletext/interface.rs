@@ -11,6 +11,7 @@ pub trait TeletextInterface {
     fn control_bits(&self) -> ControlBits;
     fn set_control_bits(&mut self, new_control_bits: ControlBits);
     fn write_char(&mut self, char: TeletextChar, col: u8, line: u8, buf: bool);
+    fn read_char(&self, col: u8, line: u8, buf: bool) -> TeletextChar;
 
     fn set_buffer(&mut self, buf: bool);
     fn frame_finished(&self) -> bool;
@@ -86,20 +87,20 @@ impl TeletextInterface for MemTeletextInterface {
     }
 
     fn magazine_number(&self) -> u8 {
-        self.teletext.magazine_number().read().magazine_number().bits()
+        self.teletext
+            .magazine_number()
+            .read()
+            .magazine_number()
+            .bits()
     }
 
     fn set_magazine_page_number(&mut self, new_magazine: u8, new_page: u8) {
-        self.teletext.magazine_number().write(|w| {
-            unsafe {
-                w.magazine_number().bits(new_magazine)
-            }
-        });
-        self.teletext.page_number().write(|w| {
-            unsafe {
-                w.page_number().bits(new_page)
-            }
-        })
+        self.teletext
+            .magazine_number()
+            .write(|w| unsafe { w.magazine_number().bits(new_magazine) });
+        self.teletext
+            .page_number()
+            .write(|w| unsafe { w.page_number().bits(new_page) })
     }
 
     fn control_bits(&self) -> ControlBits {
@@ -113,7 +114,9 @@ impl TeletextInterface for MemTeletextInterface {
             interrupted_sequence: controls.interrupted_sequence().bit(),
             suppress_header: controls.suppress_header().bit(),
             update_indicator: controls.update_indicator().bit(),
-            national_option_character_subset: NationalOptionCharacterSubset::from_value(controls.national_option_character_subset().bits()),
+            national_option_character_subset: NationalOptionCharacterSubset::from_value(
+                controls.national_option_character_subset().bits(),
+            ),
         }
     }
 
@@ -124,18 +127,22 @@ impl TeletextInterface for MemTeletextInterface {
             w.magazine_serial().bit(new_control_bits.magazine_serial);
             w.newsflash().bit(new_control_bits.newsflash);
             w.subtitle().bit(new_control_bits.subtitle);
-            w.interrupted_sequence().bit(new_control_bits.interrupted_sequence);
+            w.interrupted_sequence()
+                .bit(new_control_bits.interrupted_sequence);
             w.suppress_header().bit(new_control_bits.suppress_header);
             w.update_indicator().bit(new_control_bits.update_indicator);
             unsafe {
-                w.national_option_character_subset().bits(new_control_bits.national_option_character_subset.value())
+                w.national_option_character_subset()
+                    .bits(new_control_bits.national_option_character_subset.value())
             }
         })
     }
 
     fn write_char(&mut self, char: TeletextChar, col: u8, line: u8, buf: bool) {
         unsafe {
-            self.teletext_mem.offset(line as isize * 40 + col as isize + buf as isize * BUFFER_OFFSET).write_volatile(char);
+            self.teletext_mem
+                .offset(line as isize * 40 + col as isize + buf as isize * BUFFER_OFFSET)
+                .write_volatile(char);
         }
     }
 
@@ -145,5 +152,13 @@ impl TeletextInterface for MemTeletextInterface {
 
     fn set_buffer(&mut self, buf: bool) {
         self.teletext.buffer().write(|w| w.buffer().bit(buf))
+    }
+
+    fn read_char(&self, col: u8, line: u8, buf: bool) -> TeletextChar {
+        unsafe {
+            self.teletext_mem
+                .offset(line as isize * 40 + col as isize + buf as isize * BUFFER_OFFSET)
+                .read_volatile()
+        }
     }
 }

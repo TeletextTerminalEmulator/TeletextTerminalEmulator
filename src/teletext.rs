@@ -5,9 +5,9 @@ use crate::teletext::interface::TeletextInterface;
 use alacritty_terminal::grid::Dimensions;
 use alacritty_terminal::term::RenderableContent;
 use alloc::string::String;
-use interface::MemTeletextInterface;
 use core::iter::repeat;
 use enhancements::{EnhancementError, ENHANCEMENTS_PER_LINE};
+use interface::MemTeletextInterface;
 use litex_basys3_pac as pac;
 
 pub mod enhancements;
@@ -88,7 +88,8 @@ impl Teletext {
     fn init_page(&mut self, buf: bool) {
         for line in 1..=LINE_COUNT {
             for col in 0..COLUMN_COUNT {
-                self.interface.write_char(TeletextChar(0x20), line, col, buf);
+                self.interface
+                    .write_char(TeletextChar(0x20), line, col, buf);
             }
         }
         // init header
@@ -123,20 +124,28 @@ impl Teletext {
                 self.configuration.national_option_character_subset,
             ) {
                 Ok(()) => {
+                    let prev_char =
+                        self.interface
+                            .read_char(column, HEADER_LINE_ADDRESS, self.current_buf);
                     self.interface
-                        .write_char(TeletextChar(0x7F), column, HEADER_LINE_ADDRESS, next_buf)
+                        .write_char(prev_char, column, HEADER_LINE_ADDRESS, next_buf)
                 }
                 Err(EnhancementError::PlainChar(ch)) => {
-                    self.interface.write_char(ch, column, HEADER_LINE_ADDRESS, next_buf)
-                }
-                Err(EnhancementError::NoEnhancementSpace) => {
                     self.interface
-                        .write_char(TeletextChar(0x21), column, HEADER_LINE_ADDRESS, next_buf)
+                        .write_char(ch, column, HEADER_LINE_ADDRESS, next_buf)
                 }
-                Err(EnhancementError::Unrepresentable) => {
-                    self.interface
-                        .write_char(TeletextChar(0x3F), column, HEADER_LINE_ADDRESS, next_buf)
-                }
+                Err(EnhancementError::NoEnhancementSpace) => self.interface.write_char(
+                    TeletextChar(0x21),
+                    column,
+                    HEADER_LINE_ADDRESS,
+                    next_buf,
+                ),
+                Err(EnhancementError::Unrepresentable) => self.interface.write_char(
+                    TeletextChar(0x3F),
+                    column,
+                    HEADER_LINE_ADDRESS,
+                    next_buf,
+                ),
                 Err(EnhancementError::CellOutOfOrder) => {
                     panic!("Enhancement buffer has been filled out of order")
                 }
@@ -159,13 +168,20 @@ impl Teletext {
                 cell.c,
                 self.configuration.national_option_character_subset,
             ) {
-                Ok(()) => self.interface.write_char(TeletextChar(0x7F), column, line, next_buf),
-                Err(EnhancementError::PlainChar(ch)) => self.interface.write_char(ch, column, line, next_buf),
+                Ok(()) => {
+                    let prev_char = self.interface.read_char(column, line, self.current_buf);
+                    self.interface.write_char(prev_char, column, line, next_buf)
+                }
+                Err(EnhancementError::PlainChar(ch)) => {
+                    self.interface.write_char(ch, column, line, next_buf)
+                }
                 Err(EnhancementError::NoEnhancementSpace) => {
-                    self.interface.write_char(TeletextChar(0x21), column, line, next_buf)
+                    self.interface
+                        .write_char(TeletextChar(0x21), column, line, next_buf)
                 }
                 Err(EnhancementError::Unrepresentable) => {
-                    self.interface.write_char(TeletextChar(0x3F), column, line, next_buf)
+                    self.interface
+                        .write_char(TeletextChar(0x3F), column, line, next_buf)
                 }
                 Err(EnhancementError::CellOutOfOrder) => {
                     panic!("Enhancement buffer has been filled out of order")
@@ -222,7 +238,7 @@ impl Teletext {
     pub fn get_magazine(&self) -> u8 {
         self.magazine_number
     }
-    
+
     pub fn get_frame_finished(&self) -> bool {
         self.interface.frame_finished()
     }

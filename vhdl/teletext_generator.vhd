@@ -300,8 +300,8 @@ begin
     
     frame_finished_p: process (current_line, current_frame)
     begin
-        if current_line > 24 and current_line <= 26 then
-            FRAME_FINISHED <= current_frame;
+        if current_line > 16 then
+            FRAME_FINISHED <= not current_frame;
         else
             FRAME_FINISHED <= '0';
         end if;

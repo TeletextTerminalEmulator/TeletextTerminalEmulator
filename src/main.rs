@@ -21,7 +21,7 @@ use core::convert::Infallible;
 use core::fmt::Write;
 use core::panic::PanicInfo;
 use embedded_alloc::Heap;
-use litex_basys3_pac::{riscv_rt::entry, Peripherals, mem_map};
+use litex_basys3_pac::{mem_map, riscv_rt::entry, Peripherals};
 use litex_hal::nb::{self, block};
 use litex_hal::prelude::*;
 use pc_keyboard::KeyboardLayout;
@@ -102,7 +102,10 @@ fn wait_for_event<T: KeyboardLayout>(
                 .ok_or(nb::Error::<Infallible>::WouldBlock)
         })
         .or_else(|_| {
-            tele.borrow().get_frame_finished().then_some(Event::UpdatePage).ok_or(nb::Error::<Infallible>::WouldBlock)
+            tele.borrow()
+                .get_frame_finished()
+                .then_some(Event::UpdatePage)
+                .ok_or(nb::Error::<Infallible>::WouldBlock)
         })
         .or_else(|_| {
             (!TELETEXT_VALID.load(Ordering::Relaxed))
