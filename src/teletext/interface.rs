@@ -4,9 +4,15 @@ use litex_basys3_pac::{mem_map, Teletext};
 
 const BUFFER_OFFSET: isize = 2 * 24 * 40;
 
+/// Rust-Trait to interface with the Hardware-Teletext component
 pub trait TeletextInterface {
+    /// Retrieves current page-number onto which the data is currently written
+    /// returns number between 0x00 and 0xFF
     fn page_number(&self) -> u8;
+    /// Retrieves current magazine-number onto which the data is currently written
+    /// returns number between 0x00 and 0x0F
     fn magazine_number(&self) -> u8;
+    /// Sets the current magazine- and page-number onto which the data is written
     fn set_magazine_page_number(&mut self, new_magazine: u8, new_page: u8);
     fn control_bits(&self) -> ControlBits;
     fn set_control_bits(&mut self, new_control_bits: ControlBits);
