@@ -14,41 +14,69 @@ pub mod enhancements;
 pub mod interface;
 pub mod terminal;
 
+/// Amount of lines of a teletext frame, without the header
 pub const LINE_COUNT: u8 = 23; // Header not included
+/// Amount of columns of a teletext frame
 pub const COLUMN_COUNT: u8 = 40;
+/// Address of the header line inside the teletext buffer
 pub const HEADER_LINE_ADDRESS: u8 = 24;
 
+/// The writeable section of a teletext header line begins after a few columns,
+/// as it is covered by the display of the current page and magazine.
 const HEADER_OFFSET: u8 = 8;
+/// Column count of a teletext header line
 const HEADER_LENGTH: u8 = COLUMN_COUNT - HEADER_OFFSET;
 
+/// ControlBits are used to configure some properties of a teletext page
 #[derive(Debug, Default, Clone, Copy)]
 pub struct ControlBits {
+    /// If set the teletext decoder clears the previous page before storing the new page
     pub erase_page: bool,
+    /// If set all contents of the Page are displayed together with the video-signal
     pub newsflash: bool,
+    /// Signals to the teletext decoder that the page contains subtitles for the accompanying video-signal
     pub subtitle: bool,
+    /// If set the header of the page is not displayed
     pub suppress_header: bool,
+    /// Set to tell the teletext decoder, that the page has changed since the last page-transmission
     pub update_indicator: bool,
+    /// Signals that all packages sent don't have the correct order
     pub interrupted_sequence: bool,
+    /// If set the transmitted page will not be displayed
     pub inhibit_display: bool,
+    /// Controls when the transmission of a page ends.
+    /// If set to `true` serial transmission is used, thus a page is terminated by sending a page header with a different page number
+    /// If set to `false` parallel transmission is used, thus a page is terminated by sending a page header with a different page number, but the same magazine number
     pub magazine_serial: bool,
+    /// Controls which Character-Set is used to display characters on Lines between 1 and 24
     pub national_option_character_subset: NationalOptionCharacterSubset,
 }
 
+/// Contains a character that uses teletext encoding
 #[derive(Debug, Default, Clone, Copy)]
 #[repr(transparent)]
 pub struct TeletextChar(pub u8);
 
+/// Struct that holds all necessary interfaces and variables to communicate with the teletext component
 #[derive(Debug)]
 pub struct Teletext {
+    /// Low-Level Interface, that implements the communication with the teletext component
     interface: MemTeletextInterface,
+    /// Currently used [ControlBits]
     configuration: ControlBits,
+    /// Currently used page number
     page_number: u8,
+    /// Currently used magazine number
     magazine_number: u8,
+    /// Text that is displayed on the header line
     title: String,
+    /// Controls which buffer of the implemented double-buffering is currently used
     current_buf: bool,
+    /// Controls which buffer of the implemented double-buffering is used next
     next_buf: bool,
 }
 
+/// Macro that checks if an address for a position inside a page is valid
 macro_rules! check_bounds {
     ($line: expr, $column: expr) => {
         if $line != HEADER_LINE_ADDRESS && !(1..=LINE_COUNT).contains(&($line)) {
@@ -69,6 +97,10 @@ macro_rules! check_bounds {
 
 #[allow(dead_code)]
 impl Teletext {
+    /// Initializes a new Teletext interface
+    ///
+    /// # Arguments
+    /// * `teletext_reg` - Contains all registers needed for communication with the teletext generator
     pub fn new(teletext_reg: pac::Teletext) -> Teletext {
         let interface = MemTeletextInterface::new(teletext_reg);
 
@@ -85,6 +117,10 @@ impl Teletext {
         teletext
     }
 
+    /// Initializes a teletext page
+    ///
+    /// # Arguments
+    /// * `buf` - controls which buffer is initialized
     fn init_page(&mut self, buf: bool) {
         for line in 1..=LINE_COUNT {
             for col in 0..COLUMN_COUNT {
@@ -99,10 +135,18 @@ impl Teletext {
         }
     }
 
+    /// Sets the title of the teletext page
+    ///
+    /// # Arguments
+    /// * `title` - contains the new title
     pub fn set_title<S: Into<String>>(&mut self, title: S) {
         self.title = title.into();
     }
 
+    /// Writes entire page onto one of the buffers, controlled by [self.current_buf] and [self.next_buf]
+    ///
+    /// # Arguments
+    /// * `content` - is the provided buffer that is used to render the new page
     pub fn write_page(&mut self, content: &mut RenderableContent<'_>) -> Result<()> {
         let mut enhancements = EnhancementBuffer::new();
         let next_buf = !self.current_buf;
@@ -203,15 +247,24 @@ impl Teletext {
         Ok(())
     }
 
+    /// Updates the currently used [ControlBits]
+    ///
+    /// # Arguments
+    /// * `config` - is the newly used configuration
     pub fn set_config(&mut self, config: ControlBits) {
         self.configuration = config;
         self.interface.set_control_bits(config);
     }
 
+    /// Returns the currently used [ControlBits]
     pub fn get_config(&self) -> ControlBits {
         self.configuration
     }
 
+    /// Updates the page onto the teletext page is rendered
+    ///
+    /// # Arguments
+    /// * `new_page` - is the new page number
     pub fn set_page(&mut self, new_page: u8) {
         self.page_number = new_page;
         self.interface

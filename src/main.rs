@@ -1,5 +1,8 @@
 #![no_std]
 #![no_main]
+#![warn(missing_docs)]
+
+//! This program establishes communication between a teletext-interface, a keyboard and an uart interface.
 
 extern crate alloc;
 
@@ -33,11 +36,16 @@ use vte_input::generate_sequence;
 #[cfg(feature = "backtrace")]
 use mini_backtrace::Backtrace;
 
+/// Uart Interface declaration
+#[doc(hidden)]
 litex_hal::uart! {
+    // Uart Interface that is used to print debug messages
     Uart: litex_basys3_pac::Uart,
+    // Uart Interface that is used for communicating with the Teletext Display
     TerminalUart: litex_basys3_pac::TerminalUart,
 }
 
+/// Allocates a Timer
 litex_hal::timer! {
     Timer: litex_basys3_pac::Timer0,
 }
@@ -48,12 +56,16 @@ const SYSTEM_CLOCK_FREQUENCY: u32 = 100_000_000;
 #[global_allocator]
 static HEAP: Heap = Heap::empty();
 
+/// Controls if the teletext needs to be redrawn
 pub static TELETEXT_VALID: AtomicBool = AtomicBool::new(false);
 
+/// Holds access to the debug uart interface, that is used to send debug messages
 pub static DEBUG_UART: FairMutex<Option<Uart>> = FairMutex::new(None);
 
+/// Holds access to the uart interface, that is used for the terminal display
 pub static TERMINAL_UART: FairMutex<Option<TerminalUart>> = FairMutex::new(None);
 
+/// Controls the Mutex of the debug uart interface
 macro_rules! lock_debug_uart {
     () => {
         $crate::DEBUG_UART
@@ -69,6 +81,7 @@ use TERMINAL_UART as UART;
 #[cfg(not(feature = "terminal_uart"))]
 use DEBUG_UART as UART;
 
+/// Controls the Mutex of the terminal display uart interface
 macro_rules! lock_uart {
     () => {
         $crate::UART
@@ -81,13 +94,19 @@ macro_rules! lock_uart {
 pub(crate) use lock_debug_uart;
 pub(crate) use lock_uart;
 
+/// Contains all Event types that occur during execution
 enum Event {
+    /// Is called if a new byte is received through the terminal display uart interface
     UartReceived(u8),
+    /// Is called if a key on the keyboard is pressed
     Keyboard(ps2::KeyEventContext),
+    /// Is called if the terminal buffer (encoded in UTF-8) needs to be converted into teletext chars
     RedrawPage,
+    /// Is called to render the newly generated teletext buffer
     UpdatePage,
 }
 
+/// Event encoder, listens for the conditions of each possible Event and dispatches the Event
 fn wait_for_event<T: KeyboardLayout>(
     ps2: &mut PS2<T>,
     tele: &Rc<RefCell<Teletext>>,
@@ -114,6 +133,7 @@ fn wait_for_event<T: KeyboardLayout>(
         })
 }
 
+/// Main function of the firmware. It initializes all needed Interfaces and launches the control-loops
 #[entry]
 fn main() -> ! {
     {
@@ -198,6 +218,8 @@ fn main() -> ! {
     }
 }
 
+/// The Panic handler gets called when an unrecoverable exception is thrown
+/// When called it prints a backtrace onto the debug uart interface
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     writeln!(lock_debug_uart!(), "Panic!").unwrap();
