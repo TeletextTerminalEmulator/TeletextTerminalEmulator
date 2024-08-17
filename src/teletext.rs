@@ -271,10 +271,15 @@ impl Teletext {
             .set_magazine_page_number(self.magazine_number, new_page);
     }
 
+    /// Returns the current page number
     pub fn get_page(&self) -> u8 {
         self.page_number
     }
 
+    /// Update the current magazine number
+    ///
+    /// # Arguments
+    /// * `new_magazine` - is hte new magazine number
     pub fn set_magazine(&mut self, new_magazine: u8) -> Result<()> {
         if new_magazine > 7 {
             return Err(TeletextError::OutOfBounds {
@@ -288,14 +293,17 @@ impl Teletext {
         Ok(())
     }
 
+    /// Returns the current magazine number
     pub fn get_magazine(&self) -> u8 {
         self.magazine_number
     }
 
+    /// Returns true if a frame is finished generating
     pub fn get_frame_finished(&self) -> bool {
         self.interface.frame_finished()
     }
 
+    /// Switches the buffers, so that the updated buffer is now used for rendering
     pub fn update_page(&mut self) {
         if self.current_buf != self.next_buf {
             self.interface.set_buffer(self.next_buf);
@@ -304,17 +312,22 @@ impl Teletext {
     }
 }
 
+/// Struct used to provide alacritty-terminal with dimensions of teletext
 pub struct TeletextDimensions;
 
+/// Implementation of Dimensions for alacritty-terminal usage
 impl Dimensions for TeletextDimensions {
+    /// Returns the amount of available lines
     fn total_lines(&self) -> usize {
         self.screen_lines()
     }
 
+    /// Returns the amount of available lines
     fn screen_lines(&self) -> usize {
         LINE_COUNT.into()
     }
 
+    /// Returns the amount of available columns
     fn columns(&self) -> usize {
         COLUMN_COUNT.into()
     }

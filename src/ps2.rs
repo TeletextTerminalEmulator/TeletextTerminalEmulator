@@ -8,6 +8,7 @@ use vte_input::key::{FunctionalKey, KeyType as VteKeyType};
 use vte_input::sequence::{EventType, KeyboardModifiers as VteModifiers};
 use vte_input::{KeyEvent as VteKeyEvent, ReportingMode};
 
+/// Contains which keyboard are currently pressed
 #[derive(Debug, Clone, Default)]
 struct Modifiers {
     lshift: bool,
@@ -24,6 +25,10 @@ struct Modifiers {
 }
 
 impl Modifiers {
+    /// Updates the state of [Modifiers]
+    ///
+    /// # Arguments
+    /// * `event` - Keyboard event that contains the key that produced the event
     fn apply_key_event(&mut self, event: &mut KeyEvent) {
         match event {
             KeyEvent {
@@ -105,6 +110,7 @@ impl Modifiers {
 }
 
 impl From<&Modifiers> for VteModifiers {
+    /// Translates [Modifiers] into [VteModifiers]
     fn from(value: &Modifiers) -> Self {
         let mut vte_mods = Self::empty();
 
@@ -120,6 +126,7 @@ impl From<&Modifiers> for VteModifiers {
 }
 
 impl From<&Modifiers> for PcModifiers {
+    /// Translates [Modifiers] into [PcModifiers]
     fn from(value: &Modifiers) -> Self {
         Self {
             lshift: value.lshift,

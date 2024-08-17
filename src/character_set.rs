@@ -1,5 +1,6 @@
 use crate::teletext::TeletextChar;
 
+/// Enum of all possible language specific teletext character-sets
 #[allow(dead_code)]
 #[derive(Debug, Default, Copy, Clone)]
 pub enum NationalOptionCharacterSubset {
@@ -17,28 +18,46 @@ pub enum NationalOptionCharacterSubset {
     Slovak,
 }
 
+/// Enum of all possible diacriticals
 #[derive(Debug, Default, Copy, Clone)]
 pub enum Diacritical {
     #[default]
+    /// Character has no diacritical
     None,
+    /// Diacritical: `
     Grave,
+    /// Diacritical: ´
     Acute,
+    /// Diacritical: ˆ
     Circumflex,
+    /// Diacritical: ˜
     Tilde,
+    /// Diacritical: ¯
     Macron,
+    /// Diacritical: ˘
     Breve,
+    /// Diacritical: ˙
     Dot,
+    /// Diacritical:  ̈
     Umlaut,
+    /// Diacritical:  ̣
     DotBelow,
+    /// Diacritical:  ̊
     Ring,
+    /// Diacritical:  ̧
     Cedilla,
+    /// Diacritical: ̱
     #[allow(dead_code)]
     LowLine,
+    /// Diacritical: ˝
     DoubleAcute,
+    /// Diacritical: ˛
     Ogonek,
+    /// Diacritical:  ̌
     Caron,
 }
 
+/// Marks in which type of character-set a character can be found
 #[derive(Debug, Clone, Copy)]
 pub enum CharacterSet {
     G0,
@@ -48,6 +67,10 @@ pub enum CharacterSet {
 }
 
 impl NationalOptionCharacterSubset {
+    /// Checks if a [NationalOptionCharacterSubset] includes a specific character and if it includes it, the teletext encoding of that character is returned
+    ///
+    /// # Arguments
+    /// * `ch` - Character that is checked
     fn has_char(&self, ch: char) -> Option<u8> {
         use NationalOptionCharacterSubset::*;
 
@@ -60,6 +83,7 @@ impl NationalOptionCharacterSubset {
 }
 
 impl Diacritical {
+    /// Encodes a diacritical into its teletext encoding
     pub fn code(&self) -> u8 {
         match self {
             Diacritical::None => 0x0,
@@ -82,6 +106,7 @@ impl Diacritical {
     }
 }
 
+/// Returns the teletext encoding of a character if the english character-set contains it
 static ENGLISH_TELETEXT_CHARS: fn(char) -> Option<u8> = |input_char| {
     Some(match input_char {
         '£' => 0x23,
@@ -101,6 +126,7 @@ static ENGLISH_TELETEXT_CHARS: fn(char) -> Option<u8> = |input_char| {
     })
 };
 
+/// Returns the teletext encoding of a character if the german character-set contains it
 static GERMAN_TELETEXT_CHARS: fn(char) -> Option<u8> = |input_char| {
     Some(match input_char {
         '#' => 0x23,
@@ -120,6 +146,7 @@ static GERMAN_TELETEXT_CHARS: fn(char) -> Option<u8> = |input_char| {
     })
 };
 
+/// Returns a tuple of the teletext encoding, on which [CharacterSet] the character is found and if the character needs a diacritical
 static LATIN_TELETEXT_CHARS: fn(char) -> Option<(u8, CharacterSet)> = |input_char| {
     Some(match input_char {
         ' ' => (0x20, CharacterSet::G0),
@@ -930,6 +957,11 @@ static LATIN_TELETEXT_CHARS: fn(char) -> Option<(u8, CharacterSet)> = |input_cha
     })
 };
 
+/// Converts an utf-8 char into a teletext encoded char
+///
+/// # Arguments
+/// * `ch` - input char
+/// * `subset` - Which character subset is currently used
 pub fn char_to_teletext(
     ch: char,
     subset: NationalOptionCharacterSubset,
