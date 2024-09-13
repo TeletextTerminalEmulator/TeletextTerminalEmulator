@@ -4,9 +4,6 @@ use core::mem::MaybeUninit;
 use core::ops::{Index, IndexMut};
 use alloc::vec::Vec;
 
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-
 use super::Row;
 use crate::index::Line;
 
@@ -30,7 +27,6 @@ const MAX_CACHE_SIZE: usize = 10;
 /// [`Deref`]: std::ops::Deref
 /// [`zero`]: #structfield.zero
 #[derive(Clone, Debug)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Storage<T> {
     inner: Vec<Row<T>>,
 

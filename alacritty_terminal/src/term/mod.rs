@@ -8,9 +8,6 @@ use core::ops::{Index, IndexMut, Range};
 use crate::Arc;
 use core::{cmp, mem, ptr, slice, str};
 
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-
 use base64::engine::general_purpose::STANDARD as Base64;
 use base64::Engine;
 use bitflags::bitflags;
@@ -366,7 +363,6 @@ impl Default for Config {
 
 /// OSC 52 behavior.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize), serde(rename_all = "lowercase"))]
 pub enum Osc52 {
     /// The handling of the escape sequence is disabled.
     Disabled,
@@ -2204,14 +2200,11 @@ impl<'a> RenderableContent<'a> {
 pub mod test {
     use super::*;
 
-    #[cfg(feature = "serde")]
-    use serde::{Deserialize, Serialize};
     use unicode_width::UnicodeWidthChar;
 
     use crate::event::VoidListener;
     use crate::index::Column;
 
-    #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
     pub struct TermSize {
         pub columns: usize,
         pub screen_lines: usize,
@@ -2351,22 +2344,6 @@ mod tests {
         // Scrollable amount to bottom is 0.
         term.scroll_display(Scroll::PageDown);
         assert_eq!(term.grid.display_offset(), 0);
-    }
-
-
-
-    /// Check that the grid can be serialized back and forth losslessly.
-    ///
-    /// This test is in the term module as opposed to the grid since we want to
-    /// test this property with a T=Cell.
-    #[test]
-    #[cfg(feature = "serde")]
-    fn grid_serde() {
-        let grid: Grid<Cell> = Grid::new(24, 80, 0);
-        let serialized = serde_json::to_string(&grid).expect("ser");
-        let deserialized = serde_json::from_str::<Grid<Cell>>(&serialized).expect("de");
-
-        assert_eq!(deserialized, grid);
     }
 
     #[test]

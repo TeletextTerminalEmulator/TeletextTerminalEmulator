@@ -5,16 +5,12 @@ use core::ops::{Index, IndexMut, Range, RangeFrom, RangeFull, RangeTo, RangeToIn
 use core::{ptr, slice};
 use alloc::vec::Vec;
 
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-
 use crate::grid::GridCell;
 use crate::index::Column;
 use crate::term::cell::ResetDiscriminant;
 
 /// A row in the grid.
 #[derive(Default, Clone, Debug)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Row<T> {
     inner: Vec<T>,
 

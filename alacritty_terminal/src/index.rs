@@ -5,9 +5,6 @@ use core::cmp::{max, min, Ord, Ordering};
 use alloc::fmt;
 use core::ops::{Add, AddAssign, Deref, Sub, SubAssign};
 
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-
 use crate::grid::Dimensions;
 
 /// The side of a cell.
@@ -46,7 +43,6 @@ pub enum Boundary {
 
 /// Index in the grid using row, column notation.
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Point<L = Line, C = Column> {
     pub line: L,
     pub column: C,
@@ -132,7 +128,6 @@ impl<L: Ord, C: Ord> Ord for Point<L, C> {
 ///
 /// Newtype to avoid passing values incorrectly.
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Default, Ord, PartialOrd)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Line(pub i32);
 
 impl Line {
@@ -226,7 +221,6 @@ impl PartialEq<usize> for Line {
 ///
 /// Newtype to avoid passing values incorrectly.
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Default, Ord, PartialOrd)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Column(pub usize);
 
 impl fmt::Display for Column {

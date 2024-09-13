@@ -3,9 +3,6 @@
 use core::cmp::{max, min};
 use core::ops::{Bound, Deref, Index, IndexMut, Range, RangeBounds};
 
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-
 use crate::index::{Column, Line, Point};
 use crate::term::cell::{Flags, ResetDiscriminant};
 use crate::vte::ansi::{CharsetIndex, StandardCharset};
@@ -106,14 +103,11 @@ pub enum Scroll {
 ///                        columns
 /// ```
 #[derive(Clone, Debug)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Grid<T> {
     /// Current cursor for writing data.
-    #[cfg_attr(feature = "serde", serde(skip))]
     pub cursor: Cursor<T>,
 
     /// Last saved cursor.
-    #[cfg_attr(feature = "serde", serde(skip))]
     pub saved_cursor: Cursor<T>,
 
     /// Lines in the grid. Each row holds a list of cells corresponding to the
