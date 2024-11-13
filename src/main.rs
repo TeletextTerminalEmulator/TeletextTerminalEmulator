@@ -1,6 +1,6 @@
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
+#![warn(clippy::missing_docs_in_private_items)]
 
 //! This program establishes communication between a teletext-interface, a keyboard and an uart interface.
 
@@ -36,8 +36,8 @@ use vte_input::generate_sequence;
 #[cfg(feature = "backtrace")]
 use mini_backtrace::Backtrace;
 
-/// Uart Interface declaration
-#[doc(hidden)]
+// Uart Interface declaration
+//#[allow(clippy::missing_docs_in_private_items)]
 litex_hal::uart! {
     // Uart Interface that is used to print debug messages
     Uart: litex_basys3_pac::Uart,
@@ -45,14 +45,7 @@ litex_hal::uart! {
     TerminalUart: litex_basys3_pac::TerminalUart,
 }
 
-/// Allocates a Timer
-litex_hal::timer! {
-    Timer: litex_basys3_pac::Timer0,
-}
-
-#[allow(dead_code)]
-const SYSTEM_CLOCK_FREQUENCY: u32 = 100_000_000;
-
+/// Global heap
 #[global_allocator]
 static HEAP: Heap = Heap::empty();
 
@@ -138,7 +131,11 @@ fn wait_for_event<T: KeyboardLayout>(
 fn main() -> ! {
     {
         use core::mem::MaybeUninit;
+
+        /// Size of the global heap
         const HEAP_SIZE: usize = mem_map::SRAM_LENGTH - 4096; // -4 KiB
+
+        /// Memory area of the global heap
         static mut HEAP_MEM: [MaybeUninit<u8>; HEAP_SIZE] = [MaybeUninit::uninit(); HEAP_SIZE];
         unsafe { HEAP.init(HEAP_MEM.as_ptr() as usize, HEAP_SIZE) }
     }

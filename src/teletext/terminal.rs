@@ -1,3 +1,5 @@
+//! This module contains the interop between the teletext interface and the terminal emulator
+
 use alloc::rc::Rc;
 use core::{cell::RefCell, fmt::Write};
 
@@ -8,6 +10,7 @@ use alacritty_terminal::{
 
 use crate::teletext::Teletext;
 
+/// Implements [alacritty_terminal::event::EventListener] by using a reference to the [teletext controller](Teletext)
 pub struct TeletextTerminalListener(pub Rc<RefCell<Teletext>>);
 
 impl EventListener for TeletextTerminalListener {
@@ -37,6 +40,7 @@ impl EventListener for TeletextTerminalListener {
                     .expect("Ansi sequences should always be writeable");
             }
             Event::TextAreaSizeRequest(func) => {
+                /// Default terminal and cell size of teletext
                 const CELL_SIZE: WindowSize = WindowSize {
                     num_lines: 24,
                     num_cols: 40,
@@ -56,6 +60,8 @@ impl EventListener for TeletextTerminalListener {
     }
 }
 
+
+/// Empty struct used to implement [vte::ansi::Timeout](Timeout)
 #[derive(Default)]
 pub struct LitexTimeout;
 

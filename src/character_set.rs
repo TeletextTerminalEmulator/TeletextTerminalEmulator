@@ -1,7 +1,7 @@
 use crate::teletext::TeletextChar;
 
 /// Enum of all possible language specific teletext character-sets
-#[allow(dead_code)]
+#[allow(dead_code, clippy::missing_docs_in_private_items)]
 #[derive(Debug, Default, Copy, Clone)]
 pub enum NationalOptionCharacterSubset {
     #[default]
@@ -60,9 +60,13 @@ pub enum Diacritical {
 /// Marks in which type of character-set a character can be found
 #[derive(Debug, Clone, Copy)]
 pub enum CharacterSet {
+    /// The G0 set which contains basic alphanumerical characters
     G0,
+    /// The G0 set but with an added diacritical
     G0WithDiacritical(Diacritical),
+    /// The G2 set which contains symbols, diacriticals and regional characters
     G2,
+    /// The G3 set which contains smooth mosaics
     G3,
 }
 

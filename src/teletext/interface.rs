@@ -1,7 +1,10 @@
+//! This module contains all the code needed to interface with the teletext hardware
+
 use crate::character_set::NationalOptionCharacterSubset;
 use crate::teletext::{enhancements::EnhancementTriplet, ControlBits, TeletextChar};
 use litex_basys3_pac::{mem_map, Teletext};
 
+/// The offset at which the second teletext buffer starts
 const BUFFER_OFFSET: isize = 2 * 24 * 40;
 
 /// Rust-Trait to interface with the Hardware-Teletext component
@@ -13,15 +16,44 @@ pub trait TeletextInterface {
     /// returns number between 0x00 and 0x0F
     fn magazine_number(&self) -> u8;
     /// Sets the current magazine- and page-number onto which the data is written
+    /// 
+    /// # Arguments
+    /// * `new_magazine` - The new magazine number
+    /// * `new_page` - The new page number
     fn set_magazine_page_number(&mut self, new_magazine: u8, new_page: u8);
+    /// Get the current [control bits](ControlBits)
     fn control_bits(&self) -> ControlBits;
+
+    /// Set new [control bits](ControlBits)
     fn set_control_bits(&mut self, new_control_bits: ControlBits);
+    /// Write a teletext character into the teletext memory
+    /// 
+    /// # Arguments
+    /// * `char` - The teletext character
+    /// * `col` - The column
+    /// * `line` - The line
+    /// * `buf` - The buffer that should be written to
     fn write_char(&mut self, char: TeletextChar, col: u8, line: u8, buf: bool);
+    /// Read a teletext character at the given position
+    /// 
+    /// # Arguments
+    /// * `col` - The column
+    /// * `line` - The line
+    /// * `buf` - The buffer that should be read from
     fn read_char(&self, col: u8, line: u8, buf: bool) -> TeletextChar;
 
+    /// Sets which buffer should be shown on screen
     fn set_buffer(&mut self, buf: bool);
+    /// Return true if the frame has finished and a new frame hasn't started yet
     fn frame_finished(&self) -> bool;
 
+    /// Write an enhancement triplet into the teletext memory
+    /// 
+    /// # Arguments
+    /// * `enhancement` - The enhancement triplet
+    /// * `packet_designation` - The corresponding packet number
+    /// * `index` - The index inside the packet
+    /// * `buf` - The buffer that should be written to
     fn write_enhancement(
         &mut self,
         enhancement: EnhancementTriplet,
@@ -29,6 +61,7 @@ pub trait TeletextInterface {
         index: u8,
         buf: bool,
     ) {
+        /// Line number at which enhancement packets are encoded in the teletext memory
         const PACKET_START: u8 = 25;
 
         let (address, mode, data) = enhancement.into_triplet();
@@ -41,13 +74,17 @@ pub trait TeletextInterface {
     }
 }
 
+/// [TeletextInterface] implementation which matches the SoC
 #[derive(Debug)]
 pub struct MemTeletextInterface {
+    /// PAC struct for the CSR registers
     teletext: Teletext,
+    /// Pointer to the memory region containing the teletext characters and enhancement packets
     teletext_mem: *mut TeletextChar,
 }
 
 impl NationalOptionCharacterSubset {
+    /// Converts the enum variant into a binary teletext subset code
     fn value(&self) -> u8 {
         match *self {
             NationalOptionCharacterSubset::English => 0b000,
@@ -64,6 +101,10 @@ impl NationalOptionCharacterSubset {
         }
     }
 
+    /// Converts the teletext subset code to a fitting enum variant
+    /// 
+    /// # Arguments
+    /// * `val` - The binary subset code
     fn from_value(val: u8) -> NationalOptionCharacterSubset {
         match val {
             0b000 => NationalOptionCharacterSubset::English,
@@ -79,6 +120,11 @@ impl NationalOptionCharacterSubset {
 }
 
 impl MemTeletextInterface {
+
+    /// Creates a new teletext interface using the teletext CSR registers
+    ///
+    /// # Arguments
+    /// * `teletext` - The CSR registers from the PAC
     pub(crate) fn new(teletext: Teletext) -> MemTeletextInterface {
         MemTeletextInterface {
             teletext,
