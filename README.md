@@ -20,5 +20,5 @@ To just compile the binary for the internal risc-v cpu you can run `cargo xtask 
 ### Synthesize
 
 To synthesize the SoC you have to either add the Vivado folder to your `PATH` or to the `LITEX_ENV_VIVADO` env variable.
-The you can simply run: `cargo xtask synthesize --release [--terminal-uart]`.
+Then you can simply run: `cargo xtask synthesize --release [--terminal-uart]`.
 (When synthesizing, --release because the binary file needs to be as small as possible)
